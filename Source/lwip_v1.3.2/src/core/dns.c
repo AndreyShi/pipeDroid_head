@@ -847,7 +847,7 @@ dns_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u
   goto memerr2;
 
 responseerr:
-  /* ERROR: call specified callback function with NULL as name to indicate an error */
+  /* ERROR_stm: call specified callback function with NULL as name to indicate an error */
   if (pEntry->found) {
     (*pEntry->found)(pEntry->name, NULL, pEntry->arg);
   }

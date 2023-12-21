@@ -266,35 +266,35 @@ void RCC_HSEConfig(uint8_t RCC_HSE)
 
 /**
   * @brief  Waits for HSE start-up.
-  * @note   This functions waits on HSERDY flag to be set and return SUCCESS if 
-  *         this flag is set, otherwise returns ERROR if the timeout is reached 
+  * @note   This functions waits on HSERDY flag to be set and return SUCCESS_stm if 
+  *         this flag is set, otherwise returns ERROR_stm if the timeout is reached 
   *         and this flag is not set. The timeout value is defined by the constant
   *         HSE_STARTUP_TIMEOUT in stm32f4xx.h file. You can tailor it depending
   *         on the HSE crystal used in your application. 
   * @param  None
   * @retval An ErrorStatus enumeration value:
-  *          - SUCCESS: HSE oscillator is stable and ready to use
-  *          - ERROR: HSE oscillator not yet ready
+  *          - SUCCESS_stm: HSE oscillator is stable and ready to use
+  *          - ERROR_stm: HSE oscillator not yet ready
   */
 ErrorStatus RCC_WaitForHSEStartUp(void)
 {
   __IO uint32_t startupcounter = 0;
-  ErrorStatus status = ERROR;
-  FlagStatus hsestatus = RESET;
+  ErrorStatus status = ERROR_stm;
+  FlagStatus_stm hsestatus = RESET_stm;
   /* Wait till HSE is ready and if Time out is reached exit */
   do
   {
     hsestatus = RCC_GetFlagStatus(RCC_FLAG_HSERDY);
     startupcounter++;
-  } while((startupcounter != HSE_STARTUP_TIMEOUT) && (hsestatus == RESET));
+  } while((startupcounter != HSE_STARTUP_TIMEOUT) && (hsestatus == RESET_stm));
 
-  if (RCC_GetFlagStatus(RCC_FLAG_HSERDY) != RESET)
+  if (RCC_GetFlagStatus(RCC_FLAG_HSERDY) != RESET_stm)
   {
-    status = SUCCESS;
+    status = SUCCESS_stm;
   }
   else
   {
-    status = ERROR;
+    status = ERROR_stm;
   }
   return (status);
 }
@@ -338,7 +338,7 @@ void RCC_AdjustHSICalibrationValue(uint8_t HSICalibrationValue)
   *         flag to be set indicating that HSI clock is stable and can be used as
   *         system clock source.  
   * @param  NewState: new state of the HSI.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @note   When the HSI is stopped, HSIRDY flag goes low after 6 HSI oscillator
   *         clock cycles.  
   * @retval None
@@ -355,7 +355,7 @@ void RCC_HSICmd(FunctionalState NewState)
   * @brief  Configures the External Low Speed oscillator (LSE).
   * @note   As the LSE is in the Backup domain and write access is denied to
   *         this domain after reset, you have to enable write access using 
-  *         PWR_BackupAccessCmd(ENABLE) function before to configure the LSE
+  *         PWR_BackupAccessCmd(ENABLE_stm) function before to configure the LSE
   *         (to be done once after reset).  
   * @note   After enabling the LSE (RCC_LSE_ON or RCC_LSE_Bypass), the application
   *         software should wait on LSERDY flag to be set indicating that LSE clock
@@ -403,7 +403,7 @@ void RCC_LSEConfig(uint8_t RCC_LSE)
   *         be used to clock the IWDG and/or the RTC.
   * @note   LSI can not be disabled if the IWDG is running.  
   * @param  NewState: new state of the LSI.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @note   When the LSI is stopped, LSIRDY flag goes low after 6 LSI oscillator
   *         clock cycles. 
   * @retval None
@@ -471,7 +471,7 @@ void RCC_PLLConfig(uint32_t RCC_PLLSource, uint32_t PLLM, uint32_t PLLN, uint32_
   *         be used as system clock source.
   * @note   The main PLL can not be disabled if it is used as system clock source
   * @note   The main PLL is disabled by hardware when entering STOP and STANDBY modes.
-  * @param  NewState: new state of the main PLL. This parameter can be: ENABLE or DISABLE.
+  * @param  NewState: new state of the main PLL. This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_PLLCmd(FunctionalState NewState)
@@ -512,7 +512,7 @@ void RCC_PLLI2SConfig(uint32_t PLLI2SN, uint32_t PLLI2SR)
 /**
   * @brief  Enables or disables the PLLI2S. 
   * @note   The PLLI2S is disabled by hardware when entering STOP and STANDBY modes.  
-  * @param  NewState: new state of the PLLI2S. This parameter can be: ENABLE or DISABLE.
+  * @param  NewState: new state of the PLLI2S. This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_PLLI2SCmd(FunctionalState NewState)
@@ -530,7 +530,7 @@ void RCC_PLLI2SCmd(FunctionalState NewState)
   *         allowing the MCU to perform rescue operations. The CSSI is linked to 
   *         the Cortex-M4 NMI (Non-Maskable Interrupt) exception vector.  
   * @param  NewState: new state of the Clock Security System.
-  *         This parameter can be: ENABLE or DISABLE.
+  *         This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_ClockSecuritySystemCmd(FunctionalState NewState)
@@ -974,7 +974,7 @@ void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks)
   * @brief  Configures the RTC clock (RTCCLK).
   * @note   As the RTC clock configuration bits are in the Backup domain and write
   *         access is denied to this domain after reset, you have to enable write
-  *         access using PWR_BackupAccessCmd(ENABLE) function before to configure
+  *         access using PWR_BackupAccessCmd(ENABLE_stm) function before to configure
   *         the RTC clock source (to be done once after reset).    
   * @note   Once the RTC clock is configured it can't be changed unless the  
   *         Backup domain is reset using RCC_BackupResetCmd() function, or by
@@ -1025,7 +1025,7 @@ void RCC_RTCCLKConfig(uint32_t RCC_RTCCLKSource)
   * @brief  Enables or disables the RTC clock.
   * @note   This function must be used only after the RTC clock source was selected
   *         using the RCC_RTCCLKConfig function.
-  * @param  NewState: new state of the RTC clock. This parameter can be: ENABLE or DISABLE.
+  * @param  NewState: new state of the RTC clock. This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_RTCCLKCmd(FunctionalState NewState)
@@ -1042,7 +1042,7 @@ void RCC_RTCCLKCmd(FunctionalState NewState)
   *         and the RTC clock source selection in RCC_CSR register.
   * @note   The BKPSRAM is not affected by this reset.    
   * @param  NewState: new state of the Backup domain reset.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_BackupResetCmd(FunctionalState NewState)
@@ -1105,10 +1105,10 @@ void RCC_TIMCLKPresConfig(uint32_t RCC_TIMCLKPrescaler)
   *          This parameter can be any combination of the following values:
   *            @arg RCC_AHB1Periph_GPIOA:       GPIOA clock
   *            @arg RCC_AHB1Periph_GPIOB:       GPIOB clock 
-  *            @arg RCC_AHB1Periph_GPIOC:       GPIOC clock
+  *            @arg RCC_AHB1Periph_GPIOC:       GPIOC_stm clock
   *            @arg RCC_AHB1Periph_GPIOD:       GPIOD clock
   *            @arg RCC_AHB1Periph_GPIOE:       GPIOE clock
-  *            @arg RCC_AHB1Periph_GPIOF:       GPIOF clock
+  *            @arg RCC_AHB1Periph_GPIOF:       GPIOF_stm clock
   *            @arg RCC_AHB1Periph_GPIOG:       GPIOG clock
   *            @arg RCC_AHB1Periph_GPIOG:       GPIOG clock
   *            @arg RCC_AHB1Periph_GPIOI:       GPIOI clock 
@@ -1124,7 +1124,7 @@ void RCC_TIMCLKPresConfig(uint32_t RCC_TIMCLKPrescaler)
   *            @arg RCC_AHB1Periph_OTG_HS:      USB OTG HS clock
   *            @arg RCC_AHB1Periph_OTG_HS_ULPI: USB OTG HS ULPI clock
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB1PeriphClockCmd(uint32_t RCC_AHB1Periph, FunctionalState NewState)
@@ -1133,7 +1133,7 @@ void RCC_AHB1PeriphClockCmd(uint32_t RCC_AHB1Periph, FunctionalState NewState)
   assert_param(IS_RCC_AHB1_CLOCK_PERIPH(RCC_AHB1Periph));
 
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB1ENR |= RCC_AHB1Periph;
   }
@@ -1156,7 +1156,7 @@ void RCC_AHB1PeriphClockCmd(uint32_t RCC_AHB1Periph, FunctionalState NewState)
   *            @arg RCC_AHB2Periph_RNG:    RNG clock
   *            @arg RCC_AHB2Periph_OTG_FS: USB OTG FS clock
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB2PeriphClockCmd(uint32_t RCC_AHB2Periph, FunctionalState NewState)
@@ -1165,7 +1165,7 @@ void RCC_AHB2PeriphClockCmd(uint32_t RCC_AHB2Periph, FunctionalState NewState)
   assert_param(IS_RCC_AHB2_PERIPH(RCC_AHB2Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB2ENR |= RCC_AHB2Periph;
   }
@@ -1184,7 +1184,7 @@ void RCC_AHB2PeriphClockCmd(uint32_t RCC_AHB2Periph, FunctionalState NewState)
   *          This parameter must be: RCC_AHB3Periph_FSMC
   *                                  
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB3PeriphClockCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
@@ -1193,7 +1193,7 @@ void RCC_AHB3PeriphClockCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
   assert_param(IS_RCC_AHB3_PERIPH(RCC_AHB3Periph));  
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB3ENR |= RCC_AHB3Periph;
   }
@@ -1236,7 +1236,7 @@ void RCC_AHB3PeriphClockCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
   *            @arg RCC_APB1Periph_UART7:  UART7 clock
   *            @arg RCC_APB1Periph_UART8:  UART8 clock
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_APB1PeriphClockCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
@@ -1245,7 +1245,7 @@ void RCC_APB1PeriphClockCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
   assert_param(IS_RCC_APB1_PERIPH(RCC_APB1Periph));  
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->APB1ENR |= RCC_APB1Periph;
   }
@@ -1279,7 +1279,7 @@ void RCC_APB1PeriphClockCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
   *            @arg RCC_APB2Periph_SPI5:   SPI5 clock
   *            @arg RCC_APB2Periph_SPI6:   SPI6 clock
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
@@ -1288,7 +1288,7 @@ void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   assert_param(IS_RCC_APB2_PERIPH(RCC_APB2Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->APB2ENR |= RCC_APB2Periph;
   }
@@ -1304,10 +1304,10 @@ void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   *          This parameter can be any combination of the following values:
   *            @arg RCC_AHB1Periph_GPIOA:   GPIOA clock
   *            @arg RCC_AHB1Periph_GPIOB:   GPIOB clock 
-  *            @arg RCC_AHB1Periph_GPIOC:   GPIOC clock
+  *            @arg RCC_AHB1Periph_GPIOC:   GPIOC_stm clock
   *            @arg RCC_AHB1Periph_GPIOD:   GPIOD clock
   *            @arg RCC_AHB1Periph_GPIOE:   GPIOE clock
-  *            @arg RCC_AHB1Periph_GPIOF:   GPIOF clock
+  *            @arg RCC_AHB1Periph_GPIOF:   GPIOF_stm clock
   *            @arg RCC_AHB1Periph_GPIOG:   GPIOG clock
   *            @arg RCC_AHB1Periph_GPIOG:   GPIOG clock
   *            @arg RCC_AHB1Periph_GPIOI:   GPIOI clock  
@@ -1318,7 +1318,7 @@ void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   *            @arg RCC_AHB1Periph_OTG_HS:  USB OTG HS clock
   *                  
   * @param  NewState: new state of the specified peripheral reset.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB1PeriphResetCmd(uint32_t RCC_AHB1Periph, FunctionalState NewState)
@@ -1327,7 +1327,7 @@ void RCC_AHB1PeriphResetCmd(uint32_t RCC_AHB1Periph, FunctionalState NewState)
   assert_param(IS_RCC_AHB1_RESET_PERIPH(RCC_AHB1Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB1RSTR |= RCC_AHB1Periph;
   }
@@ -1347,7 +1347,7 @@ void RCC_AHB1PeriphResetCmd(uint32_t RCC_AHB1Periph, FunctionalState NewState)
   *            @arg RCC_AHB2Periph_RNG:    RNG clock
   *            @arg RCC_AHB2Periph_OTG_FS: USB OTG FS clock
   * @param  NewState: new state of the specified peripheral reset.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB2PeriphResetCmd(uint32_t RCC_AHB2Periph, FunctionalState NewState)
@@ -1356,7 +1356,7 @@ void RCC_AHB2PeriphResetCmd(uint32_t RCC_AHB2Periph, FunctionalState NewState)
   assert_param(IS_RCC_AHB2_PERIPH(RCC_AHB2Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB2RSTR |= RCC_AHB2Periph;
   }
@@ -1372,7 +1372,7 @@ void RCC_AHB2PeriphResetCmd(uint32_t RCC_AHB2Periph, FunctionalState NewState)
   *          This parameter must be: RCC_AHB3Periph_FSMC
   *                                   
   * @param  NewState: new state of the specified peripheral reset.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB3PeriphResetCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
@@ -1381,7 +1381,7 @@ void RCC_AHB3PeriphResetCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
   assert_param(IS_RCC_AHB3_PERIPH(RCC_AHB3Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB3RSTR |= RCC_AHB3Periph;
   }
@@ -1421,7 +1421,7 @@ void RCC_AHB3PeriphResetCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
   *            @arg RCC_APB1Periph_UART7:  UART7 clock
   *            @arg RCC_APB1Periph_UART8:  UART8 clock  
   * @param  NewState: new state of the specified peripheral reset.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_APB1PeriphResetCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
@@ -1429,7 +1429,7 @@ void RCC_APB1PeriphResetCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_RCC_APB1_PERIPH(RCC_APB1Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->APB1RSTR |= RCC_APB1Periph;
   }
@@ -1460,7 +1460,7 @@ void RCC_APB1PeriphResetCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
   *            @arg RCC_APB2Periph_SPI5:   SPI5 clock
   *            @arg RCC_APB2Periph_SPI6:   SPI6 clock 
   * @param  NewState: new state of the specified peripheral reset.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
@@ -1468,7 +1468,7 @@ void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_RCC_APB2_RESET_PERIPH(RCC_APB2Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->APB2RSTR |= RCC_APB2Periph;
   }
@@ -1488,10 +1488,10 @@ void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   *          This parameter can be any combination of the following values:
   *            @arg RCC_AHB1Periph_GPIOA:       GPIOA clock
   *            @arg RCC_AHB1Periph_GPIOB:       GPIOB clock 
-  *            @arg RCC_AHB1Periph_GPIOC:       GPIOC clock
+  *            @arg RCC_AHB1Periph_GPIOC:       GPIOC_stm clock
   *            @arg RCC_AHB1Periph_GPIOD:       GPIOD clock
   *            @arg RCC_AHB1Periph_GPIOE:       GPIOE clock
-  *            @arg RCC_AHB1Periph_GPIOF:       GPIOF clock
+  *            @arg RCC_AHB1Periph_GPIOF:       GPIOF_stm clock
   *            @arg RCC_AHB1Periph_GPIOG:       GPIOG clock
   *            @arg RCC_AHB1Periph_GPIOG:       GPIOG clock
   *            @arg RCC_AHB1Periph_GPIOI:       GPIOI clock 
@@ -1506,7 +1506,7 @@ void RCC_APB2PeriphResetCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
   *            @arg RCC_AHB1Periph_OTG_HS:      USB OTG HS clock
   *            @arg RCC_AHB1Periph_OTG_HS_ULPI: USB OTG HS ULPI clock
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB1PeriphClockLPModeCmd(uint32_t RCC_AHB1Periph, FunctionalState NewState)
@@ -1514,7 +1514,7 @@ void RCC_AHB1PeriphClockLPModeCmd(uint32_t RCC_AHB1Periph, FunctionalState NewSt
   /* Check the parameters */
   assert_param(IS_RCC_AHB1_LPMODE_PERIPH(RCC_AHB1Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB1LPENR |= RCC_AHB1Periph;
   }
@@ -1538,7 +1538,7 @@ void RCC_AHB1PeriphClockLPModeCmd(uint32_t RCC_AHB1Periph, FunctionalState NewSt
   *            @arg RCC_AHB2Periph_RNG:    RNG clock
   *            @arg RCC_AHB2Periph_OTG_FS: USB OTG FS clock  
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB2PeriphClockLPModeCmd(uint32_t RCC_AHB2Periph, FunctionalState NewState)
@@ -1546,7 +1546,7 @@ void RCC_AHB2PeriphClockLPModeCmd(uint32_t RCC_AHB2Periph, FunctionalState NewSt
   /* Check the parameters */
   assert_param(IS_RCC_AHB2_PERIPH(RCC_AHB2Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB2LPENR |= RCC_AHB2Periph;
   }
@@ -1566,7 +1566,7 @@ void RCC_AHB2PeriphClockLPModeCmd(uint32_t RCC_AHB2Periph, FunctionalState NewSt
   *          This parameter must be: RCC_AHB3Periph_FSMC
   *                                  
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_AHB3PeriphClockLPModeCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
@@ -1574,7 +1574,7 @@ void RCC_AHB3PeriphClockLPModeCmd(uint32_t RCC_AHB3Periph, FunctionalState NewSt
   /* Check the parameters */
   assert_param(IS_RCC_AHB3_PERIPH(RCC_AHB3Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->AHB3LPENR |= RCC_AHB3Periph;
   }
@@ -1618,7 +1618,7 @@ void RCC_AHB3PeriphClockLPModeCmd(uint32_t RCC_AHB3Periph, FunctionalState NewSt
   *            @arg RCC_APB1Periph_UART7:  UART7 clock
   *            @arg RCC_APB1Periph_UART8:  UART8 clock
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_APB1PeriphClockLPModeCmd(uint32_t RCC_APB1Periph, FunctionalState NewState)
@@ -1626,7 +1626,7 @@ void RCC_APB1PeriphClockLPModeCmd(uint32_t RCC_APB1Periph, FunctionalState NewSt
   /* Check the parameters */
   assert_param(IS_RCC_APB1_PERIPH(RCC_APB1Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->APB1LPENR |= RCC_APB1Periph;
   }
@@ -1661,7 +1661,7 @@ void RCC_APB1PeriphClockLPModeCmd(uint32_t RCC_APB1Periph, FunctionalState NewSt
   *            @arg RCC_APB2Periph_SPI5:   SPI5 clock
   *            @arg RCC_APB2Periph_SPI6:   SPI6 clock  
   * @param  NewState: new state of the specified peripheral clock.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_APB2PeriphClockLPModeCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)
@@ -1669,7 +1669,7 @@ void RCC_APB2PeriphClockLPModeCmd(uint32_t RCC_APB2Periph, FunctionalState NewSt
   /* Check the parameters */
   assert_param(IS_RCC_APB2_PERIPH(RCC_APB2Periph));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     RCC->APB2LPENR |= RCC_APB2Periph;
   }
@@ -1707,7 +1707,7 @@ void RCC_APB2PeriphClockLPModeCmd(uint32_t RCC_APB2Periph, FunctionalState NewSt
   *            @arg RCC_IT_PLLI2SRDY: PLLI2S ready interrupt
   *              
   * @param  NewState: new state of the specified RCC interrupts.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RCC_ITConfig(uint8_t RCC_IT, FunctionalState NewState)
@@ -1715,7 +1715,7 @@ void RCC_ITConfig(uint8_t RCC_IT, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_RCC_IT(RCC_IT));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Perform Byte access to RCC_CIR[14:8] bits to enable the selected interrupts */
     *(__IO uint8_t *) CIR_BYTE2_ADDRESS |= RCC_IT;
@@ -1744,13 +1744,13 @@ void RCC_ITConfig(uint8_t RCC_IT, FunctionalState NewState)
   *            @arg RCC_FLAG_IWDGRST: Independent Watchdog reset
   *            @arg RCC_FLAG_WWDGRST: Window Watchdog reset
   *            @arg RCC_FLAG_LPWRRST: Low Power reset
-  * @retval The new state of RCC_FLAG (SET or RESET).
+  * @retval The new state of RCC_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus RCC_GetFlagStatus(uint8_t RCC_FLAG)
+FlagStatus_stm RCC_GetFlagStatus(uint8_t RCC_FLAG)
 {
   uint32_t tmp = 0;
   uint32_t statusreg = 0;
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
 
   /* Check the parameters */
   assert_param(IS_RCC_FLAG(RCC_FLAG));
@@ -1772,13 +1772,13 @@ FlagStatus RCC_GetFlagStatus(uint8_t RCC_FLAG)
 
   /* Get the flag position */
   tmp = RCC_FLAG & FLAG_MASK;
-  if ((statusreg & ((uint32_t)1 << tmp)) != (uint32_t)RESET)
+  if ((statusreg & ((uint32_t)1 << tmp)) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the flag status */
   return bitstatus;
@@ -1808,23 +1808,23 @@ void RCC_ClearFlag(void)
   *            @arg RCC_IT_PLLRDY: main PLL ready interrupt
   *            @arg RCC_IT_PLLI2SRDY: PLLI2S ready interrupt             
   *            @arg RCC_IT_CSS: Clock Security System interrupt
-  * @retval The new state of RCC_IT (SET or RESET).
+  * @retval The new state of RCC_IT (SET_stm or RESET_stm).
   */
 ITStatus RCC_GetITStatus(uint8_t RCC_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
 
   /* Check the parameters */
   assert_param(IS_RCC_GET_IT(RCC_IT));
 
   /* Check the status of the specified RCC interrupt */
-  if ((RCC->CIR & RCC_IT) != (uint32_t)RESET)
+  if ((RCC->CIR & RCC_IT) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the RCC_IT status */
   return  bitstatus;

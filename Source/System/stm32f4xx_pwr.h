@@ -168,7 +168,7 @@ void PWR_EnterSTOPMode(uint32_t PWR_Regulator, uint8_t PWR_STOPEntry);
 void PWR_EnterSTANDBYMode(void);
 
 /* Flags management functions *************************************************/ 
-FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG);
+FlagStatus_stm PWR_GetFlagStatus(uint32_t PWR_FLAG);
 void PWR_ClearFlag(uint32_t PWR_FLAG);
 
 #ifdef __cplusplus

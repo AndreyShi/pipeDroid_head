@@ -151,8 +151,8 @@ static void ETH_Delay(__IO uint32_t nCount)
   */
 void ETH_DeInit(void)
 {
-  RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_ETH_MAC, ENABLE);
-  RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_ETH_MAC, DISABLE);
+  RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_ETH_MAC, ENABLE_stm);
+  RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_ETH_MAC, DISABLE_stm);
 }
 
 
@@ -512,23 +512,23 @@ uint32_t ETH_Init(ETH_InitTypeDef* ETH_InitStruct, uint16_t PHYAddress)
 void ETH_Start(void)
 {
   /* Enable transmit state machine of the MAC for transmission on the MII */  
-  ETH_MACTransmissionCmd(ENABLE);
+  ETH_MACTransmissionCmd(ENABLE_stm);
   /* Flush Transmit FIFO */
   ETH_FlushTransmitFIFO();
   /* Enable receive state machine of the MAC for reception from the MII */  
-  ETH_MACReceptionCmd(ENABLE);
+  ETH_MACReceptionCmd(ENABLE_stm);
  
   /* Start DMA transmission */
-  ETH_DMATransmissionCmd(ENABLE); 
+  ETH_DMATransmissionCmd(ENABLE_stm); 
   /* Start DMA reception */
-  ETH_DMAReceptionCmd(ENABLE);   
+  ETH_DMAReceptionCmd(ENABLE_stm);   
 }
 
 
 /**
   * @brief  Enables or disables the MAC transmission.
   * @param  NewState: new state of the MAC transmission.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MACTransmissionCmd(FunctionalState NewState)
@@ -536,7 +536,7 @@ void ETH_MACTransmissionCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MAC transmission */
     ETH->MACCR |= ETH_MACCR_TE;  
@@ -552,7 +552,7 @@ void ETH_MACTransmissionCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the MAC reception.
   * @param  NewState: new state of the MAC reception.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MACReceptionCmd(FunctionalState NewState)
@@ -560,7 +560,7 @@ void ETH_MACReceptionCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MAC reception */
     ETH->MACCR |= ETH_MACCR_RE;  
@@ -576,19 +576,19 @@ void ETH_MACReceptionCmd(FunctionalState NewState)
 /**
   * @brief  Checks whether the ETHERNET flow control busy bit is set or not.
   * @param  None
-  * @retval The new state of flow control busy status bit (SET or RESET).
+  * @retval The new state of flow control busy status bit (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetFlowControlBusyStatus(void)
+FlagStatus_stm ETH_GetFlowControlBusyStatus(void)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* The Flow Control register should not be written to until this bit is cleared */
-  if ((ETH->MACFCR & ETH_MACFCR_FCBBPA) != (uint32_t)RESET)
+  if ((ETH->MACFCR & ETH_MACFCR_FCBBPA) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -609,7 +609,7 @@ void ETH_InitiatePauseControlFrame(void)
 /**
   * @brief  Enables or disables the MAC BackPressure operation activation (Half-duplex only).
   * @param  NewState: new state of the MAC BackPressure operation activation.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_BackPressureActivationCmd(FunctionalState NewState)   
@@ -617,7 +617,7 @@ void ETH_BackPressureActivationCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
     
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Activate the MAC BackPressure operation */
     /* In Half duplex: during backpressure, when the MAC receives a new frame,
@@ -641,20 +641,20 @@ void ETH_BackPressureActivationCmd(FunctionalState NewState)
   *     @arg ETH_MAC_FLAG_MMCR : MMC receive flag   
   *     @arg ETH_MAC_FLAG_MMC  : MMC flag  
   *     @arg ETH_MAC_FLAG_PMT  : PMT flag  
-  * @retval The new state of ETHERNET MAC flag (SET or RESET).
+  * @retval The new state of ETHERNET MAC flag (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetMACFlagStatus(uint32_t ETH_MAC_FLAG)
+FlagStatus_stm ETH_GetMACFlagStatus(uint32_t ETH_MAC_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_MAC_GET_FLAG(ETH_MAC_FLAG)); 
-  if ((ETH->MACSR & ETH_MAC_FLAG) != (uint32_t)RESET)
+  if ((ETH->MACSR & ETH_MAC_FLAG) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -669,20 +669,20 @@ FlagStatus ETH_GetMACFlagStatus(uint32_t ETH_MAC_FLAG)
   *     @arg ETH_MAC_IT_MMCR : MMC receive interrupt  
   *     @arg ETH_MAC_IT_MMC  : MMC interrupt 
   *     @arg ETH_MAC_IT_PMT  : PMT interrupt 
-  * @retval The new state of ETHERNET MAC interrupt (SET or RESET).
+  * @retval The new state of ETHERNET MAC interrupt (SET_stm or RESET_stm).
   */
 ITStatus ETH_GetMACITStatus(uint32_t ETH_MAC_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_MAC_GET_IT(ETH_MAC_IT)); 
-  if ((ETH->MACSR & ETH_MAC_IT) != (uint32_t)RESET)
+  if ((ETH->MACSR & ETH_MAC_IT) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -696,7 +696,7 @@ ITStatus ETH_GetMACITStatus(uint32_t ETH_MAC_IT)
   *     @arg ETH_MAC_IT_TST : Time stamp trigger interrupt 
   *     @arg ETH_MAC_IT_PMT : PMT interrupt 
   * @param  NewState: new state of the specified ETHERNET MAC interrupts.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MACITConfig(uint32_t ETH_MAC_IT, FunctionalState NewState)
@@ -705,7 +705,7 @@ void ETH_MACITConfig(uint32_t ETH_MAC_IT, FunctionalState NewState)
   assert_param(IS_ETH_MAC_IT(ETH_MAC_IT));
   assert_param(IS_FUNCTIONAL_STATE(NewState));  
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ETHERNET MAC interrupts */
     ETH->MACIMR &= (~(uint32_t)ETH_MAC_IT);
@@ -789,7 +789,7 @@ void ETH_GetMACAddress(uint32_t MacAddr, uint8_t *Addr)
   *     @arg ETH_MAC_Address2 : MAC Address2
   *     @arg ETH_MAC_Address3 : MAC Address3
   * @param  NewState: new state of the specified ETHERNET MAC address use.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MACAddressPerfectFilterCmd(uint32_t MacAddr, FunctionalState NewState)
@@ -798,7 +798,7 @@ void ETH_MACAddressPerfectFilterCmd(uint32_t MacAddr, FunctionalState NewState)
   assert_param(IS_ETH_MAC_ADDRESS123(MacAddr));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
     
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ETHERNET MAC address for perfect filtering */
     (*(__IO uint32_t *) (ETH_MAC_ADDR_HBASE + MacAddr)) |= ETH_MACA1HR_AE;
@@ -932,7 +932,7 @@ FrameTypeDef ETH_Get_Received_Frame_interrupt(void)
   __IO uint32_t descriptor_scan_counter = 0; 
   
   /* scan descriptors owned by CPU */
-  while (((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET)&&
+  while (((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET_stm)&&
         (descriptor_scan_counter<ETH_RXBUFNB))
   {
     
@@ -940,8 +940,8 @@ FrameTypeDef ETH_Get_Received_Frame_interrupt(void)
     descriptor_scan_counter++;
     
     /* check if first segment in frame */
-    if(((DMARxDescToGet->Status & ETH_DMARxDesc_FS) != (uint32_t)RESET)&&
-      ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET))
+    if(((DMARxDescToGet->Status & ETH_DMARxDesc_FS) != (uint32_t)RESET_stm)&&
+      ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET_stm))
     {
       DMA_RX_FRAME_infos->FS_Rx_Desc = DMARxDescToGet;
       DMA_RX_FRAME_infos->Seg_Count = 1;   
@@ -949,8 +949,8 @@ FrameTypeDef ETH_Get_Received_Frame_interrupt(void)
     }
     
     /* check if intermediate segment */
-    else if (((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET)&&
-            ((DMARxDescToGet->Status & ETH_DMARxDesc_FS) == (uint32_t)RESET))
+    else if (((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET_stm)&&
+            ((DMARxDescToGet->Status & ETH_DMARxDesc_FS) == (uint32_t)RESET_stm))
     {
       (DMA_RX_FRAME_infos->Seg_Count) ++;
       DMARxDescToGet = (ETH_DMADESCTypeDef*) (DMARxDescToGet->Buffer2NextDescAddr);
@@ -1007,9 +1007,9 @@ uint32_t ETH_Prepare_Transmit_Descriptors(u16 FrameLength)
   __IO ETH_DMADESCTypeDef *DMATxNextDesc;
   
   /* Check if the descriptor is owned by the ETHERNET DMA (when set) or CPU (when reset) */
-  if((DMATxDescToSet->Status & ETH_DMATxDesc_OWN) != (u32)RESET)
+  if((DMATxDescToSet->Status & ETH_DMATxDesc_OWN) != (u32)RESET_stm)
   {  
-    /* Return ERROR: OWN bit set */
+    /* Return ERROR_stm: OWN bit set */
     return ETH_ERROR;
   }
   
@@ -1063,7 +1063,7 @@ uint32_t ETH_Prepare_Transmit_Descriptors(u16 FrameLength)
   }
     
   /* When Tx Buffer unavailable flag is set: clear it and resume transmission */
-  if ((ETH->DMASR & ETH_DMASR_TBUS) != (u32)RESET)
+  if ((ETH->DMASR & ETH_DMASR_TBUS) != (u32)RESET_stm)
   {
     /* Clear TBUS ETHERNET DMA flag */
     ETH->DMASR = ETH_DMASR_TBUS;
@@ -1071,7 +1071,7 @@ uint32_t ETH_Prepare_Transmit_Descriptors(u16 FrameLength)
     ETH->DMATPDR = 0;
   }
   
-  /* Return SUCCESS */
+  /* Return SUCCESS_stm */
   return ETH_SUCCESS;   
 }
 
@@ -1132,8 +1132,8 @@ void ETH_DMARxDescChainInit(ETH_DMADESCTypeDef *DMARxDescTab, uint8_t *RxBuff, u
 uint32_t ETH_CheckFrameReceived(void)
 { 
   /* check if last segment */
-  if(((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET) &&
-     ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) != (uint32_t)RESET)) 
+  if(((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET_stm) &&
+     ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) != (uint32_t)RESET_stm)) 
     {   
       DMA_RX_FRAME_infos->LS_Rx_Desc = DMARxDescToGet;
       DMA_RX_FRAME_infos->Seg_Count++;
@@ -1141,9 +1141,9 @@ uint32_t ETH_CheckFrameReceived(void)
     }
   
     /* check if first segment */
-    else if(((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET) &&
-     ((DMARxDescToGet->Status & ETH_DMARxDesc_FS) != (uint32_t)RESET)&&
-     ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET))      
+    else if(((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET_stm) &&
+     ((DMARxDescToGet->Status & ETH_DMARxDesc_FS) != (uint32_t)RESET_stm)&&
+     ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET_stm))      
     {
       DMA_RX_FRAME_infos->FS_Rx_Desc = DMARxDescToGet;
       DMA_RX_FRAME_infos->LS_Rx_Desc = NULL;
@@ -1152,9 +1152,9 @@ uint32_t ETH_CheckFrameReceived(void)
     }
     
     /* check if intermediate segment */ 
-    else if(((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET) &&
-     ((DMARxDescToGet->Status & ETH_DMARxDesc_FS) == (uint32_t)RESET)&&
-     ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET))
+    else if(((DMARxDescToGet->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET_stm) &&
+     ((DMARxDescToGet->Status & ETH_DMARxDesc_FS) == (uint32_t)RESET_stm)&&
+     ((DMARxDescToGet->Status & ETH_DMARxDesc_LS) == (uint32_t)RESET_stm))
     {
       (DMA_RX_FRAME_infos->Seg_Count) ++;
       DMARxDescToGet = (ETH_DMADESCTypeDef*) (DMARxDescToGet->Buffer2NextDescAddr);
@@ -1239,21 +1239,21 @@ void ETH_DMATxDescChainInit(ETH_DMADESCTypeDef *DMATxDescTab, uint8_t* TxBuff, u
   *     @arg ETH_DMATxDesc_ED  : Excessive Deferral
   *     @arg ETH_DMATxDesc_UF  : Underflow Error: late data arrival from the memory
   *     @arg ETH_DMATxDesc_DB  : Deferred Bit
-  * @retval The new state of ETH_DMATxDescFlag (SET or RESET).
+  * @retval The new state of ETH_DMATxDescFlag (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetDMATxDescFlagStatus(ETH_DMADESCTypeDef *DMATxDesc, uint32_t ETH_DMATxDescFlag)
+FlagStatus_stm ETH_GetDMATxDescFlagStatus(ETH_DMADESCTypeDef *DMATxDesc, uint32_t ETH_DMATxDescFlag)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_DMATxDESC_GET_FLAG(ETH_DMATxDescFlag));
   
-  if ((DMATxDesc->Status & ETH_DMATxDescFlag) != (uint32_t)RESET)
+  if ((DMATxDesc->Status & ETH_DMATxDescFlag) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -1284,7 +1284,7 @@ void ETH_SetDMATxDescOwnBit(ETH_DMADESCTypeDef *DMATxDesc)
   * @brief  Enables or disables the specified DMA Tx Desc Transmit interrupt.
   * @param  DMATxDesc: Pointer on a Tx desc
   * @param  NewState: new state of the DMA Tx Desc transmit interrupt.
-  *   This parameter can be: ENABLE or DISABLE.                   
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.                   
   * @retval None
   */
 void ETH_DMATxDescTransmitITConfig(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState)
@@ -1292,7 +1292,7 @@ void ETH_DMATxDescTransmitITConfig(ETH_DMADESCTypeDef *DMATxDesc, FunctionalStat
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the DMA Tx Desc Transmit interrupt */
     DMATxDesc->Status |= ETH_DMATxDesc_IC;
@@ -1346,7 +1346,7 @@ void ETH_DMATxDescChecksumInsertionConfig(ETH_DMADESCTypeDef *DMATxDesc, uint32_
   * @brief  Enables or disables the DMA Tx Desc CRC.
   * @param  DMATxDesc: pointer on a DMA Tx descriptor
   * @param  NewState: new state of the specified DMA Tx Desc CRC.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_DMATxDescCRCCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState)
@@ -1354,7 +1354,7 @@ void ETH_DMATxDescCRCCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected DMA Tx Desc CRC */
     DMATxDesc->Status &= (~(uint32_t)ETH_DMATxDesc_DC);
@@ -1371,7 +1371,7 @@ void ETH_DMATxDescCRCCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState
   * @brief  Enables or disables the DMA Tx Desc second address chained.
   * @param  DMATxDesc: pointer on a DMA Tx descriptor
   * @param  NewState: new state of the specified DMA Tx Desc second address chained.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_DMATxDescSecondAddressChainedCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState)
@@ -1379,7 +1379,7 @@ void ETH_DMATxDescSecondAddressChainedCmd(ETH_DMADESCTypeDef *DMATxDesc, Functio
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected DMA Tx Desc second address chained */
     DMATxDesc->Status |= ETH_DMATxDesc_TCH;  
@@ -1395,7 +1395,7 @@ void ETH_DMATxDescSecondAddressChainedCmd(ETH_DMADESCTypeDef *DMATxDesc, Functio
   * @brief  Enables or disables the DMA Tx Desc padding for frame shorter than 64 bytes.
   * @param  DMATxDesc: pointer on a DMA Tx descriptor
   * @param  NewState: new state of the specified DMA Tx Desc padding for frame shorter than 64 bytes.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_DMATxDescShortFramePaddingCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState)
@@ -1403,7 +1403,7 @@ void ETH_DMATxDescShortFramePaddingCmd(ETH_DMADESCTypeDef *DMATxDesc, Functional
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected DMA Tx Desc padding for frame shorter than 64 bytes */
     DMATxDesc->Status &= (~(uint32_t)ETH_DMATxDesc_DP);
@@ -1457,20 +1457,20 @@ void ETH_DMATxDescBufferSizeConfig(ETH_DMADESCTypeDef *DMATxDesc, uint32_t Buffe
   *     @arg ETH_DMARxDesc_DE:          Dribble bit error: frame contains non int multiple of 8 bits
   *     @arg ETH_DMARxDesc_CE:          CRC error
   *     @arg ETH_DMARxDesc_MAMPCE:      Rx MAC Address/Payload Checksum Error: Rx MAC address matched/ Rx Payload Checksum Error
-  * @retval The new state of ETH_DMARxDescFlag (SET or RESET).
+  * @retval The new state of ETH_DMARxDescFlag (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetDMARxDescFlagStatus(ETH_DMADESCTypeDef *DMARxDesc, uint32_t ETH_DMARxDescFlag)
+FlagStatus_stm ETH_GetDMARxDescFlagStatus(ETH_DMADESCTypeDef *DMARxDesc, uint32_t ETH_DMARxDescFlag)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_DMARxDESC_GET_FLAG(ETH_DMARxDescFlag));
-  if ((DMARxDesc->Status & ETH_DMARxDescFlag) != (uint32_t)RESET)
+  if ((DMARxDesc->Status & ETH_DMARxDescFlag) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -1490,22 +1490,22 @@ FlagStatus ETH_GetDMARxDescFlagStatus(ETH_DMADESCTypeDef *DMARxDesc, uint32_t ET
   *     @arg ETH_DMAPTPRxDesc_IPPE:   IP payload error
   *     @arg ETH_DMAPTPRxDesc_IPHE:   IP header error 
   *     @arg ETH_DMAPTPRxDesc_IPPT:   IP payload type 
-  * @retval The new state of ETH_DMAPTPRxDescExtendedFlag (SET or RESET).
+  * @retval The new state of ETH_DMAPTPRxDescExtendedFlag (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetDMAPTPRxDescExtendedFlagStatus(ETH_DMADESCTypeDef *DMAPTPRxDesc, uint32_t ETH_DMAPTPRxDescExtendedFlag)
+FlagStatus_stm ETH_GetDMAPTPRxDescExtendedFlagStatus(ETH_DMADESCTypeDef *DMAPTPRxDesc, uint32_t ETH_DMAPTPRxDescExtendedFlag)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
 
   /* Check the parameters */
   assert_param(IS_ETH_DMAPTPRxDESC_GET_EXTENDED_FLAG(ETH_DMAPTPRxDescExtendedFlag));
 
-  if ((DMAPTPRxDesc->ExtendedStatus & ETH_DMAPTPRxDescExtendedFlag) != (uint32_t)RESET)
+  if ((DMAPTPRxDesc->ExtendedStatus & ETH_DMAPTPRxDescExtendedFlag) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -1537,7 +1537,7 @@ uint32_t ETH_GetDMARxDescFrameLength(ETH_DMADESCTypeDef *DMARxDesc)
   * @brief  Enables or disables the specified DMA Rx Desc receive interrupt.
   * @param  DMARxDesc: Pointer on a Rx desc
   * @param  NewState: new state of the specified DMA Rx Desc interrupt.
-  *   This parameter can be: ENABLE or DISABLE.                   
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.                   
   * @retval None
   */
 void ETH_DMARxDescReceiveITConfig(ETH_DMADESCTypeDef *DMARxDesc, FunctionalState NewState)
@@ -1545,7 +1545,7 @@ void ETH_DMARxDescReceiveITConfig(ETH_DMADESCTypeDef *DMARxDesc, FunctionalState
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the DMA Rx Desc receive interrupt */
     DMARxDesc->ControlBufferSize &=(~(uint32_t)ETH_DMARxDesc_DIC);
@@ -1593,9 +1593,9 @@ uint32_t ETH_GetDMARxDescBufferSize(ETH_DMADESCTypeDef *DMARxDesc, uint32_t DMAR
 uint32_t ETH_GetRxPktSize(ETH_DMADESCTypeDef *DMARxDesc)
 {
   uint32_t frameLength = 0;
-  if(((DMARxDesc->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET) &&
-     ((DMARxDesc->Status & ETH_DMARxDesc_ES) == (uint32_t)RESET) &&
-     ((DMARxDesc->Status & ETH_DMARxDesc_LS) != (uint32_t)RESET)) 
+  if(((DMARxDesc->Status & ETH_DMARxDesc_OWN) == (uint32_t)RESET_stm) &&
+     ((DMARxDesc->Status & ETH_DMARxDesc_ES) == (uint32_t)RESET_stm) &&
+     ((DMARxDesc->Status & ETH_DMARxDesc_LS) != (uint32_t)RESET_stm)) 
   {
     /* Get the size of the packet: including 4 bytes of the CRC */
     frameLength =  ETH_GetDMARxDescFrameLength(DMARxDesc);
@@ -1609,7 +1609,7 @@ uint32_t ETH_GetRxPktSize(ETH_DMADESCTypeDef *DMARxDesc)
 /**
   * @brief  Enables or disables the Enhanced descriptor structure.
   * @param  NewState: new state of the Enhanced descriptor structure.
-  *   This parameter can be: ENABLE or DISABLE. 
+  *   This parameter can be: ENABLE_stm or DISABLE_stm. 
   * @retval None
   */
 void ETH_EnhancedDescriptorCmd(FunctionalState NewState)
@@ -1617,7 +1617,7 @@ void ETH_EnhancedDescriptorCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable enhanced descriptor structure */
     ETH->DMABMR |= ETH_DMABMR_EDE;  
@@ -1648,18 +1648,18 @@ void ETH_SoftwareReset(void)
 /**
   * @brief  Checks whether the ETHERNET software reset bit is set or not.
   * @param  None
-  * @retval The new state of DMA Bus Mode register SR bit (SET or RESET).
+  * @retval The new state of DMA Bus Mode register SR bit (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetSoftwareResetStatus(void)
+FlagStatus_stm ETH_GetSoftwareResetStatus(void)
 {
-  FlagStatus bitstatus = RESET;
-  if((ETH->DMABMR & ETH_DMABMR_SR) != (uint32_t)RESET)
+  FlagStatus_stm bitstatus = RESET_stm;
+  if((ETH->DMABMR & ETH_DMABMR_SR) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -1689,26 +1689,26 @@ FlagStatus ETH_GetSoftwareResetStatus(void)
   *     @arg ETH_DMA_FLAG_TBU : Transmit buffer unavailable flag 
   *     @arg ETH_DMA_FLAG_TPS : Transmit process stopped flag 
   *     @arg ETH_DMA_FLAG_T   : Transmit flag 
-  * @retval The new state of ETH_DMA_FLAG (SET or RESET).
+  * @retval The new state of ETH_DMA_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetDMAFlagStatus(uint32_t ETH_DMA_FLAG)
+FlagStatus_stm ETH_GetDMAFlagStatus(uint32_t ETH_DMA_FLAG)
 {  
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_DMA_GET_IT(ETH_DMA_FLAG));
-  if ((ETH->DMASR & ETH_DMA_FLAG) != (uint32_t)RESET)
+  if ((ETH->DMASR & ETH_DMA_FLAG) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
 
 /**
-  * @brief  Clears the ETHERNET’s DMA pending flag.
+  * @brief  Clears the ETHERNETï¿½s DMA pending flag.
   * @param  ETH_DMA_FLAG: specifies the flag to clear.
   *   This parameter can be any combination of the following values:
   *     @arg ETH_DMA_FLAG_NIS : Normal interrupt summary flag
@@ -1758,7 +1758,7 @@ void ETH_DMAClearFlag(uint32_t ETH_DMA_FLAG)
   *     @arg ETH_DMA_IT_TPS : Transmit process stopped interrupt 
   *     @arg ETH_DMA_IT_T   : Transmit interrupt
   * @param  NewState: new state of the specified ETHERNET DMA interrupts.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_DMAITConfig(uint32_t ETH_DMA_IT, FunctionalState NewState)
@@ -1767,7 +1767,7 @@ void ETH_DMAITConfig(uint32_t ETH_DMA_IT, FunctionalState NewState)
   assert_param(IS_ETH_DMA_IT(ETH_DMA_IT));
   assert_param(IS_FUNCTIONAL_STATE(NewState));  
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ETHERNET DMA interrupts */
     ETH->DMAIER |= ETH_DMA_IT;
@@ -1801,26 +1801,26 @@ void ETH_DMAITConfig(uint32_t ETH_DMA_IT, FunctionalState NewState)
   *     @arg ETH_DMA_IT_TBU : Transmit buffer unavailable interrupt 
   *     @arg ETH_DMA_IT_TPS : Transmit process stopped interrupt 
   *     @arg ETH_DMA_IT_T   : Transmit interrupt 
-  * @retval The new state of ETH_DMA_IT (SET or RESET).
+  * @retval The new state of ETH_DMA_IT (SET_stm or RESET_stm).
   */
 ITStatus ETH_GetDMAITStatus(uint32_t ETH_DMA_IT)
 {  
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_DMA_GET_IT(ETH_DMA_IT));
-  if ((ETH->DMASR & ETH_DMA_IT) != (uint32_t)RESET)
+  if ((ETH->DMASR & ETH_DMA_IT) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
 
 /**
-  * @brief  Clears the ETHERNET’s DMA IT pending bit.
+  * @brief  Clears the ETHERNETï¿½s DMA IT pending bit.
   * @param  ETH_DMA_IT: specifies the interrupt pending bit to clear.
   *   This parameter can be any combination of the following values:
   *     @arg ETH_DMA_IT_NIS : Normal interrupt summary 
@@ -1897,18 +1897,18 @@ void ETH_FlushTransmitFIFO(void)
 /**
   * @brief  Checks whether the ETHERNET flush transmit FIFO bit is cleared or not.
   * @param  None                
-  * @retval The new state of ETHERNET flush transmit FIFO bit (SET or RESET).
+  * @retval The new state of ETHERNET flush transmit FIFO bit (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetFlushTransmitFIFOStatus(void)
+FlagStatus_stm ETH_GetFlushTransmitFIFOStatus(void)
 {   
-  FlagStatus bitstatus = RESET;
-  if ((ETH->DMAOMR & ETH_DMAOMR_FTF) != (uint32_t)RESET)
+  FlagStatus_stm bitstatus = RESET_stm;
+  if ((ETH->DMAOMR & ETH_DMAOMR_FTF) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus; 
 }
@@ -1916,7 +1916,7 @@ FlagStatus ETH_GetFlushTransmitFIFOStatus(void)
 /**
   * @brief  Enables or disables the DMA transmission.
   * @param  NewState: new state of the DMA transmission.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_DMATransmissionCmd(FunctionalState NewState)
@@ -1924,7 +1924,7 @@ void ETH_DMATransmissionCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the DMA transmission */
     ETH->DMAOMR |= ETH_DMAOMR_ST;  
@@ -1939,7 +1939,7 @@ void ETH_DMATransmissionCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the DMA reception.
   * @param  NewState: new state of the DMA reception.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_DMAReceptionCmd(FunctionalState NewState)
@@ -1947,7 +1947,7 @@ void ETH_DMAReceptionCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the DMA reception */
     ETH->DMAOMR |= ETH_DMAOMR_SR;  
@@ -1965,21 +1965,21 @@ void ETH_DMAReceptionCmd(FunctionalState NewState)
   *   This parameter can be one of the following values:
   *     @arg ETH_DMA_Overflow_RxFIFOCounter : Overflow for FIFO Overflows Counter
   *     @arg ETH_DMA_Overflow_MissedFrameCounter : Overflow for Buffer Unavailable Missed Frame Counter
-  * @retval The new state of ETHERNET DMA overflow Flag (SET or RESET).
+  * @retval The new state of ETHERNET DMA overflow Flag (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetDMAOverflowStatus(uint32_t ETH_DMA_Overflow)
+FlagStatus_stm ETH_GetDMAOverflowStatus(uint32_t ETH_DMA_Overflow)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_DMA_GET_OVERFLOW(ETH_DMA_Overflow));
   
-  if ((ETH->DMAMFBOCR & ETH_DMA_Overflow) != (uint32_t)RESET)
+  if ((ETH->DMAMFBOCR & ETH_DMA_Overflow) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -2112,7 +2112,7 @@ void ETH_SetWakeUpFrameFilterRegister(uint32_t *Buffer)
   * @brief  Enables or disables any unicast packet filtered by the MAC address
   *   recognition to be a wake-up frame.
   * @param  NewState: new state of the MAC Global Unicast Wake-Up.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_GlobalUnicastWakeUpCmd(FunctionalState NewState)
@@ -2120,7 +2120,7 @@ void ETH_GlobalUnicastWakeUpCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MAC Global Unicast Wake-Up */
     ETH->MACPMTCSR |= ETH_MACPMTCSR_GU;  
@@ -2139,21 +2139,21 @@ void ETH_GlobalUnicastWakeUpCmd(FunctionalState NewState)
   *     @arg ETH_PMT_FLAG_WUFFRPR : Wake-Up Frame Filter Register Pointer Reset 
   *     @arg ETH_PMT_FLAG_WUFR    : Wake-Up Frame Received 
   *     @arg ETH_PMT_FLAG_MPR     : Magic Packet Received
-  * @retval The new state of ETHERNET PMT Flag (SET or RESET).
+  * @retval The new state of ETHERNET PMT Flag (SET_stm or RESET_stm).
   */
-FlagStatus ETH_GetPMTFlagStatus(uint32_t ETH_PMT_FLAG)
+FlagStatus_stm ETH_GetPMTFlagStatus(uint32_t ETH_PMT_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_PMT_GET_FLAG(ETH_PMT_FLAG));
   
-  if ((ETH->MACPMTCSR & ETH_PMT_FLAG) != (uint32_t)RESET)
+  if ((ETH->MACPMTCSR & ETH_PMT_FLAG) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -2161,7 +2161,7 @@ FlagStatus ETH_GetPMTFlagStatus(uint32_t ETH_PMT_FLAG)
 /**
   * @brief  Enables or disables the MAC Wake-Up Frame Detection.
   * @param  NewState: new state of the MAC Wake-Up Frame Detection.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_WakeUpFrameDetectionCmd(FunctionalState NewState)
@@ -2169,7 +2169,7 @@ void ETH_WakeUpFrameDetectionCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MAC Wake-Up Frame Detection */
     ETH->MACPMTCSR |= ETH_MACPMTCSR_WFE;  
@@ -2184,7 +2184,7 @@ void ETH_WakeUpFrameDetectionCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the MAC Magic Packet Detection.
   * @param  NewState: new state of the MAC Magic Packet Detection.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MagicPacketDetectionCmd(FunctionalState NewState)
@@ -2192,7 +2192,7 @@ void ETH_MagicPacketDetectionCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MAC Magic Packet Detection */
     ETH->MACPMTCSR |= ETH_MACPMTCSR_MPE;  
@@ -2207,7 +2207,7 @@ void ETH_MagicPacketDetectionCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the MAC Power Down.
   * @param  NewState: new state of the MAC Power Down.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_PowerDownCmd(FunctionalState NewState)
@@ -2215,7 +2215,7 @@ void ETH_PowerDownCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MAC Power Down */
     /* This puts the MAC in power down mode */
@@ -2258,7 +2258,7 @@ void ETH_MMCCounterHalfPreset(void)
  /**
   * @brief  Enables or disables the MMC Counter Freeze.
   * @param  NewState: new state of the MMC Counter Freeze.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MMCCounterFreezeCmd(FunctionalState NewState)
@@ -2266,7 +2266,7 @@ void ETH_MMCCounterFreezeCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MMC Counter Freeze */
     ETH->MMCCR |= ETH_MMCCR_MCF;
@@ -2281,7 +2281,7 @@ void ETH_MMCCounterFreezeCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the MMC Reset On Read.
   * @param  NewState: new state of the MMC Reset On Read.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MMCResetOnReadCmd(FunctionalState NewState)
@@ -2289,7 +2289,7 @@ void ETH_MMCResetOnReadCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the MMC Counter reset on read */
     ETH->MMCCR |= ETH_MMCCR_ROR; 
@@ -2304,7 +2304,7 @@ void ETH_MMCResetOnReadCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the MMC Counter Stop Rollover.
   * @param  NewState: new state of the MMC Counter Stop Rollover.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MMCCounterRolloverCmd(FunctionalState NewState)
@@ -2312,7 +2312,7 @@ void ETH_MMCCounterRolloverCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Disable the MMC Counter Stop Rollover  */
     ETH->MMCCR &= ~ETH_MMCCR_CSR;
@@ -2347,7 +2347,7 @@ void ETH_MMCCountersReset(void)
   *     @arg ETH_MMC_IT_RFAE  : When Rx alignment error counter reaches half the maximum value 
   *     @arg ETH_MMC_IT_RFCE  : When Rx crc error counter reaches half the maximum value
   * @param  NewState: new state of the specified ETHERNET MMC interrupts.
-  *   This parameter can be: ENABLE or DISABLE.
+  *   This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ETH_MMCITConfig(uint32_t ETH_MMC_IT, FunctionalState NewState)
@@ -2356,13 +2356,13 @@ void ETH_MMCITConfig(uint32_t ETH_MMC_IT, FunctionalState NewState)
   assert_param(IS_ETH_MMC_IT(ETH_MMC_IT));  
   assert_param(IS_FUNCTIONAL_STATE(NewState));
    
-  if ((ETH_MMC_IT & (uint32_t)0x10000000) != (uint32_t)RESET)
+  if ((ETH_MMC_IT & (uint32_t)0x10000000) != (uint32_t)RESET_stm)
   {
     /* Remove Register mak from IT */
     ETH_MMC_IT &= 0xEFFFFFFF;
   
     /* ETHERNET MMC Rx interrupts selected */
-    if (NewState != DISABLE)
+    if (NewState != DISABLE_stm)
     {
       /* Enable the selected ETHERNET MMC interrupts */
       ETH->MMCRIMR &=(~(uint32_t)ETH_MMC_IT);
@@ -2376,7 +2376,7 @@ void ETH_MMCITConfig(uint32_t ETH_MMC_IT, FunctionalState NewState)
   else
   {
     /* ETHERNET MMC Tx interrupts selected */
-    if (NewState != DISABLE)
+    if (NewState != DISABLE_stm)
     {
       /* Enable the selected ETHERNET MMC interrupts */
       ETH->MMCTIMR &=(~(uint32_t)ETH_MMC_IT);
@@ -2399,38 +2399,38 @@ void ETH_MMCITConfig(uint32_t ETH_MMC_IT, FunctionalState NewState)
   *     @arg ETH_MMC_IT_RxUGFC: When Rx good unicast frames counter reaches half the maximum value  
   *     @arg ETH_MMC_IT_RxAEC : When Rx alignment error counter reaches half the maximum value 
   *     @arg ETH_MMC_IT_RxCEC : When Rx crc error counter reaches half the maximum value 
-  * @retval The value of ETHERNET MMC IT (SET or RESET).
+  * @retval The value of ETHERNET MMC IT (SET_stm or RESET_stm).
   */
 ITStatus ETH_GetMMCITStatus(uint32_t ETH_MMC_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ETH_MMC_GET_IT(ETH_MMC_IT)); 
   
-  if ((ETH_MMC_IT & (uint32_t)0x10000000) != (uint32_t)RESET)
+  if ((ETH_MMC_IT & (uint32_t)0x10000000) != (uint32_t)RESET_stm)
   {
     /* ETHERNET MMC Rx interrupts selected */
     /* Check if the ETHERNET MMC Rx selected interrupt is enabled and occurred */ 
-    if ((((ETH->MMCRIR & ETH_MMC_IT) != (uint32_t)RESET)) && ((ETH->MMCRIMR & ETH_MMC_IT) == (uint32_t)RESET))
+    if ((((ETH->MMCRIR & ETH_MMC_IT) != (uint32_t)RESET_stm)) && ((ETH->MMCRIMR & ETH_MMC_IT) == (uint32_t)RESET_stm))
     {
-      bitstatus = SET;
+      bitstatus = SET_stm;
     }
     else
     {
-      bitstatus = RESET;
+      bitstatus = RESET_stm;
     }
   }
   else
   {
     /* ETHERNET MMC Tx interrupts selected */
     /* Check if the ETHERNET MMC Tx selected interrupt is enabled and occurred */  
-    if ((((ETH->MMCTIR & ETH_MMC_IT) != (uint32_t)RESET)) && ((ETH->MMCRIMR & ETH_MMC_IT) == (uint32_t)RESET))
+    if ((((ETH->MMCTIR & ETH_MMC_IT) != (uint32_t)RESET_stm)) && ((ETH->MMCRIMR & ETH_MMC_IT) == (uint32_t)RESET_stm))
     {
-      bitstatus = SET;
+      bitstatus = SET_stm;
     }
     else
     {
-      bitstatus = RESET;
+      bitstatus = RESET_stm;
     }  
   }    
     

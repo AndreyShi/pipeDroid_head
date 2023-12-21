@@ -307,12 +307,12 @@ void FLASH_OB_BORConfig(uint8_t OB_BOR);
 FLASH_Status FLASH_OB_Launch(void);
 uint8_t FLASH_OB_GetUser(void);
 uint16_t FLASH_OB_GetWRP(void);
-FlagStatus FLASH_OB_GetRDP(void);
+FlagStatus_stm FLASH_OB_GetRDP(void);
 uint8_t FLASH_OB_GetBOR(void);
 
 /* Interrupts and flags management functions **********************************/
 void FLASH_ITConfig(uint32_t FLASH_IT, FunctionalState NewState);
-FlagStatus FLASH_GetFlagStatus(uint32_t FLASH_FLAG);
+FlagStatus_stm FLASH_GetFlagStatus(uint32_t FLASH_FLAG);
 void FLASH_ClearFlag(uint32_t FLASH_FLAG);
 FLASH_Status FLASH_GetStatus(void);
 FLASH_Status FLASH_WaitForLastOperation(void);

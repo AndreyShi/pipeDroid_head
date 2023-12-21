@@ -41,7 +41,7 @@ static USHORT usT35TimeOut50us;
 BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us) {
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	/* TIM7 clock enable */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE_stm);
 	;
 	usT35TimeOut50us=usTimeOut50us;
 	/* Time base configuration */
@@ -52,8 +52,8 @@ BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us) {
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
 	TIM_TimeBaseInit(MODBUS_TIMER, &TIM_TimeBaseStructure);
-	TIM_ITConfig(MODBUS_TIMER, TIM_IT_Update, ENABLE);
-	//TIM_Cmd(TIM7, ENABLE);
+	TIM_ITConfig(MODBUS_TIMER, TIM_IT_Update, ENABLE_stm);
+	//TIM_Cmd(TIM7, ENABLE_stm);
 
 	NVIC_InitTypeDef NVIC_InitStructure;
 
@@ -61,14 +61,14 @@ BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us) {
 	NVIC_InitStructure.NVIC_IRQChannel = TIM7_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE_stm;
 	NVIC_Init(&NVIC_InitStructure);
 
 	return TRUE;
 }
 
 void vMBMasterPortTimersT35Enable() {
-	TIM_Cmd(MODBUS_TIMER, DISABLE);
+	TIM_Cmd(MODBUS_TIMER, DISABLE_stm);
 	TIM_SetCounter(MODBUS_TIMER,0);
 	uint32_t timer_tick = (50 * usT35TimeOut50us)
 			/ (1000 * 1000 / RT_TICK_PER_SECOND);
@@ -76,38 +76,38 @@ void vMBMasterPortTimersT35Enable() {
 	/* Set current timer mode, don't change it.*/
 	vMBMasterSetCurTimerMode(MB_TMODE_T35);
 
-	TIM_Cmd(MODBUS_TIMER, ENABLE);
+	TIM_Cmd(MODBUS_TIMER, ENABLE_stm);
 }
 
 void vMBMasterPortTimersConvertDelayEnable() {
 	uint32_t timer_tick = MB_MASTER_DELAY_MS_CONVERT * RT_TICK_PER_SECOND
 			/ 1000;
-	TIM_Cmd(MODBUS_TIMER, DISABLE);
+	TIM_Cmd(MODBUS_TIMER, DISABLE_stm);
 	TIM_SetCounter(MODBUS_TIMER,0);
 	/* Set current timer mode, don't change it.*/
 	vMBMasterSetCurTimerMode(MB_TMODE_CONVERT_DELAY);
 	TIM_SetAutoreload(MODBUS_TIMER,timer_tick);
-	TIM_Cmd(MODBUS_TIMER, ENABLE);
+	TIM_Cmd(MODBUS_TIMER, ENABLE_stm);
 }
 
 void vMBMasterPortTimersRespondTimeoutEnable() {
 	uint32_t timer_tick = MB_MASTER_TIMEOUT_MS_RESPOND * RT_TICK_PER_SECOND
 			/ 1000;
-	TIM_Cmd(MODBUS_TIMER, DISABLE);
+	TIM_Cmd(MODBUS_TIMER, DISABLE_stm);
 	TIM_SetCounter(MODBUS_TIMER,0);
 	/* Set current timer mode, don't change it.*/
 	vMBMasterSetCurTimerMode(MB_TMODE_RESPOND_TIMEOUT);
 	TIM_SetAutoreload(MODBUS_TIMER,timer_tick);
-	TIM_Cmd(MODBUS_TIMER, ENABLE);
+	TIM_Cmd(MODBUS_TIMER, ENABLE_stm);
 }
 
 void vMBMasterPortTimersDisable() {
-	TIM_Cmd(MODBUS_TIMER, DISABLE);
+	TIM_Cmd(MODBUS_TIMER, DISABLE_stm);
 }
 
 void TIM7_IRQHandler(void) {
 	/* TIM Update event */
-	if (TIM_GetFlagStatus(MODBUS_TIMER, TIM_FLAG_Update) != RESET) {
+	if (TIM_GetFlagStatus(MODBUS_TIMER, TIM_FLAG_Update) != RESET_stm) {
 		TIM_ClearFlag(MODBUS_TIMER, TIM_FLAG_Update);
 		(void) pxMBMasterPortCBTimerExpired();
 	}

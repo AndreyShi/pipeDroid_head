@@ -498,7 +498,7 @@ snmp_msg_getnext_event(u8_t request_id, struct snmp_msg_pstat *msg_ps)
 }
 
 /**
- * Service an internal or external event for SNMP SET.
+ * Service an internal or external event for SNMP SET_stm.
  *
  * @param request_id identifies requests from 0 to (SNMP_CONCURRENT_REQUESTS-1)
  * @param msg_ps points to the assosicated message process state

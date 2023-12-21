@@ -479,15 +479,15 @@ pppoe_dispatch_disc_pkt(struct netif *netif, struct pbuf *pb)
         }
         break;
       case PPPOE_TAG_SNAME_ERR:
-        err_msg = "SERVICE NAME ERROR";
+        err_msg = "SERVICE NAME ERROR_stm";
         errortag = 1;
         break;
       case PPPOE_TAG_ACSYS_ERR:
-        err_msg = "AC SYSTEM ERROR";
+        err_msg = "AC SYSTEM ERROR_stm";
         errortag = 1;
         break;
       case PPPOE_TAG_GENERIC_ERR:
-        err_msg = "GENERIC ERROR";
+        err_msg = "GENERIC ERROR_stm";
         errortag = 1;
         break;
     }
@@ -786,7 +786,7 @@ pppoe_send_padi(struct pppoe_softc *sc)
   int len, l1 = 0, l2 = 0; /* XXX: gcc */
 
   if (sc->sc_state >PPPOE_STATE_PADI_SENT) {
-    PPPDEBUG((LOG_ERR, "ERROR: pppoe_send_padi in state %d", sc->sc_state));
+    PPPDEBUG((LOG_ERR, "ERROR_stm: pppoe_send_padi in state %d", sc->sc_state));
   }
 
   /* calculate length of frame (excluding ethernet header + pppoe header) */

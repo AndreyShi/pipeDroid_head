@@ -100,7 +100,7 @@
     [..]          
       (+) DAC APB clock must be enabled to get write access to DAC
           registers using
-          RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE)
+          RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE_stm)
       (+) Configure DAC_OUTx (DAC_OUT1: PA4, DAC_OUT2: PA5) in analog mode.
       (+) Configure the DAC channel using DAC_Init() function
       (+) Enable the DAC channel using DAC_Cmd() function
@@ -187,9 +187,9 @@
 void DAC_DeInit(void)
 {
   /* Enable DAC reset state */
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, ENABLE);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, ENABLE_stm);
   /* Release DAC from reset state */
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, DISABLE);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_DAC, DISABLE_stm);
 }
 
 /**
@@ -259,7 +259,7 @@ void DAC_StructInit(DAC_InitTypeDef* DAC_InitStruct)
   *            @arg DAC_Channel_1: DAC Channel1 selected
   *            @arg DAC_Channel_2: DAC Channel2 selected
   * @param  NewState: new state of the DAC channel. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @note   When the DAC channel is enabled the trigger source can no more be modified.
   * @retval None
   */
@@ -269,7 +269,7 @@ void DAC_Cmd(uint32_t DAC_Channel, FunctionalState NewState)
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected DAC channel */
     DAC->CR |= (DAC_CR_EN1 << DAC_Channel);
@@ -288,7 +288,7 @@ void DAC_Cmd(uint32_t DAC_Channel, FunctionalState NewState)
   *            @arg DAC_Channel_1: DAC Channel1 selected
   *            @arg DAC_Channel_2: DAC Channel2 selected
   * @param  NewState: new state of the selected DAC channel software trigger.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void DAC_SoftwareTriggerCmd(uint32_t DAC_Channel, FunctionalState NewState)
@@ -297,7 +297,7 @@ void DAC_SoftwareTriggerCmd(uint32_t DAC_Channel, FunctionalState NewState)
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable software trigger for the selected DAC channel */
     DAC->SWTRIGR |= (uint32_t)DAC_SWTRIGR_SWTRIG1 << (DAC_Channel >> 4);
@@ -312,7 +312,7 @@ void DAC_SoftwareTriggerCmd(uint32_t DAC_Channel, FunctionalState NewState)
 /**
   * @brief  Enables or disables simultaneously the two DAC channels software triggers.
   * @param  NewState: new state of the DAC channels software triggers.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void DAC_DualSoftwareTriggerCmd(FunctionalState NewState)
@@ -320,7 +320,7 @@ void DAC_DualSoftwareTriggerCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable software trigger for both DAC channels */
     DAC->SWTRIGR |= DUAL_SWTRIG_SET;
@@ -343,7 +343,7 @@ void DAC_DualSoftwareTriggerCmd(FunctionalState NewState)
   *            @arg DAC_Wave_Noise: noise wave generation
   *            @arg DAC_Wave_Triangle: triangle wave generation
   * @param  NewState: new state of the selected DAC channel wave generation.
-  *          This parameter can be: ENABLE or DISABLE.  
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.  
   * @retval None
   */
 void DAC_WaveGenerationCmd(uint32_t DAC_Channel, uint32_t DAC_Wave, FunctionalState NewState)
@@ -353,7 +353,7 @@ void DAC_WaveGenerationCmd(uint32_t DAC_Channel, uint32_t DAC_Wave, FunctionalSt
   assert_param(IS_DAC_WAVE(DAC_Wave)); 
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected wave generation for the selected DAC channel */
     DAC->CR |= DAC_Wave << DAC_Channel;
@@ -500,7 +500,7 @@ uint16_t DAC_GetDataOutputValue(uint32_t DAC_Channel)
   *            @arg DAC_Channel_1: DAC Channel1 selected
   *            @arg DAC_Channel_2: DAC Channel2 selected
   * @param  NewState: new state of the selected DAC channel DMA request.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @note   The DAC channel1 is mapped on DMA1 Stream 5 channel7 which must be
   *          already configured.
   * @note   The DAC channel2 is mapped on DMA1 Stream 6 channel7 which must be
@@ -513,7 +513,7 @@ void DAC_DMACmd(uint32_t DAC_Channel, FunctionalState NewState)
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected DAC channel DMA request */
     DAC->CR |= (DAC_CR_DMAEN1 << DAC_Channel);
@@ -552,7 +552,7 @@ void DAC_DMACmd(uint32_t DAC_Channel, FunctionalState NewState)
   * @note   The DMA underrun occurs when a second external trigger arrives before the 
   *         acknowledgement for the first external trigger is received (first request).
   * @param  NewState: new state of the specified DAC interrupts.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */ 
 void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewState)  
@@ -562,7 +562,7 @@ void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewStat
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   assert_param(IS_DAC_IT(DAC_IT)); 
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected DAC interrupts */
     DAC->CR |=  (DAC_IT << DAC_Channel);
@@ -585,25 +585,25 @@ void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewStat
   *            @arg DAC_FLAG_DMAUDR: DMA underrun flag
   * @note   The DMA underrun occurs when a second external trigger arrives before the 
   *         acknowledgement for the first external trigger is received (first request).
-  * @retval The new state of DAC_FLAG (SET or RESET).
+  * @retval The new state of DAC_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG)
+FlagStatus_stm DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_DAC_CHANNEL(DAC_Channel));
   assert_param(IS_DAC_FLAG(DAC_FLAG));
 
   /* Check the status of the specified DAC flag */
-  if ((DAC->SR & (DAC_FLAG << DAC_Channel)) != (uint8_t)RESET)
+  if ((DAC->SR & (DAC_FLAG << DAC_Channel)) != (uint8_t)RESET_stm)
   {
     /* DAC_FLAG is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* DAC_FLAG is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the DAC_FLAG status */
   return  bitstatus;
@@ -643,11 +643,11 @@ void DAC_ClearFlag(uint32_t DAC_Channel, uint32_t DAC_FLAG)
   *            @arg DAC_IT_DMAUDR: DMA underrun interrupt mask
   * @note   The DMA underrun occurs when a second external trigger arrives before the 
   *         acknowledgement for the first external trigger is received (first request).
-  * @retval The new state of DAC_IT (SET or RESET).
+  * @retval The new state of DAC_IT (SET_stm or RESET_stm).
   */
 ITStatus DAC_GetITStatus(uint32_t DAC_Channel, uint32_t DAC_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   uint32_t enablestatus = 0;
   
   /* Check the parameters */
@@ -658,15 +658,15 @@ ITStatus DAC_GetITStatus(uint32_t DAC_Channel, uint32_t DAC_IT)
   enablestatus = (DAC->CR & (DAC_IT << DAC_Channel)) ;
   
   /* Check the status of the specified DAC interrupt */
-  if (((DAC->SR & (DAC_IT << DAC_Channel)) != (uint32_t)RESET) && enablestatus)
+  if (((DAC->SR & (DAC_IT << DAC_Channel)) != (uint32_t)RESET_stm) && enablestatus)
   {
     /* DAC_IT is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* DAC_IT is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the DAC_IT status */
   return  bitstatus;

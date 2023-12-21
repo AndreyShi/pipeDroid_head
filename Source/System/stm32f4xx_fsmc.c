@@ -76,8 +76,8 @@
  SRAM, PSRAM, NOR or OneNAND memory connected to the NOR/SRAM Bank:
  
    1. Enable the clock for the FSMC and associated GPIOs using the following functions:
-          RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
-          RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+          RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE_stm);
+          RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE_stm);
 
    2. FSMC pins configuration 
        - Connect the involved FSMC pins to AF12 using the following function 
@@ -94,7 +94,7 @@
           FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure); 
 
    5. Then enable the NOR/SRAM Bank, for example:
-          FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM2, ENABLE);  
+          FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM2, ENABLE_stm);  
 
    6. At this stage you can read/write from/to the memory connected to the NOR/SRAM Bank. 
    
@@ -262,7 +262,7 @@ void FSMC_NORSRAMStructInit(FSMC_NORSRAMInitTypeDef* FSMC_NORSRAMInitStruct)
   *            @arg FSMC_Bank1_NORSRAM2: FSMC Bank1 NOR/SRAM2 
   *            @arg FSMC_Bank1_NORSRAM3: FSMC Bank1 NOR/SRAM3 
   *            @arg FSMC_Bank1_NORSRAM4: FSMC Bank1 NOR/SRAM4 
-  * @param  NewState: new state of the FSMC_Bank. This parameter can be: ENABLE or DISABLE.
+  * @param  NewState: new state of the FSMC_Bank. This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)
@@ -270,7 +270,7 @@ void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)
   assert_param(IS_FSMC_NORSRAM_BANK(FSMC_Bank));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected NOR/SRAM Bank by setting the PBKEN bit in the BCRx register */
     FSMC_Bank1->BTCR[FSMC_Bank] |= BCR_MBKEN_SET;
@@ -297,8 +297,8 @@ void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)
  8-bit or 16-bit NAND memory connected to the NAND Bank:
  
    1. Enable the clock for the FSMC and associated GPIOs using the following functions:
-          RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
-          RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+          RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE_stm);
+          RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE_stm);
 
    2. FSMC pins configuration 
        - Connect the involved FSMC pins to AF12 using the following function 
@@ -315,12 +315,12 @@ void FSMC_NORSRAMCmd(uint32_t FSMC_Bank, FunctionalState NewState)
           FSMC_NANDInit(&FSMC_NANDInitStructure); 
 
    5. Then enable the NAND Bank, for example:
-          FSMC_NANDCmd(FSMC_Bank3_NAND, ENABLE);  
+          FSMC_NANDCmd(FSMC_Bank3_NAND, ENABLE_stm);  
 
    6. At this stage you can read/write from/to the memory connected to the NAND Bank. 
    
 @note To enable the Error Correction Code (ECC), you have to use the function
-          FSMC_NANDECCCmd(FSMC_Bank3_NAND, ENABLE);  
+          FSMC_NANDECCCmd(FSMC_Bank3_NAND, ENABLE_stm);  
       and to get the current ECC value you have to use the function
           ECCval = FSMC_GetECC(FSMC_Bank3_NAND); 
 
@@ -458,7 +458,7 @@ void FSMC_NANDStructInit(FSMC_NANDInitTypeDef* FSMC_NANDInitStruct)
   *          This parameter can be one of the following values:
   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
-  * @param  NewState: new state of the FSMC_Bank. This parameter can be: ENABLE or DISABLE.
+  * @param  NewState: new state of the FSMC_Bank. This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FSMC_NANDCmd(uint32_t FSMC_Bank, FunctionalState NewState)
@@ -466,7 +466,7 @@ void FSMC_NANDCmd(uint32_t FSMC_Bank, FunctionalState NewState)
   assert_param(IS_FSMC_NAND_BANK(FSMC_Bank));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected NAND Bank by setting the PBKEN bit in the PCRx register */
     if(FSMC_Bank == FSMC_Bank2_NAND)
@@ -498,7 +498,7 @@ void FSMC_NANDCmd(uint32_t FSMC_Bank, FunctionalState NewState)
   *            @arg FSMC_Bank2_NAND: FSMC Bank2 NAND 
   *            @arg FSMC_Bank3_NAND: FSMC Bank3 NAND
   * @param  NewState: new state of the FSMC NAND ECC feature.  
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FSMC_NANDECCCmd(uint32_t FSMC_Bank, FunctionalState NewState)
@@ -506,7 +506,7 @@ void FSMC_NANDECCCmd(uint32_t FSMC_Bank, FunctionalState NewState)
   assert_param(IS_FSMC_NAND_BANK(FSMC_Bank));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected NAND Bank ECC function by setting the ECCEN bit in the PCRx register */
     if(FSMC_Bank == FSMC_Bank2_NAND)
@@ -573,8 +573,8 @@ uint32_t FSMC_GetECC(uint32_t FSMC_Bank)
  16-bit PC Card compatible memory connected to the PCCARD Bank:
  
    1. Enable the clock for the FSMC and associated GPIOs using the following functions:
-          RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
-          RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+          RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE_stm);
+          RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE_stm);
 
    2. FSMC pins configuration 
        - Connect the involved FSMC pins to AF12 using the following function 
@@ -591,7 +591,7 @@ uint32_t FSMC_GetECC(uint32_t FSMC_Bank)
           FSMC_PCCARDInit(&FSMC_PCCARDInitStructure); 
 
    5. Then enable the PCCARD Bank:
-          FSMC_PCCARDCmd(ENABLE);  
+          FSMC_PCCARDCmd(ENABLE_stm);  
 
    6. At this stage you can read/write from/to the memory connected to the PCCARD Bank. 
  
@@ -696,14 +696,14 @@ void FSMC_PCCARDStructInit(FSMC_PCCARDInitTypeDef* FSMC_PCCARDInitStruct)
 /**
   * @brief  Enables or disables the PCCARD Memory Bank.
   * @param  NewState: new state of the PCCARD Memory Bank.  
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FSMC_PCCARDCmd(FunctionalState NewState)
 {
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the PCCARD Bank by setting the PBKEN bit in the PCR4 register */
     FSMC_Bank4->PCR4 |= PCR_PBKEN_SET;
@@ -743,7 +743,7 @@ void FSMC_PCCARDCmd(FunctionalState NewState)
   *            @arg FSMC_IT_Level: Level edge detection interrupt.
   *            @arg FSMC_IT_FallingEdge: Falling edge detection interrupt.
   * @param  NewState: new state of the specified FSMC interrupts.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FSMC_ITConfig(uint32_t FSMC_Bank, uint32_t FSMC_IT, FunctionalState NewState)
@@ -752,7 +752,7 @@ void FSMC_ITConfig(uint32_t FSMC_Bank, uint32_t FSMC_IT, FunctionalState NewStat
   assert_param(IS_FSMC_IT(FSMC_IT));	
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected FSMC_Bank2 interrupts */
     if(FSMC_Bank == FSMC_Bank2_NAND)
@@ -804,11 +804,11 @@ void FSMC_ITConfig(uint32_t FSMC_Bank, uint32_t FSMC_IT, FunctionalState NewStat
   *            @arg FSMC_FLAG_Level: Level detection Flag.
   *            @arg FSMC_FLAG_FallingEdge: Falling edge detection Flag.
   *            @arg FSMC_FLAG_FEMPT: Fifo empty Flag. 
-  * @retval The new state of FSMC_FLAG (SET or RESET).
+  * @retval The new state of FSMC_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus FSMC_GetFlagStatus(uint32_t FSMC_Bank, uint32_t FSMC_FLAG)
+FlagStatus_stm FSMC_GetFlagStatus(uint32_t FSMC_Bank, uint32_t FSMC_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   uint32_t tmpsr = 0x00000000;
   
   /* Check the parameters */
@@ -830,13 +830,13 @@ FlagStatus FSMC_GetFlagStatus(uint32_t FSMC_Bank, uint32_t FSMC_FLAG)
   } 
   
   /* Get the flag status */
-  if ((tmpsr & FSMC_FLAG) != (uint16_t)RESET )
+  if ((tmpsr & FSMC_FLAG) != (uint16_t)RESET_stm )
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the flag status */
   return bitstatus;
@@ -889,11 +889,11 @@ void FSMC_ClearFlag(uint32_t FSMC_Bank, uint32_t FSMC_FLAG)
   *            @arg FSMC_IT_RisingEdge: Rising edge detection interrupt. 
   *            @arg FSMC_IT_Level: Level edge detection interrupt.
   *            @arg FSMC_IT_FallingEdge: Falling edge detection interrupt. 
-  * @retval The new state of FSMC_IT (SET or RESET).
+  * @retval The new state of FSMC_IT (SET_stm or RESET_stm).
   */
 ITStatus FSMC_GetITStatus(uint32_t FSMC_Bank, uint32_t FSMC_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   uint32_t tmpsr = 0x0, itstatus = 0x0, itenable = 0x0; 
   
   /* Check the parameters */
@@ -917,13 +917,13 @@ ITStatus FSMC_GetITStatus(uint32_t FSMC_Bank, uint32_t FSMC_IT)
   itstatus = tmpsr & FSMC_IT;
   
   itenable = tmpsr & (FSMC_IT >> 3);
-  if ((itstatus != (uint32_t)RESET)  && (itenable != (uint32_t)RESET))
+  if ((itstatus != (uint32_t)RESET_stm)  && (itenable != (uint32_t)RESET_stm))
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus; 
 }

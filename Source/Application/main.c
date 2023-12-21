@@ -42,6 +42,7 @@
 #include "stm32f4x7_eth.h"
 #include "track.h"
 #include "../GD32F4xx_Firmware_Library_V3.1.0/systick.h"
+#include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define SYSTEMTICK_PERIOD_MS  1
@@ -110,15 +111,15 @@ int main(void) {
     systick_config();
 	__enable_irq();
 	Delay_ms(100);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOH, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOI, ENABLE);
+	rcu_periph_clock_enable(RCU_GPIOA);//RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOH, ENABLE_stm);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOI, ENABLE_stm);
 	//lsm330_setup(LSM330_GYR_FS_250DPS, LSM330_ACC_G_2G);
 	Delay_ms(100);
 
@@ -127,8 +128,8 @@ int main(void) {
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOC, GPIO_Pin_4);
+	GPIO_Init(GPIOC_stm, &GPIO_InitStructure);
+	GPIO_ResetBits(GPIOC_stm, GPIO_Pin_4);
 
 
 
@@ -138,9 +139,9 @@ int main(void) {
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOF, &GPIO_InitStructure);
+	GPIO_Init(GPIOF_stm, &GPIO_InitStructure);
 	//TEST PIN
-	GPIO_ResetBits(GPIOF, GPIO_Pin_4);
+	GPIO_ResetBits(GPIOF_stm, GPIO_Pin_4);
 
 
 	Delay_ms(10);
@@ -227,7 +228,7 @@ int main(void) {
 			break;
 		case cmd_stop:
 			//TEST PIN
-			GPIO_ResetBits(GPIOF, GPIO_Pin_4);
+			GPIO_ResetBits(GPIOF_stm, GPIO_Pin_4);
 			track_stop();
 			active_cmd = cmd_na;
 			break;
@@ -257,7 +258,7 @@ int main(void) {
 			break;
 		case cmd_moveFwd:
 			//TEST PIN
-			GPIO_SetBits(GPIOF, GPIO_Pin_4);
+			GPIO_SetBits(GPIOF_stm, GPIO_Pin_4);
 			if (track_move_speed != coef.move_speed) {
 				track_move_speed = coef.move_speed;
 				track_update_speed(track_move_speed, coef.kSpeed);

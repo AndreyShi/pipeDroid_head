@@ -171,7 +171,7 @@ static void TI4_Config(TIM_TypeDef* TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_
     [..] 
     To use the Timer in Timing(Time base) mode, the following steps are mandatory:
        
-      (#) Enable TIM clock using RCC_APBxPeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE) function
+      (#) Enable TIM clock using RCC_APBxPeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE_stm) function
                     
       (#) Fill the TIM_TimeBaseInitStruct with the desired parameters.
        
@@ -182,7 +182,7 @@ static void TI4_Config(TIM_TypeDef* TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_
           
       (#) Enable the corresponding interrupt using the function TIM_ITConfig(TIMx, TIM_IT_Update) 
        
-      (#) Call the TIM_Cmd(ENABLE) function to enable the TIM counter.
+      (#) Call the TIM_Cmd(ENABLE_stm) function to enable the TIM counter.
              
        -@- All other functions can be used separately to modify, if needed,
            a specific feature of the Timer. 
@@ -204,75 +204,75 @@ void TIM_DeInit(TIM_TypeDef* TIMx)
  
   if (TIMx == TIM1)
   {
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM1, ENABLE);
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM1, DISABLE);  
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM1, ENABLE_stm);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM1, DISABLE_stm);  
   } 
   else if (TIMx == TIM2) 
   {     
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM2, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM2, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM2, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM2, DISABLE_stm);
   }  
   else if (TIMx == TIM3)
   { 
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM3, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM3, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM3, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM3, DISABLE_stm);
   }  
   else if (TIMx == TIM4)
   { 
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM4, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM4, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM4, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM4, DISABLE_stm);
   }  
   else if (TIMx == TIM5)
   {      
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM5, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM5, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM5, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM5, DISABLE_stm);
   }  
   else if (TIMx == TIM6)  
   {    
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM6, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM6, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM6, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM6, DISABLE_stm);
   }  
   else if (TIMx == TIM7)
   {      
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM7, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM7, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM7, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM7, DISABLE_stm);
   }  
   else if (TIMx == TIM8)
   {      
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM8, ENABLE);
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM8, DISABLE);  
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM8, ENABLE_stm);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM8, DISABLE_stm);  
   }  
   else if (TIMx == TIM9)
   {      
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM9, ENABLE);
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM9, DISABLE);  
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM9, ENABLE_stm);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM9, DISABLE_stm);  
    }  
   else if (TIMx == TIM10)
   {      
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM10, ENABLE);
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM10, DISABLE);  
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM10, ENABLE_stm);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM10, DISABLE_stm);  
   }  
   else if (TIMx == TIM11) 
   {     
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM11, ENABLE);
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM11, DISABLE);  
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM11, ENABLE_stm);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM11, DISABLE_stm);  
   }  
   else if (TIMx == TIM12)
   {      
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM12, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM12, DISABLE);  
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM12, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM12, DISABLE_stm);  
   }  
   else if (TIMx == TIM13) 
   {       
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM13, ENABLE);
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM13, DISABLE);  
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM13, ENABLE_stm);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM13, DISABLE_stm);  
   }  
   else
   { 
     if (TIMx == TIM14) 
     {     
-      RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM14, ENABLE);
-      RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM14, DISABLE); 
+      RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM14, ENABLE_stm);
+      RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM14, DISABLE_stm); 
     }   
   }
 }
@@ -462,7 +462,7 @@ uint16_t TIM_GetPrescaler(TIM_TypeDef* TIMx)
   * @brief  Enables or Disables the TIMx Update event.
   * @param  TIMx: where x can be 1 to 14 to select the TIM peripheral.
   * @param  NewState: new state of the TIMx UDIS bit
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_UpdateDisableConfig(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -471,7 +471,7 @@ void TIM_UpdateDisableConfig(TIM_TypeDef* TIMx, FunctionalState NewState)
   assert_param(IS_TIM_ALL_PERIPH(TIMx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Set the Update Disable Bit */
     TIMx->CR1 |= TIM_CR1_UDIS;
@@ -516,7 +516,7 @@ void TIM_UpdateRequestConfig(TIM_TypeDef* TIMx, uint16_t TIM_UpdateSource)
   * @brief  Enables or disables TIMx peripheral Preload register on ARR.
   * @param  TIMx: where x can be 1 to 14 to select the TIM peripheral.
   * @param  NewState: new state of the TIMx peripheral Preload register
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_ARRPreloadConfig(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -525,7 +525,7 @@ void TIM_ARRPreloadConfig(TIM_TypeDef* TIMx, FunctionalState NewState)
   assert_param(IS_TIM_ALL_PERIPH(TIMx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Set the ARR Preload Bit */
     TIMx->CR1 |= TIM_CR1_ARPE;
@@ -586,7 +586,7 @@ void TIM_SetClockDivision(TIM_TypeDef* TIMx, uint16_t TIM_CKD)
   * @brief  Enables or disables the specified TIM peripheral.
   * @param  TIMx: where x can be 1 to 14 to select the TIMx peripheral.
   * @param  NewState: new state of the TIMx peripheral.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_Cmd(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -595,7 +595,7 @@ void TIM_Cmd(TIM_TypeDef* TIMx, FunctionalState NewState)
   assert_param(IS_TIM_ALL_PERIPH(TIMx)); 
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the TIM Counter */
     TIMx->CR1 |= TIM_CR1_CEN;
@@ -624,7 +624,7 @@ void TIM_Cmd(TIM_TypeDef* TIMx, FunctionalState NewState)
     [..] 
     To use the Timer in Output Compare mode, the following steps are mandatory:
        
-      (#) Enable TIM clock using RCC_APBxPeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE) 
+      (#) Enable TIM clock using RCC_APBxPeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE_stm) 
           function
        
       (#) Configure the TIM pins by configuring the corresponding GPIO pins
@@ -645,7 +645,7 @@ void TIM_Cmd(TIM_TypeDef* TIMx, FunctionalState NewState)
       (#) Call TIM_OCxInit(TIMx, &TIM_OCInitStruct) to configure the desired 
           channel with the corresponding configuration
        
-      (#) Call the TIM_Cmd(ENABLE) function to enable the TIM counter.
+      (#) Call the TIM_Cmd(ENABLE_stm) function to enable the TIM counter.
        
       -@- All other functions can be used separately to modify, if needed,
           a specific feature of the Timer. 
@@ -1847,7 +1847,7 @@ void TIM_CCxNCmd(TIM_TypeDef* TIMx, uint16_t TIM_Channel, uint16_t TIM_CCxN)
     [..]    
     To use the Timer in Input Capture mode, the following steps are mandatory:
        
-      (#) Enable TIM clock using RCC_APBxPeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE) 
+      (#) Enable TIM clock using RCC_APBxPeriphClockCmd(RCC_APBxPeriph_TIMx, ENABLE_stm) 
           function
        
       (#) Configure the TIM pins by configuring the corresponding GPIO pins
@@ -1878,7 +1878,7 @@ void TIM_CCxNCmd(TIM_TypeDef* TIMx, uint16_t TIM_Channel, uint16_t TIM_CCxN)
           value, using the function TIM_ITConfig(TIMx, TIM_IT_CCx) 
           (or TIM_DMA_Cmd(TIMx, TIM_DMA_CCx)) 
        
-      (#) Call the TIM_Cmd(ENABLE) function to enable the TIM counter.
+      (#) Call the TIM_Cmd(ENABLE_stm) function to enable the TIM counter.
        
       (#) Use TIM_GetCapturex(TIMx); to read the captured value.
        
@@ -2200,7 +2200,7 @@ void TIM_SetIC4Prescaler(TIM_TypeDef* TIMx, uint16_t TIM_ICPSC)
                
       (#) Call TIM_BDTRConfig(TIMx, &TIM_BDTRInitStruct) to configure the Timer
           
-      (#) Enable the Main Output using TIM_CtrlPWMOutputs(TIM1, ENABLE) 
+      (#) Enable the Main Output using TIM_CtrlPWMOutputs(TIM1, ENABLE_stm) 
           
       (#) Once the break even occurs, the Timer's output signals are put in reset
           state or in a known state (according to the configuration made in
@@ -2259,7 +2259,7 @@ void TIM_BDTRStructInit(TIM_BDTRInitTypeDef* TIM_BDTRInitStruct)
   * @brief  Enables or disables the TIM peripheral Main Outputs.
   * @param  TIMx: where x can be 1 or 8 to select the TIMx peripheral.
   * @param  NewState: new state of the TIM peripheral Main Outputs.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_CtrlPWMOutputs(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -2268,7 +2268,7 @@ void TIM_CtrlPWMOutputs(TIM_TypeDef* TIMx, FunctionalState NewState)
   assert_param(IS_TIM_LIST4_PERIPH(TIMx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the TIM Main Output */
     TIMx->BDTR |= TIM_BDTR_MOE;
@@ -2284,7 +2284,7 @@ void TIM_CtrlPWMOutputs(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @brief  Selects the TIM peripheral Commutation event.
   * @param  TIMx: where x can be  1 or 8 to select the TIMx peripheral
   * @param  NewState: new state of the Commutation event.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_SelectCOM(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -2293,7 +2293,7 @@ void TIM_SelectCOM(TIM_TypeDef* TIMx, FunctionalState NewState)
   assert_param(IS_TIM_LIST4_PERIPH(TIMx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Set the COM Bit */
     TIMx->CR2 |= TIM_CR2_CCUS;
@@ -2309,7 +2309,7 @@ void TIM_SelectCOM(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @brief  Sets or Resets the TIM peripheral Capture Compare Preload Control bit.
   * @param  TIMx: where x can be  1 or 8 to select the TIMx peripheral
   * @param  NewState: new state of the Capture Compare Preload Control bit
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_CCPreloadControl(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -2317,7 +2317,7 @@ void TIM_CCPreloadControl(TIM_TypeDef* TIMx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_TIM_LIST4_PERIPH(TIMx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Set the CCPC Bit */
     TIMx->CR2 |= TIM_CR2_CCPC;
@@ -2366,7 +2366,7 @@ void TIM_CCPreloadControl(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @note   TIM_IT_COM and TIM_IT_Break can be used only with TIM1 and TIM8 
   *        
   * @param  NewState: new state of the TIM interrupts.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_ITConfig(TIM_TypeDef* TIMx, uint16_t TIM_IT, FunctionalState NewState)
@@ -2376,7 +2376,7 @@ void TIM_ITConfig(TIM_TypeDef* TIMx, uint16_t TIM_IT, FunctionalState NewState)
   assert_param(IS_TIM_IT(TIM_IT));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the Interrupt sources */
     TIMx->DIER |= TIM_IT;
@@ -2438,23 +2438,23 @@ void TIM_GenerateEvent(TIM_TypeDef* TIMx, uint16_t TIM_EventSource)
   * @note   TIM6 and TIM7 can have only one update flag. 
   * @note   TIM_FLAG_COM and TIM_FLAG_Break are used only with TIM1 and TIM8.    
   *
-  * @retval The new state of TIM_FLAG (SET or RESET).
+  * @retval The new state of TIM_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus TIM_GetFlagStatus(TIM_TypeDef* TIMx, uint16_t TIM_FLAG)
+FlagStatus_stm TIM_GetFlagStatus(TIM_TypeDef* TIMx, uint16_t TIM_FLAG)
 { 
-  ITStatus bitstatus = RESET;  
+  ITStatus bitstatus = RESET_stm;  
   /* Check the parameters */
   assert_param(IS_TIM_ALL_PERIPH(TIMx));
   assert_param(IS_TIM_GET_FLAG(TIM_FLAG));
 
   
-  if ((TIMx->SR & TIM_FLAG) != (uint16_t)RESET)
+  if ((TIMx->SR & TIM_FLAG) != (uint16_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -2508,11 +2508,11 @@ void TIM_ClearFlag(TIM_TypeDef* TIMx, uint16_t TIM_FLAG)
   * @note   TIM6 and TIM7 can generate only an update interrupt.
   * @note   TIM_IT_COM and TIM_IT_Break are used only with TIM1 and TIM8.
   *     
-  * @retval The new state of the TIM_IT(SET or RESET).
+  * @retval The new state of the TIM_IT(SET_stm or RESET_stm).
   */
 ITStatus TIM_GetITStatus(TIM_TypeDef* TIMx, uint16_t TIM_IT)
 {
-  ITStatus bitstatus = RESET;  
+  ITStatus bitstatus = RESET_stm;  
   uint16_t itstatus = 0x0, itenable = 0x0;
   /* Check the parameters */
   assert_param(IS_TIM_ALL_PERIPH(TIMx));
@@ -2521,13 +2521,13 @@ ITStatus TIM_GetITStatus(TIM_TypeDef* TIMx, uint16_t TIM_IT)
   itstatus = TIMx->SR & TIM_IT;
   
   itenable = TIMx->DIER & TIM_IT;
-  if ((itstatus != (uint16_t)RESET) && (itenable != (uint16_t)RESET))
+  if ((itstatus != (uint16_t)RESET_stm) && (itenable != (uint16_t)RESET_stm))
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -2612,7 +2612,7 @@ void TIM_DMAConfig(TIM_TypeDef* TIMx, uint16_t TIM_DMABase, uint16_t TIM_DMABurs
   *            @arg TIM_DMA_COM: TIM Commutation DMA source
   *            @arg TIM_DMA_Trigger: TIM Trigger DMA source
   * @param  NewState: new state of the DMA Request sources.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_DMACmd(TIM_TypeDef* TIMx, uint16_t TIM_DMASource, FunctionalState NewState)
@@ -2622,7 +2622,7 @@ void TIM_DMACmd(TIM_TypeDef* TIMx, uint16_t TIM_DMASource, FunctionalState NewSt
   assert_param(IS_TIM_DMA_SOURCE(TIM_DMASource));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the DMA sources */
     TIMx->DIER |= TIM_DMASource; 
@@ -2638,7 +2638,7 @@ void TIM_DMACmd(TIM_TypeDef* TIMx, uint16_t TIM_DMASource, FunctionalState NewSt
   * @brief  Selects the TIMx peripheral Capture Compare DMA source.
   * @param  TIMx: where x can be  1, 2, 3, 4, 5 or 8 to select the TIM peripheral.
   * @param  NewState: new state of the Capture Compare DMA source
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_SelectCCDMA(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -2647,7 +2647,7 @@ void TIM_SelectCCDMA(TIM_TypeDef* TIMx, FunctionalState NewState)
   assert_param(IS_TIM_LIST3_PERIPH(TIMx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Set the CCDS Bit */
     TIMx->CR2 |= TIM_CR2_CCDS;
@@ -3116,7 +3116,7 @@ void TIM_EncoderInterfaceConfig(TIM_TypeDef* TIMx, uint16_t TIM_EncoderMode,
   * @param  TIMx: where x can be 1, 2, 3, 4, 5, 8, 9 or 12 to select the TIM 
   *         peripheral.
   * @param  NewState: new state of the TIMx Hall sensor interface.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void TIM_SelectHallSensor(TIM_TypeDef* TIMx, FunctionalState NewState)
@@ -3125,7 +3125,7 @@ void TIM_SelectHallSensor(TIM_TypeDef* TIMx, FunctionalState NewState)
   assert_param(IS_TIM_LIST2_PERIPH(TIMx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Set the TI1S Bit */
     TIMx->CR2 |= TIM_CR2_TI1S;

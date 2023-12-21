@@ -19,12 +19,12 @@
  ===================================================================
  [..]
    (#) Enable peripheral clock using the following functions 
-       RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE) for SPI1
-       RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE) for SPI2
-       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE) for SPI3
-       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE) for SPI4
-       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE) for SPI5
-       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE) for SPI6.
+       RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE_stm) for SPI1
+       RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE_stm) for SPI2
+       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE_stm) for SPI3
+       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE_stm) for SPI4
+       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE_stm) for SPI5
+       RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE_stm) for SPI6.
   
    (#) Enable SCK, MOSI, MISO and NSS GPIO clocks using RCC_AHB1PeriphClockCmd()
        function. In I2S mode, if an external clock source is used then the I2S 
@@ -48,7 +48,7 @@
        frequency and Polarity using I2S_Init() function. For I2S mode, make sure 
        that either:
        (++) I2S PLL is configured using the functions 
-            RCC_I2SCLKConfig(RCC_I2S2CLKSource_PLLI2S), RCC_PLLI2SCmd(ENABLE) and 
+            RCC_I2SCLKConfig(RCC_I2S2CLKSource_PLLI2S), RCC_PLLI2SCmd(ENABLE_stm) and 
             RCC_GetFlagStatus(RCC_FLAG_PLLI2SRDY); or 
        (++) External clock source is configured using the function 
             RCC_I2SCLKConfig(RCC_I2S2CLKSource_Ext) and after setting correctly 
@@ -108,19 +108,19 @@
                    
       Example: To use SPI3 in Full duplex mode (SPI3 is Master Tx, I2S3ext is Slave Rx):
               
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);   
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE_stm);   
       I2S_StructInit(&I2SInitStruct);
       I2SInitStruct.Mode = I2S_Mode_MasterTx;     
       I2S_Init(SPI3, &I2SInitStruct);
       I2S_FullDuplexConfig(SPI3ext, &I2SInitStruct)
-      I2S_Cmd(SPI3, ENABLE);
-      I2S_Cmd(SPI3ext, ENABLE);
+      I2S_Cmd(SPI3, ENABLE_stm);
+      I2S_Cmd(SPI3ext, ENABLE_stm);
       ...
-      while (SPI_I2S_GetFlagStatus(SPI2, SPI_FLAG_TXE) == RESET)
+      while (SPI_I2S_GetFlagStatus(SPI2, SPI_FLAG_TXE) == RESET_stm)
       {}
       SPI_I2S_SendData(SPI3, txdata[i]);
       ...  
-      while (SPI_I2S_GetFlagStatus(I2S3ext, SPI_FLAG_RXNE) == RESET)
+      while (SPI_I2S_GetFlagStatus(I2S3ext, SPI_FLAG_RXNE) == RESET_stm)
       {}
       rxdata[i] = SPI_I2S_ReceiveData(I2S3ext);
       ...          
@@ -229,46 +229,46 @@ void SPI_I2S_DeInit(SPI_TypeDef* SPIx)
   if (SPIx == SPI1)
   {
     /* Enable SPI1 reset state */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, ENABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, ENABLE_stm);
     /* Release SPI1 from reset state */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, DISABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1, DISABLE_stm);
   }
   else if (SPIx == SPI2)
   {
     /* Enable SPI2 reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, ENABLE_stm);
     /* Release SPI2 from reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI2, DISABLE_stm);
   }
   else if (SPIx == SPI3)
   {
     /* Enable SPI3 reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, ENABLE_stm);
     /* Release SPI3 from reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, DISABLE_stm);
   }
   else if (SPIx == SPI4)
   {
     /* Enable SPI4 reset state */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI4, ENABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI4, ENABLE_stm);
     /* Release SPI4 from reset state */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI4, DISABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI4, DISABLE_stm);
   }
   else if (SPIx == SPI5)
   {
     /* Enable SPI5 reset state */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI5, ENABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI5, ENABLE_stm);
     /* Release SPI5 from reset state */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI5, DISABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI5, DISABLE_stm);
   }
   else 
   {
     if (SPIx == SPI6)
     {
       /* Enable SPI6 reset state */
-      RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI6, ENABLE);
+      RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI6, ENABLE_stm);
       /* Release SPI6 from reset state */
-      RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI6, DISABLE);
+      RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI6, DISABLE_stm);
     }
   }
 }
@@ -531,7 +531,7 @@ void I2S_StructInit(I2S_InitTypeDef* I2S_InitStruct)
   * @brief  Enables or disables the specified SPI peripheral.
   * @param  SPIx: where x can be 1, 2, 3, 4, 5 or 6 to select the SPI peripheral.
   * @param  NewState: new state of the SPIx peripheral. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void SPI_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState)
@@ -539,7 +539,7 @@ void SPI_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_SPI_ALL_PERIPH(SPIx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected SPI peripheral */
     SPIx->CR1 |= SPI_CR1_SPE;
@@ -556,7 +556,7 @@ void SPI_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState)
   * @param  SPIx: where x can be 2 or 3 to select the SPI peripheral (or I2Sxext 
   *         for full duplex mode).
   * @param  NewState: new state of the SPIx peripheral. 
-  *         This parameter can be: ENABLE or DISABLE.
+  *         This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2S_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState)
@@ -565,7 +565,7 @@ void I2S_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState)
   assert_param(IS_SPI_23_PERIPH_EXT(SPIx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected SPI peripheral (in I2S mode) */
     SPIx->I2SCFGR |= SPI_I2SCFGR_I2SE;
@@ -653,7 +653,7 @@ void SPI_NSSInternalSoftwareConfig(SPI_TypeDef* SPIx, uint16_t SPI_NSSInternalSo
   * @brief  Enables or disables the SS output for the selected SPI.
   * @param  SPIx: where x can be 1, 2, 3, 4, 5 or 6 to select the SPI peripheral.
   * @param  NewState: new state of the SPIx SS output. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void SPI_SSOutputCmd(SPI_TypeDef* SPIx, FunctionalState NewState)
@@ -661,7 +661,7 @@ void SPI_SSOutputCmd(SPI_TypeDef* SPIx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_SPI_ALL_PERIPH(SPIx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected SPI SS output */
     SPIx->CR2 |= (uint16_t)SPI_CR2_SSOE;
@@ -684,7 +684,7 @@ void SPI_SSOutputCmd(SPI_TypeDef* SPIx, FunctionalState NewState)
   * 
   * @param  SPIx: where x can be 1, 2, 3, 4, 5 or 6 
   * @param  NewState: new state of the selected SPI TI communication mode.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void SPI_TIModeCmd(SPI_TypeDef* SPIx, FunctionalState NewState)
@@ -693,7 +693,7 @@ void SPI_TIModeCmd(SPI_TypeDef* SPIx, FunctionalState NewState)
   assert_param(IS_SPI_ALL_PERIPH(SPIx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the TI mode for the selected SPI peripheral */
     SPIx->CR2 |= SPI_CR2_FRF;
@@ -901,7 +901,7 @@ void SPI_I2S_SendData(SPI_TypeDef* SPIx, uint16_t Data)
   * @brief  Enables or disables the CRC value calculation of the transferred bytes.
   * @param  SPIx: where x can be 1, 2, 3, 4, 5 or 6 to select the SPI peripheral.
   * @param  NewState: new state of the SPIx CRC value calculation.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void SPI_CalculateCRC(SPI_TypeDef* SPIx, FunctionalState NewState)
@@ -909,7 +909,7 @@ void SPI_CalculateCRC(SPI_TypeDef* SPIx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_SPI_ALL_PERIPH(SPIx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected SPI CRC calculation */
     SPIx->CR1 |= SPI_CR1_CRCEN;
@@ -1003,7 +1003,7 @@ uint16_t SPI_GetCRCPolynomial(SPI_TypeDef* SPIx)
   *            @arg SPI_I2S_DMAReq_Tx: Tx buffer DMA transfer request
   *            @arg SPI_I2S_DMAReq_Rx: Rx buffer DMA transfer request
   * @param  NewState: new state of the selected SPI DMA transfer request.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState NewState)
@@ -1013,7 +1013,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   assert_param(IS_SPI_I2S_DMAREQ(SPI_I2S_DMAReq));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected SPI DMA requests */
     SPIx->CR2 |= SPI_I2S_DMAReq;
@@ -1059,7 +1059,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
       better to use the TXE and RXNE flags instead.
 
  [..] In this Mode it is advised to use the following functions:
-   (+) FlagStatus SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG);
+   (+) FlagStatus_stm SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG);
    (+) void SPI_I2S_ClearFlag(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG);
 
  *** Interrupt Mode ***
@@ -1111,7 +1111,7 @@ void SPI_I2S_DMACmd(SPI_TypeDef* SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState 
   *            @arg SPI_I2S_IT_RXNE: Rx buffer not empty interrupt mask
   *            @arg SPI_I2S_IT_ERR: Error interrupt mask
   * @param  NewState: new state of the specified SPI interrupt.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void SPI_I2S_ITConfig(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT, FunctionalState NewState)
@@ -1129,7 +1129,7 @@ void SPI_I2S_ITConfig(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT, FunctionalState New
   /* Set the IT mask */
   itmask = (uint16_t)1 << (uint16_t)itpos;
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected SPI interrupt */
     SPIx->CR2 |= itmask;
@@ -1156,25 +1156,25 @@ void SPI_I2S_ITConfig(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT, FunctionalState New
   *            @arg SPI_I2S_FLAG_TIFRFE: Format Error.
   *            @arg I2S_FLAG_UDR: Underrun Error flag.
   *            @arg I2S_FLAG_CHSIDE: Channel Side flag.  
-  * @retval The new state of SPI_I2S_FLAG (SET or RESET).
+  * @retval The new state of SPI_I2S_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG)
+FlagStatus_stm SPI_I2S_GetFlagStatus(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_SPI_ALL_PERIPH_EXT(SPIx));
   assert_param(IS_SPI_I2S_GET_FLAG(SPI_I2S_FLAG));
   
   /* Check the status of the specified SPI flag */
-  if ((SPIx->SR & SPI_I2S_FLAG) != (uint16_t)RESET)
+  if ((SPIx->SR & SPI_I2S_FLAG) != (uint16_t)RESET_stm)
   {
     /* SPI_I2S_FLAG is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* SPI_I2S_FLAG is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the SPI_I2S_FLAG status */
   return  bitstatus;
@@ -1222,11 +1222,11 @@ void SPI_I2S_ClearFlag(SPI_TypeDef* SPIx, uint16_t SPI_I2S_FLAG)
   *            @arg SPI_IT_CRCERR: CRC Error interrupt.
   *            @arg I2S_IT_UDR: Underrun interrupt.  
   *            @arg SPI_I2S_IT_TIFRFE: Format Error interrupt.  
-  * @retval The new state of SPI_I2S_IT (SET or RESET).
+  * @retval The new state of SPI_I2S_IT (SET_stm or RESET_stm).
   */
 ITStatus SPI_I2S_GetITStatus(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   uint16_t itpos = 0, itmask = 0, enablestatus = 0;
 
   /* Check the parameters */
@@ -1246,15 +1246,15 @@ ITStatus SPI_I2S_GetITStatus(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT)
   enablestatus = (SPIx->CR2 & itmask) ;
 
   /* Check the status of the specified SPI interrupt */
-  if (((SPIx->SR & itpos) != (uint16_t)RESET) && enablestatus)
+  if (((SPIx->SR & itpos) != (uint16_t)RESET_stm) && enablestatus)
   {
     /* SPI_I2S_IT is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* SPI_I2S_IT is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the SPI_I2S_IT status */
   return bitstatus;

@@ -105,7 +105,7 @@
 #define MOTOR_B_PIN_SOURCE             	GPIO_PinSource14
 #define MOTOR_AB_GPIO_PORT				GPIOD
 #define MOTOR_AB_AF              		GPIO_AF_TIM4
-#define MOTOR_AB_TIMER_CLK_EN      		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE)
+#define MOTOR_AB_TIMER_CLK_EN      		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE_stm)
 #define MOTOR_AB_TIMER					TIM4
 
 

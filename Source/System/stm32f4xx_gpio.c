@@ -16,7 +16,7 @@
  ===============================================================================       
  [..]             
    (#) Enable the GPIO AHB clock using the following function
-       RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+       RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE_stm);
                
    (#) Configure the GPIO pin(s) using GPIO_Init()
        Four possible configuration are available for each pin:
@@ -130,50 +130,50 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
 
   if (GPIOx == GPIOA)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOA, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOA, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOA, DISABLE_stm);
   }
   else if (GPIOx == GPIOB)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOB, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOB, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOB, DISABLE_stm);
   }
-  else if (GPIOx == GPIOC)
+  else if (GPIOx == GPIOC_stm)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOC, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOC, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOC, DISABLE_stm);
   }
   else if (GPIOx == GPIOD)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOD, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOD, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOD, DISABLE_stm);
   }
   else if (GPIOx == GPIOE)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, DISABLE_stm);
   }
-  else if (GPIOx == GPIOF)
+  else if (GPIOx == GPIOF_stm)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOF, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOF, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOF, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOF, DISABLE_stm);
   }
   else if (GPIOx == GPIOG)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOG, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOG, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOG, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOG, DISABLE_stm);
   }
   else if (GPIOx == GPIOH)
   {
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOH, ENABLE);
-    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOH, DISABLE);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOH, ENABLE_stm);
+    RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOH, DISABLE_stm);
   }
   else
   {
     if (GPIOx == GPIOI)
     {
-      RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, ENABLE);
-      RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, DISABLE);
+      RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, ENABLE_stm);
+      RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, DISABLE_stm);
     }
   }
 }

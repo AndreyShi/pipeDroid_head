@@ -17,7 +17,7 @@
  ===================================================================          
  [..]
    (#) Enable The RNG controller clock using 
-       RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE) function.
+       RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_RNG, ENABLE_stm) function.
                 
    (#) Activate the RNG peripheral using RNG_Cmd() function.
             
@@ -99,16 +99,16 @@
 void RNG_DeInit(void)
 {
   /* Enable RNG reset state */
-  RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_RNG, ENABLE);
+  RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_RNG, ENABLE_stm);
 
   /* Release RNG from reset state */
-  RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_RNG, DISABLE);
+  RCC_AHB2PeriphResetCmd(RCC_AHB2Periph_RNG, DISABLE_stm);
 }
 
 /**
   * @brief  Enables or disables the RNG peripheral.
   * @param  NewState: new state of the RNG peripheral.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RNG_Cmd(FunctionalState NewState)
@@ -116,7 +116,7 @@ void RNG_Cmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the RNG */
     RNG->CR |= RNG_CR_RNGEN;
@@ -261,7 +261,7 @@ uint32_t RNG_GetRandomNumber(void)
   *         (see RNG_GetITStatus() function) and clear bit except the DRDY event
   *         (see RNG_ClearITPendingBit() function).
   * @param  NewState: new state of the RNG interrupt.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void RNG_ITConfig(FunctionalState NewState)
@@ -269,7 +269,7 @@ void RNG_ITConfig(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the RNG interrupt */
     RNG->CR |= RNG_CR_IE;
@@ -288,24 +288,24 @@ void RNG_ITConfig(FunctionalState NewState)
   *            @arg RNG_FLAG_DRDY: Data Ready flag.
   *            @arg RNG_FLAG_CECS: Clock Error Current flag.
   *            @arg RNG_FLAG_SECS: Seed Error Current flag.
-  * @retval The new state of RNG_FLAG (SET or RESET).
+  * @retval The new state of RNG_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus RNG_GetFlagStatus(uint8_t RNG_FLAG)
+FlagStatus_stm RNG_GetFlagStatus(uint8_t RNG_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_RNG_GET_FLAG(RNG_FLAG));
 
   /* Check the status of the specified RNG flag */
-  if ((RNG->SR & RNG_FLAG) != (uint8_t)RESET)
+  if ((RNG->SR & RNG_FLAG) != (uint8_t)RESET_stm)
   {
     /* RNG_FLAG is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* RNG_FLAG is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the RNG_FLAG status */
   return  bitstatus;
@@ -337,24 +337,24 @@ void RNG_ClearFlag(uint8_t RNG_FLAG)
   *          This parameter can be one of the following values:
   *            @arg RNG_IT_CEI: Clock Error Interrupt.
   *            @arg RNG_IT_SEI: Seed Error Interrupt.                   
-  * @retval The new state of RNG_IT (SET or RESET).
+  * @retval The new state of RNG_IT (SET_stm or RESET_stm).
   */
 ITStatus RNG_GetITStatus(uint8_t RNG_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_RNG_GET_IT(RNG_IT));
 
   /* Check the status of the specified RNG interrupt */
-  if ((RNG->SR & RNG_IT) != (uint8_t)RESET)
+  if ((RNG->SR & RNG_IT) != (uint8_t)RESET_stm)
   {
     /* RNG_IT is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* RNG_IT is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the RNG_IT status */
   return bitstatus;

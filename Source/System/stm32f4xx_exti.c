@@ -39,7 +39,7 @@
   *            4- Configure NVIC IRQ channel mapped to the EXTI line using NVIC_Init()
   *   
   *  @note  SYSCFG APB clock must be enabled to get write access to SYSCFG_EXTICRx
-  *         registers using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+  *         registers using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE_stm);
   *          
   *  @endverbatim                  
   *
@@ -128,7 +128,7 @@ void EXTI_Init(EXTI_InitTypeDef* EXTI_InitStruct)
 
   tmp = (uint32_t)EXTI_BASE;
      
-  if (EXTI_InitStruct->EXTI_LineCmd != DISABLE)
+  if (EXTI_InitStruct->EXTI_LineCmd != DISABLE_stm)
   {
     /* Clear EXTI line configuration */
     EXTI->IMR &= ~EXTI_InitStruct->EXTI_Line;
@@ -177,7 +177,7 @@ void EXTI_StructInit(EXTI_InitTypeDef* EXTI_InitStruct)
   EXTI_InitStruct->EXTI_Line = EXTI_LINENONE;
   EXTI_InitStruct->EXTI_Mode = EXTI_Mode_Interrupt;
   EXTI_InitStruct->EXTI_Trigger = EXTI_Trigger_Falling;
-  EXTI_InitStruct->EXTI_LineCmd = DISABLE;
+  EXTI_InitStruct->EXTI_LineCmd = DISABLE_stm;
 }
 
 /**
@@ -215,21 +215,21 @@ void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
   * @brief  Checks whether the specified EXTI line flag is set or not.
   * @param  EXTI_Line: specifies the EXTI line flag to check.
   *          This parameter can be EXTI_Linex where x can be(0..22)
-  * @retval The new state of EXTI_Line (SET or RESET).
+  * @retval The new state of EXTI_Line (SET_stm or RESET_stm).
   */
-FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line)
+FlagStatus_stm EXTI_GetFlagStatus(uint32_t EXTI_Line)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
   
-  if ((EXTI->PR & EXTI_Line) != (uint32_t)RESET)
+  if ((EXTI->PR & EXTI_Line) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -252,23 +252,23 @@ void EXTI_ClearFlag(uint32_t EXTI_Line)
   * @brief  Checks whether the specified EXTI line is asserted or not.
   * @param  EXTI_Line: specifies the EXTI line to check.
   *          This parameter can be EXTI_Linex where x can be(0..22)
-  * @retval The new state of EXTI_Line (SET or RESET).
+  * @retval The new state of EXTI_Line (SET_stm or RESET_stm).
   */
 ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   uint32_t enablestatus = 0;
   /* Check the parameters */
   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
   
   enablestatus =  EXTI->IMR & EXTI_Line;
-  if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
+  if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET_stm) && (enablestatus != (uint32_t)RESET_stm))
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }

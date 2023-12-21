@@ -1755,7 +1755,7 @@ void ETH_DeInit(void);
 uint32_t ETH_Init(ETH_InitTypeDef* ETH_InitStruct, uint16_t PHYAddress);
 void ETH_StructInit(ETH_InitTypeDef* ETH_InitStruct);
 void ETH_SoftwareReset(void);
-FlagStatus ETH_GetSoftwareResetStatus(void);
+FlagStatus_stm ETH_GetSoftwareResetStatus(void);
 void  ETH_Start(void);
 uint32_t ETH_GetRxPktSize(ETH_DMADESCTypeDef *DMARxDesc);
 
@@ -1776,10 +1776,10 @@ uint32_t ETH_PHYLoopBackCmd(uint16_t PHYAddress, FunctionalState NewState);
   */ 
 void ETH_MACTransmissionCmd(FunctionalState NewState);
 void ETH_MACReceptionCmd(FunctionalState NewState);
-FlagStatus ETH_GetFlowControlBusyStatus(void);
+FlagStatus_stm ETH_GetFlowControlBusyStatus(void);
 void ETH_InitiatePauseControlFrame(void);  
 void ETH_BackPressureActivationCmd(FunctionalState NewState); 
-FlagStatus ETH_GetMACFlagStatus(uint32_t ETH_MAC_FLAG);  
+FlagStatus_stm ETH_GetMACFlagStatus(uint32_t ETH_MAC_FLAG);  
 ITStatus ETH_GetMACITStatus(uint32_t ETH_MAC_IT);
 void ETH_MACITConfig(uint32_t ETH_MAC_IT, FunctionalState NewState);
 void ETH_MACAddressConfig(uint32_t MacAddr, uint8_t *Addr);
@@ -1796,7 +1796,7 @@ void ETH_DMATxDescChainInit(ETH_DMADESCTypeDef *DMATxDescTab, uint8_t* TxBuff, u
 uint32_t ETH_CheckFrameReceived(void);
 uint32_t ETH_Prepare_Transmit_Descriptors(u16 FrameLength);
 FrameTypeDef ETH_Get_Received_Frame(void);
-FlagStatus ETH_GetDMATxDescFlagStatus(ETH_DMADESCTypeDef *DMATxDesc, uint32_t ETH_DMATxDescFlag);
+FlagStatus_stm ETH_GetDMATxDescFlagStatus(ETH_DMADESCTypeDef *DMATxDesc, uint32_t ETH_DMATxDescFlag);
 uint32_t ETH_GetDMATxDescCollisionCount(ETH_DMADESCTypeDef *DMATxDesc);
 void ETH_SetDMATxDescOwnBit(ETH_DMADESCTypeDef *DMATxDesc);
 void ETH_DMATxDescTransmitITConfig(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState);
@@ -1806,9 +1806,9 @@ void ETH_DMATxDescCRCCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState
 void ETH_DMATxDescSecondAddressChainedCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState);
 void ETH_DMATxDescShortFramePaddingCmd(ETH_DMADESCTypeDef *DMATxDesc, FunctionalState NewState);
 void ETH_DMATxDescBufferSizeConfig(ETH_DMADESCTypeDef *DMATxDesc, uint32_t BufferSize1, uint32_t BufferSize2);
-FlagStatus ETH_GetDMARxDescFlagStatus(ETH_DMADESCTypeDef *DMARxDesc, uint32_t ETH_DMARxDescFlag);
+FlagStatus_stm ETH_GetDMARxDescFlagStatus(ETH_DMADESCTypeDef *DMARxDesc, uint32_t ETH_DMARxDescFlag);
 #ifdef USE_ENHANCED_DMA_DESCRIPTORS
- FlagStatus ETH_GetDMAPTPRxDescExtendedFlagStatus(ETH_DMADESCTypeDef *DMAPTPRxDesc, uint32_t ETH_DMAPTPRxDescExtendedFlag);
+ FlagStatus_stm ETH_GetDMAPTPRxDescExtendedFlagStatus(ETH_DMADESCTypeDef *DMAPTPRxDesc, uint32_t ETH_DMAPTPRxDescExtendedFlag);
 #endif /* USE_ENHANCED_DMA_DESCRIPTORS */
 void ETH_SetDMARxDescOwnBit(ETH_DMADESCTypeDef *DMARxDesc);
 uint32_t ETH_GetDMARxDescFrameLength(ETH_DMADESCTypeDef *DMARxDesc);
@@ -1819,18 +1819,18 @@ FrameTypeDef ETH_Get_Received_Frame_interrupt(void);
 /** 
   * @brief  DMA
   */ 
-FlagStatus ETH_GetDMAFlagStatus(uint32_t ETH_DMA_FLAG);
+FlagStatus_stm ETH_GetDMAFlagStatus(uint32_t ETH_DMA_FLAG);
 void ETH_DMAClearFlag(uint32_t ETH_DMA_FLAG);
 ITStatus ETH_GetDMAITStatus(uint32_t ETH_DMA_IT);
 void ETH_DMAClearITPendingBit(uint32_t ETH_DMA_IT);
 uint32_t ETH_GetTransmitProcessState(void);
 uint32_t ETH_GetReceiveProcessState(void);
 void ETH_FlushTransmitFIFO(void);
-FlagStatus ETH_GetFlushTransmitFIFOStatus(void);
+FlagStatus_stm ETH_GetFlushTransmitFIFOStatus(void);
 void ETH_DMATransmissionCmd(FunctionalState NewState);
 void ETH_DMAReceptionCmd(FunctionalState NewState);
 void ETH_DMAITConfig(uint32_t ETH_DMA_IT, FunctionalState NewState);
-FlagStatus ETH_GetDMAOverflowStatus(uint32_t ETH_DMA_Overflow);
+FlagStatus_stm ETH_GetDMAOverflowStatus(uint32_t ETH_DMA_Overflow);
 uint32_t ETH_GetRxOverflowMissedFrameCounter(void);
 uint32_t ETH_GetBufferUnavailableMissedFrameCounter(void);
 uint32_t ETH_GetCurrentTxDescStartAddress(void);
@@ -1848,7 +1848,7 @@ void ETH_SetReceiveWatchdogTimer(uint8_t Value);
 void ETH_ResetWakeUpFrameFilterRegisterPointer(void);
 void ETH_SetWakeUpFrameFilterRegister(uint32_t *Buffer);
 void ETH_GlobalUnicastWakeUpCmd(FunctionalState NewState);
-FlagStatus ETH_GetPMTFlagStatus(uint32_t ETH_PMT_FLAG);
+FlagStatus_stm ETH_GetPMTFlagStatus(uint32_t ETH_PMT_FLAG);
 void ETH_WakeUpFrameDetectionCmd(FunctionalState NewState);
 void ETH_MagicPacketDetectionCmd(FunctionalState NewState);
 void ETH_PowerDownCmd(FunctionalState NewState);

@@ -17,7 +17,7 @@
                     ##### How to use this driver #####
  ===============================================================================
     [..]
-      (#) Enable peripheral clock using RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2Cx, ENABLE)
+      (#) Enable peripheral clock using RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2Cx, ENABLE_stm)
           function for I2C1, I2C2 or I2C3.
   
       (#) Enable SDA, SCL  and SMBA (when used) GPIO clocks using 
@@ -142,25 +142,25 @@ void I2C_DeInit(I2C_TypeDef* I2Cx)
   if (I2Cx == I2C1)
   {
     /* Enable I2C1 reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, ENABLE_stm);
     /* Release I2C1 from reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, DISABLE);    
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, DISABLE_stm);    
   }
   else if (I2Cx == I2C2)
   {
     /* Enable I2C2 reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, ENABLE_stm);
     /* Release I2C2 from reset state */
-    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, DISABLE);      
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C2, DISABLE_stm);      
   }
   else 
   {
     if (I2Cx == I2C3)
     {
       /* Enable I2C3 reset state */
-      RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C3, ENABLE);
+      RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C3, ENABLE_stm);
       /* Release I2C3 from reset state */
-      RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C3, DISABLE);     
+      RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C3, DISABLE_stm);     
     }
   }
 }
@@ -307,7 +307,7 @@ void I2C_StructInit(I2C_InitTypeDef* I2C_InitStruct)
   * @brief  Enables or disables the specified I2C peripheral.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx peripheral. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -315,7 +315,7 @@ void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected I2C peripheral */
     I2Cx->CR1 |= I2C_CR1_PE;
@@ -331,7 +331,7 @@ void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables the Analog filter of I2C peripheral.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the Analog filter. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @note   This function should be called before initializing and enabling
             the I2C Peripheral.
   * @retval None
@@ -341,7 +341,7 @@ void I2C_AnalogFilterCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the analog filter */
     I2Cx->FLTR &= (uint16_t)~((uint16_t)I2C_FLTR_ANOFF);    
@@ -387,7 +387,7 @@ void I2C_DigitalFilterConfig(I2C_TypeDef* I2Cx, uint16_t I2C_DigitalFilter)
   * @brief  Generates I2Cx communication START condition.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C START condition generation.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None.
   */
 void I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -395,7 +395,7 @@ void I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Generate a START condition */
     I2Cx->CR1 |= I2C_CR1_START;
@@ -411,7 +411,7 @@ void I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Generates I2Cx communication STOP condition.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C STOP condition generation.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None.
   */
 void I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -419,7 +419,7 @@ void I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Generate a STOP condition */
     I2Cx->CR1 |= I2C_CR1_STOP;
@@ -466,7 +466,7 @@ void I2C_Send7bitAddress(I2C_TypeDef* I2Cx, uint8_t Address, uint8_t I2C_Directi
   * @brief  Enables or disables the specified I2C acknowledge feature.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C Acknowledgement.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None.
   */
 void I2C_AcknowledgeConfig(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -474,7 +474,7 @@ void I2C_AcknowledgeConfig(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the acknowledgement */
     I2Cx->CR1 |= I2C_CR1_ACK;
@@ -516,7 +516,7 @@ void I2C_OwnAddress2Config(I2C_TypeDef* I2Cx, uint8_t Address)
   * @brief  Enables or disables the specified I2C dual addressing mode.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C dual addressing mode.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_DualAddressCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -524,7 +524,7 @@ void I2C_DualAddressCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable dual addressing mode */
     I2Cx->OAR2 |= I2C_OAR2_ENDUAL;
@@ -540,7 +540,7 @@ void I2C_DualAddressCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables the specified I2C general call feature.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C General call.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_GeneralCallCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -548,7 +548,7 @@ void I2C_GeneralCallCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable generall call */
     I2Cx->CR1 |= I2C_CR1_ENGC;
@@ -566,7 +566,7 @@ void I2C_GeneralCallCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   *         be useful to recover from bus errors).  
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C software reset.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_SoftwareResetCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -574,7 +574,7 @@ void I2C_SoftwareResetCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Peripheral under reset */
     I2Cx->CR1 |= I2C_CR1_SWRST;
@@ -590,7 +590,7 @@ void I2C_SoftwareResetCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables the specified I2C Clock stretching.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx Clock stretching.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_StretchClockCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -598,7 +598,7 @@ void I2C_StretchClockCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState == DISABLE)
+  if (NewState == DISABLE_stm)
   {
     /* Enable the selected I2C Clock stretching */
     I2Cx->CR1 |= I2C_CR1_NOSTRETCH;
@@ -706,7 +706,7 @@ void I2C_SMBusAlertConfig(I2C_TypeDef* I2Cx, uint16_t I2C_SMBusAlert)
   * @brief  Enables or disables the specified I2C ARP.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx ARP. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_ARPCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -714,7 +714,7 @@ void I2C_ARPCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected I2C ARP */
     I2Cx->CR1 |= I2C_CR1_ENARP;
@@ -788,7 +788,7 @@ uint8_t I2C_ReceiveData(I2C_TypeDef* I2Cx)
   * @brief  Enables or disables the specified I2C PEC transfer.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C PEC transmission.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_TransmitPEC(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -796,7 +796,7 @@ void I2C_TransmitPEC(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected I2C PEC transmission */
     I2Cx->CR1 |= I2C_CR1_PEC;
@@ -843,7 +843,7 @@ void I2C_PECPositionConfig(I2C_TypeDef* I2Cx, uint16_t I2C_PECPosition)
   * @brief  Enables or disables the PEC value calculation of the transferred bytes.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx PEC value calculation.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_CalculatePEC(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -851,7 +851,7 @@ void I2C_CalculatePEC(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected I2C PEC calculation */
     I2Cx->CR1 |= I2C_CR1_ENPEC;
@@ -898,7 +898,7 @@ uint8_t I2C_GetPEC(I2C_TypeDef* I2Cx)
   * @brief  Enables or disables the specified I2C DMA requests.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C DMA transfer.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_DMACmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -906,7 +906,7 @@ void I2C_DMACmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected I2C DMA requests */
     I2Cx->CR2 |= I2C_CR2_DMAEN;
@@ -922,7 +922,7 @@ void I2C_DMACmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Specifies that the next DMA transfer is the last one.
   * @param  I2Cx: where x can be 1, 2 or 3 to select the I2C peripheral.
   * @param  NewState: new state of the I2C DMA last transfer.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_DMALastTransferCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -930,7 +930,7 @@ void I2C_DMALastTransferCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Next DMA transfer is the last transfer */
     I2Cx->CR2 |= I2C_CR2_LAST;
@@ -971,8 +971,8 @@ void I2C_DMALastTransferCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
      
         It compares the status registers (SR1 and SR2) content to a given event
         (can be the combination of one or more flags).
-        It returns SUCCESS if the current status includes the given flags 
-        and returns ERROR if one or more flags are missing in the current status.
+        It returns SUCCESS_stm if the current status includes the given flags 
+        and returns ERROR_stm if one or more flags are missing in the current status.
 
           (++) When to use
              (+++) This function is suitable for most applications as well as for startup 
@@ -982,7 +982,7 @@ void I2C_DMALastTransferCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
 
           (++) Limitations
                If an error occurs (ie. error flags are set besides to the monitored 
-               flags), the I2C_CheckEvent() function may return SUCCESS despite 
+               flags), the I2C_CheckEvent() function may return SUCCESS_stm despite 
                the communication hold or corrupted real state. 
                In this case, it is advised to use error interrupts to monitor 
                the error events and handle them in the interrupt IRQ handler.
@@ -1087,7 +1087,7 @@ uint16_t I2C_ReadRegister(I2C_TypeDef* I2Cx, uint8_t I2C_Register)
   *            @arg I2C_IT_EVT: Event interrupt mask
   *            @arg I2C_IT_ERR: Error interrupt mask
   * @param  NewState: new state of the specified I2C interrupts.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void I2C_ITConfig(I2C_TypeDef* I2Cx, uint16_t I2C_IT, FunctionalState NewState)
@@ -1097,7 +1097,7 @@ void I2C_ITConfig(I2C_TypeDef* I2Cx, uint16_t I2C_IT, FunctionalState NewState)
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   assert_param(IS_I2C_CONFIG_IT(I2C_IT));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected I2C interrupts */
     I2Cx->CR2 |= I2C_IT;
@@ -1146,14 +1146,14 @@ void I2C_ITConfig(I2C_TypeDef* I2Cx, uint16_t I2C_IT, FunctionalState NewState)
   *         in stm32f4xx_i2c.h file.
   *    
   * @retval An ErrorStatus enumeration value:
-  *           - SUCCESS: Last event is equal to the I2C_EVENT
-  *           - ERROR: Last event is different from the I2C_EVENT
+  *           - SUCCESS_stm: Last event is equal to the I2C_EVENT
+  *           - ERROR_stm: Last event is different from the I2C_EVENT
   */
 ErrorStatus I2C_CheckEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT)
 {
   uint32_t lastevent = 0;
   uint32_t flag1 = 0, flag2 = 0;
-  ErrorStatus status = ERROR;
+  ErrorStatus status = ERROR_stm;
 
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
@@ -1170,13 +1170,13 @@ ErrorStatus I2C_CheckEvent(I2C_TypeDef* I2Cx, uint32_t I2C_EVENT)
   /* Check whether the last event contains the I2C_EVENT */
   if ((lastevent & I2C_EVENT) == I2C_EVENT)
   {
-    /* SUCCESS: last event is equal to I2C_EVENT */
-    status = SUCCESS;
+    /* SUCCESS_stm: last event is equal to I2C_EVENT */
+    status = SUCCESS_stm;
   }
   else
   {
-    /* ERROR: last event is different from I2C_EVENT */
-    status = ERROR;
+    /* ERROR_stm: last event is different from I2C_EVENT */
+    status = ERROR_stm;
   }
   /* Return status */
   return status;
@@ -1250,11 +1250,11 @@ uint32_t I2C_GetLastEvent(I2C_TypeDef* I2Cx)
   *            @arg I2C_FLAG_ADDR: Address sent flag (Master mode) "ADSL"
   *                                Address matched flag (Slave mode)"ENDAD"
   *            @arg I2C_FLAG_SB: Start bit flag (Master mode)
-  * @retval The new state of I2C_FLAG (SET or RESET).
+  * @retval The new state of I2C_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
+FlagStatus_stm I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   __IO uint32_t i2creg = 0, i2cxbase = 0;
 
   /* Check the parameters */
@@ -1283,15 +1283,15 @@ FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
     i2cxbase += 0x18;
   }
   
-  if(((*(__IO uint32_t *)i2cxbase) & I2C_FLAG) != (uint32_t)RESET)
+  if(((*(__IO uint32_t *)i2cxbase) & I2C_FLAG) != (uint32_t)RESET_stm)
   {
     /* I2C_FLAG is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* I2C_FLAG is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   
   /* Return the I2C_FLAG status */
@@ -1361,11 +1361,11 @@ void I2C_ClearFlag(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
   *            @arg I2C_IT_ADDR: Address sent flag (Master mode) "ADSL"
   *                              Address matched flag (Slave mode)"ENDAD"
   *            @arg I2C_IT_SB: Start bit flag (Master mode)
-  * @retval The new state of I2C_IT (SET or RESET).
+  * @retval The new state of I2C_IT (SET_stm or RESET_stm).
   */
 ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, uint32_t I2C_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   uint32_t enablestatus = 0;
 
   /* Check the parameters */
@@ -1379,15 +1379,15 @@ ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, uint32_t I2C_IT)
   I2C_IT &= FLAG_MASK;
 
   /* Check the status of the specified I2C flag */
-  if (((I2Cx->SR1 & I2C_IT) != (uint32_t)RESET) && enablestatus)
+  if (((I2Cx->SR1 & I2C_IT) != (uint32_t)RESET_stm) && enablestatus)
   {
     /* I2C_IT is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* I2C_IT is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the I2C_IT status */
   return  bitstatus;

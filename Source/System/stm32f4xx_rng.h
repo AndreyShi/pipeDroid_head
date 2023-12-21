@@ -98,7 +98,7 @@ uint32_t RNG_GetRandomNumber(void);
 
 /* Interrupts and flags management functions **********************************/
 void RNG_ITConfig(FunctionalState NewState);
-FlagStatus RNG_GetFlagStatus(uint8_t RNG_FLAG);
+FlagStatus_stm RNG_GetFlagStatus(uint8_t RNG_FLAG);
 void RNG_ClearFlag(uint8_t RNG_FLAG);
 ITStatus RNG_GetITStatus(uint8_t RNG_IT);
 void RNG_ClearITPendingBit(uint8_t RNG_IT);

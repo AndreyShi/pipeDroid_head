@@ -153,7 +153,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
   for(q = p; q != NULL; q = q->next)
     {
       /* Is this buffer available? If not, goto error */
-      if((DmaTxDesc->Status & ETH_DMATxDesc_OWN) != (u32)RESET)
+      if((DmaTxDesc->Status & ETH_DMATxDesc_OWN) != (u32)RESET_stm)
       {
         errval = ERR_BUF;
         goto error;
@@ -173,7 +173,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
         DmaTxDesc = (ETH_DMADESCTypeDef *)(DmaTxDesc->Buffer2NextDescAddr);
 
         /* Check if the buffer is available */
-        if((DmaTxDesc->Status & ETH_DMATxDesc_OWN) != (u32)RESET)
+        if((DmaTxDesc->Status & ETH_DMATxDesc_OWN) != (u32)RESET_stm)
         {
           errval = ERR_USE;
           goto error;
@@ -204,7 +204,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
 error:
   
   /* When Transmit Underflow flag is set, clear it and issue a Transmit Poll Demand to resume transmission */
-  if ((ETH->DMASR & ETH_DMASR_TUS) != (uint32_t)RESET)
+  if ((ETH->DMASR & ETH_DMASR_TUS) != (uint32_t)RESET_stm)
   {
     /* Clear TUS ETHERNET DMA flag */
     ETH->DMASR = ETH_DMASR_TUS;
@@ -288,7 +288,7 @@ static struct pbuf * low_level_input(struct netif *netif)
   DMA_RX_FRAME_infos->Seg_Count =0;
   
   /* When Rx Buffer unavailable flag is set: clear it and resume reception */
-  if ((ETH->DMASR & ETH_DMASR_RBUS) != (u32)RESET)  
+  if ((ETH->DMASR & ETH_DMASR_RBUS) != (u32)RESET_stm)  
   {
     /* Clear RBUS ETHERNET DMA flag */
     ETH->DMASR = ETH_DMASR_RBUS;

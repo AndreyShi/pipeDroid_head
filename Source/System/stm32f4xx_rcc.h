@@ -523,7 +523,7 @@ void RCC_APB2PeriphClockLPModeCmd(uint32_t RCC_APB2Periph, FunctionalState NewSt
 
 /* Interrupts and flags management functions **********************************/
 void       RCC_ITConfig(uint8_t RCC_IT, FunctionalState NewState);
-FlagStatus RCC_GetFlagStatus(uint8_t RCC_FLAG);
+FlagStatus_stm RCC_GetFlagStatus(uint8_t RCC_FLAG);
 void       RCC_ClearFlag(void);
 ITStatus   RCC_GetITStatus(uint8_t RCC_IT);
 void       RCC_ClearITPendingBit(uint8_t RCC_IT);

@@ -283,11 +283,11 @@ typedef struct
 
 #define I2C_FLAG_SMBALERT               ((uint32_t)0x10008000)
 #define I2C_FLAG_TIMEOUT                ((uint32_t)0x10004000)
-#define I2C_FLAG_PECERR                 ((uint32_t)0x10001000)
+#define I2C_FLAG_PECERR_stm                 ((uint32_t)0x10001000)
 #define I2C_FLAG_OVR                    ((uint32_t)0x10000800)
 #define I2C_FLAG_AF                     ((uint32_t)0x10000400)
 #define I2C_FLAG_ARLO                   ((uint32_t)0x10000200)
-#define I2C_FLAG_BERR                   ((uint32_t)0x10000100)
+#define I2C_FLAG_BERR_stm                   ((uint32_t)0x10000100)
 #define I2C_FLAG_TXE                    ((uint32_t)0x10000080)
 #define I2C_FLAG_RXNE                   ((uint32_t)0x10000040)
 #define I2C_FLAG_STOPF                  ((uint32_t)0x10000010)
@@ -302,9 +302,9 @@ typedef struct
                                ((FLAG) == I2C_FLAG_SMBDEFAULT) || ((FLAG) == I2C_FLAG_GENCALL) || \
                                ((FLAG) == I2C_FLAG_TRA) || ((FLAG) == I2C_FLAG_BUSY) || \
                                ((FLAG) == I2C_FLAG_MSL) || ((FLAG) == I2C_FLAG_SMBALERT) || \
-                               ((FLAG) == I2C_FLAG_TIMEOUT) || ((FLAG) == I2C_FLAG_PECERR) || \
+                               ((FLAG) == I2C_FLAG_TIMEOUT) || ((FLAG) == I2C_FLAG_PECERR_stm) || \
                                ((FLAG) == I2C_FLAG_OVR) || ((FLAG) == I2C_FLAG_AF) || \
-                               ((FLAG) == I2C_FLAG_ARLO) || ((FLAG) == I2C_FLAG_BERR) || \
+                               ((FLAG) == I2C_FLAG_ARLO) || ((FLAG) == I2C_FLAG_BERR_stm) || \
                                ((FLAG) == I2C_FLAG_TXE) || ((FLAG) == I2C_FLAG_RXNE) || \
                                ((FLAG) == I2C_FLAG_STOPF) || ((FLAG) == I2C_FLAG_ADD10) || \
                                ((FLAG) == I2C_FLAG_BTF) || ((FLAG) == I2C_FLAG_ADDR) || \
@@ -597,8 +597,8 @@ void I2C_ITConfig(I2C_TypeDef* I2Cx, uint16_t I2C_IT, FunctionalState NewState);
      -----------------------------------------------------------
         It compares the status registers (SR1 and SR2) content to a given event
         (can be the combination of one or more flags).
-        It returns SUCCESS if the current status includes the given flags 
-        and returns ERROR if one or more flags are missing in the current status.
+        It returns SUCCESS_stm if the current status includes the given flags 
+        and returns ERROR_stm if one or more flags are missing in the current status.
 
           - When to use
              - This function is suitable for most applications as well as for startup 
@@ -608,7 +608,7 @@ void I2C_ITConfig(I2C_TypeDef* I2Cx, uint16_t I2C_IT, FunctionalState NewState);
 
           - Limitations
              - If an error occurs (ie. error flags are set besides to the monitored 
-               flags), the I2C_CheckEvent() function may return SUCCESS despite 
+               flags), the I2C_CheckEvent() function may return SUCCESS_stm despite 
                the communication hold or corrupted real state. 
                In this case, it is advised to use error interrupts to monitor 
                the error events and handle them in the interrupt IRQ handler.
@@ -687,7 +687,7 @@ uint32_t I2C_GetLastEvent(I2C_TypeDef* I2Cx);
                           3. Flag-based state monitoring
  ===============================================================================
  */
-FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG);
+FlagStatus_stm I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG);
 
 
 void I2C_ClearFlag(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG);

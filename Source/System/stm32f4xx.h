@@ -146,29 +146,29 @@
  * @brief STM32F4XX Interrupt Number Definition, according to the selected device 
  *        in @ref Library_configuration_section 
  */
-typedef enum IRQn
+typedef enum IRQn_stm
 {
 /******  Cortex-M4 Processor Exceptions Numbers ****************************************************************/
-  NonMaskableInt_IRQn         = -14,    /*!< 2 Non Maskable Interrupt                                          */
-  MemoryManagement_IRQn       = -12,    /*!< 4 Cortex-M4 Memory Management Interrupt                           */
-  BusFault_IRQn               = -11,    /*!< 5 Cortex-M4 Bus Fault Interrupt                                   */
-  UsageFault_IRQn             = -10,    /*!< 6 Cortex-M4 Usage Fault Interrupt                                 */
-  SVCall_IRQn                 = -5,     /*!< 11 Cortex-M4 SV Call Interrupt                                    */
-  DebugMonitor_IRQn           = -4,     /*!< 12 Cortex-M4 Debug Monitor Interrupt                              */
-  PendSV_IRQn                 = -2,     /*!< 14 Cortex-M4 Pend SV Interrupt                                    */
-  SysTick_IRQn                = -1,     /*!< 15 Cortex-M4 System Tick Interrupt                                */
+  NonMaskableInt_IRQn_stm        = -14,    /*!< 2 Non Maskable Interrupt                                          */
+  MemoryManagement_IRQn_stm       = -12,    /*!< 4 Cortex-M4 Memory Management Interrupt                           */
+  BusFault_IRQn_stm               = -11,    /*!< 5 Cortex-M4 Bus Fault Interrupt                                   */
+  UsageFault_IRQn_stm             = -10,    /*!< 6 Cortex-M4 Usage Fault Interrupt                                 */
+  SVCall_IRQn_stm                 = -5,     /*!< 11 Cortex-M4 SV Call Interrupt                                    */
+  DebugMonitor_IRQn_stm           = -4,     /*!< 12 Cortex-M4 Debug Monitor Interrupt                              */
+  PendSV_IRQn_stm                 = -2,     /*!< 14 Cortex-M4 Pend SV Interrupt                                    */
+  SysTick_IRQn_stm                = -1,     /*!< 15 Cortex-M4 System Tick Interrupt                                */
 /******  STM32 specific Interrupt Numbers **********************************************************************/
   WWDG_IRQn                   = 0,      /*!< Window WatchDog Interrupt                                         */
   PVD_IRQn                    = 1,      /*!< PVD through EXTI Line detection Interrupt                         */
   TAMP_STAMP_IRQn             = 2,      /*!< Tamper and TimeStamp interrupts through the EXTI line             */
-  RTC_WKUP_IRQn               = 3,      /*!< RTC Wakeup interrupt through the EXTI line                        */
+  RTC_WKUP_IRQn_stm               = 3,      /*!< RTC Wakeup interrupt through the EXTI line                        */
   FLASH_IRQn                  = 4,      /*!< FLASH global Interrupt                                            */
   RCC_IRQn                    = 5,      /*!< RCC global Interrupt                                              */
-  EXTI0_IRQn                  = 6,      /*!< EXTI Line0 Interrupt                                              */
-  EXTI1_IRQn                  = 7,      /*!< EXTI Line1 Interrupt                                              */
-  EXTI2_IRQn                  = 8,      /*!< EXTI Line2 Interrupt                                              */
-  EXTI3_IRQn                  = 9,      /*!< EXTI Line3 Interrupt                                              */
-  EXTI4_IRQn                  = 10,     /*!< EXTI Line4 Interrupt                                              */
+  EXTI0_IRQn_stm                  = 6,      /*!< EXTI Line0 Interrupt                                              */
+  EXTI1_IRQn_stm                  = 7,      /*!< EXTI Line1 Interrupt                                              */
+  EXTI2_IRQn_stm                  = 8,      /*!< EXTI Line2 Interrupt                                              */
+  EXTI3_IRQn_stm                 = 9,      /*!< EXTI Line3 Interrupt                                              */
+  EXTI4_IRQn_stm                  = 10,     /*!< EXTI Line4 Interrupt                                              */
   DMA1_Stream0_IRQn           = 11,     /*!< DMA1 Stream 0 global Interrupt                                    */
   DMA1_Stream1_IRQn           = 12,     /*!< DMA1 Stream 1 global Interrupt                                    */
   DMA1_Stream2_IRQn           = 13,     /*!< DMA1 Stream 2 global Interrupt                                    */
@@ -176,10 +176,10 @@ typedef enum IRQn
   DMA1_Stream4_IRQn           = 15,     /*!< DMA1 Stream 4 global Interrupt                                    */
   DMA1_Stream5_IRQn           = 16,     /*!< DMA1 Stream 5 global Interrupt                                    */
   DMA1_Stream6_IRQn           = 17,     /*!< DMA1 Stream 6 global Interrupt                                    */
-  ADC_IRQn                    = 18,     /*!< ADC1, ADC2 and ADC3 global Interrupts                             */
-  CAN1_TX_IRQn                = 19,     /*!< CAN1 TX Interrupt                                                 */
-  CAN1_RX0_IRQn               = 20,     /*!< CAN1 RX0 Interrupt                                                */
-  CAN1_RX1_IRQn               = 21,     /*!< CAN1 RX1 Interrupt                                                */
+  ADC_IRQn_stm                    = 18,     /*!< ADC1, ADC2 and ADC3 global Interrupts                             */
+  CAN1_TX_IRQn_stm                = 19,     /*!< CAN1 TX Interrupt                                                 */
+  CAN1_RX0_IRQn_stm               = 20,     /*!< CAN1 RX0 Interrupt                                                */
+  CAN1_RX1_IRQn_stm               = 21,     /*!< CAN1 RX1 Interrupt                                                */
   CAN1_SCE_IRQn               = 22,     /*!< CAN1 SCE Interrupt                                                */
   EXTI9_5_IRQn                = 23,     /*!< External Line[9:5] Interrupts                                     */
   TIM1_BRK_TIM9_IRQn          = 24,     /*!< TIM1 Break interrupt and TIM9 global interrupt                    */
@@ -189,17 +189,17 @@ typedef enum IRQn
   TIM2_IRQn                   = 28,     /*!< TIM2 global Interrupt                                             */
   TIM3_IRQn                   = 29,     /*!< TIM3 global Interrupt                                             */
   TIM4_IRQn                   = 30,     /*!< TIM4 global Interrupt                                             */
-  I2C1_EV_IRQn                = 31,     /*!< I2C1 Event Interrupt                                              */
-  I2C1_ER_IRQn                = 32,     /*!< I2C1 Error Interrupt                                              */
-  I2C2_EV_IRQn                = 33,     /*!< I2C2 Event Interrupt                                              */
-  I2C2_ER_IRQn                = 34,     /*!< I2C2 Error Interrupt                                              */  
-  SPI1_IRQn                   = 35,     /*!< SPI1 global Interrupt                                             */
-  SPI2_IRQn                   = 36,     /*!< SPI2 global Interrupt                                             */
-  USART1_IRQn                 = 37,     /*!< USART1 global Interrupt                                           */
-  USART2_IRQn                 = 38,     /*!< USART2 global Interrupt                                           */
+  I2C1_EV_IRQn_stm                = 31,     /*!< I2C1 Event Interrupt                                              */
+  I2C1_ER_IRQn_stm                = 32,     /*!< I2C1 Error Interrupt                                              */
+  I2C2_EV_IRQn_stm                = 33,     /*!< I2C2 Event Interrupt                                              */
+  I2C2_ER_IRQn_stm                = 34,     /*!< I2C2 Error Interrupt                                              */  
+  SPI1_IRQn_stm                   = 35,     /*!< SPI1 global Interrupt                                             */
+  SPI2_IRQn_stm                   = 36,     /*!< SPI2 global Interrupt                                             */
+  USART1_IRQn_stm                 = 37,     /*!< USART1 global Interrupt                                           */
+  USART2_IRQn_stm                 = 38,     /*!< USART2 global Interrupt                                           */
   USART3_IRQn                 = 39,     /*!< USART3 global Interrupt                                           */
   EXTI15_10_IRQn              = 40,     /*!< External Line[15:10] Interrupts                                   */
-  RTC_Alarm_IRQn              = 41,     /*!< RTC Alarm (A and B) through EXTI Line Interrupt                   */
+  RTC_Alarm_IRQn_stm              = 41,     /*!< RTC Alarm (A and B) through EXTI Line Interrupt                   */
   OTG_FS_WKUP_IRQn            = 42,     /*!< USB OTG FS Wakeup through EXTI line interrupt                     */    
   TIM8_BRK_TIM12_IRQn         = 43,     /*!< TIM8 Break Interrupt and TIM12 global interrupt                   */
   TIM8_UP_TIM13_IRQn          = 44,     /*!< TIM8 Update Interrupt and TIM13 global interrupt                  */
@@ -207,10 +207,10 @@ typedef enum IRQn
   TIM8_CC_IRQn                = 46,     /*!< TIM8 Capture Compare Interrupt                                    */
   DMA1_Stream7_IRQn           = 47,     /*!< DMA1 Stream7 Interrupt                                            */
   FSMC_IRQn                   = 48,     /*!< FSMC global Interrupt                                             */
-  SDIO_IRQn                   = 49,     /*!< SDIO global Interrupt                                             */
+  SDIO_IRQn_stm                   = 49,     /*!< SDIO global Interrupt                                             */
   TIM5_IRQn                   = 50,     /*!< TIM5 global Interrupt                                             */
-  SPI3_IRQn                   = 51,     /*!< SPI3 global Interrupt                                             */
-  UART4_IRQn                  = 52,     /*!< UART4 global Interrupt                                            */
+  SPI3_IRQn_stm                   = 51,     /*!< SPI3 global Interrupt                                             */
+  UART4_IRQn_stm                  = 52,     /*!< UART4 global Interrupt                                            */
   UART5_IRQn                  = 53,     /*!< UART5 global Interrupt                                            */
   TIM6_DAC_IRQn               = 54,     /*!< TIM6 global and DAC1&2 underrun error  interrupts                 */
   TIM7_IRQn                   = 55,     /*!< TIM7 global interrupt                                             */
@@ -241,7 +241,7 @@ typedef enum IRQn
   HASH_RNG_IRQn               = 80,     /*!< Hash and Rng global interrupt                                     */
 
 #ifdef STM32F40XX
-  FPU_IRQn                    = 81      /*!< FPU global interrupt                                              */
+  FPU_IRQn_stm                    = 81      /*!< FPU global interrupt                                              */
 #endif /* STM32F40XX */
 
 #ifdef STM32F427X 
@@ -253,7 +253,7 @@ typedef enum IRQn
   SPI6_IRQn                   = 86      /*!< SPI6 global Interrupt                                             */
 #endif /* STM32F427X */
  
-} IRQn_Type;
+} IRQn_Type_stm;
 
 /**
   * @}
@@ -299,12 +299,12 @@ typedef __I uint32_t vuc32;  /*!< Read Only */
 typedef __I uint16_t vuc16;  /*!< Read Only */
 typedef __I uint8_t vuc8;   /*!< Read Only */
 
-typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
+typedef enum {RESET_stm = 0, SET_stm = !RESET_stm} FlagStatus_stm, ITStatus;
 
-typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
-#define IS_FUNCTIONAL_STATE(STATE) (((STATE) == DISABLE) || ((STATE) == ENABLE))
+typedef enum {DISABLE_stm = 0, ENABLE_stm = !DISABLE_stm} FunctionalState;
+#define IS_FUNCTIONAL_STATE(STATE) (((STATE) == DISABLE_stm) || ((STATE) == ENABLE_stm))
 
-typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
+typedef enum {ERROR_stm = 0, SUCCESS_stm = !ERROR_stm} ErrorStatus;
 
 /**
   * @}
@@ -1245,10 +1245,10 @@ typedef struct
 
 #define GPIOA               ((GPIO_TypeDef *) GPIOA_BASE)
 #define GPIOB               ((GPIO_TypeDef *) GPIOB_BASE)
-#define GPIOC               ((GPIO_TypeDef *) GPIOC_BASE)
+#define GPIOC_stm               ((GPIO_TypeDef *) GPIOC_BASE)
 #define GPIOD               ((GPIO_TypeDef *) GPIOD_BASE)
 #define GPIOE               ((GPIO_TypeDef *) GPIOE_BASE)
-#define GPIOF               ((GPIO_TypeDef *) GPIOF_BASE)
+#define GPIOF_stm               ((GPIO_TypeDef *) GPIOF_BASE)
 #define GPIOG               ((GPIO_TypeDef *) GPIOG_BASE)
 #define GPIOH               ((GPIO_TypeDef *) GPIOH_BASE)
 #define GPIOI               ((GPIO_TypeDef *) GPIOI_BASE)
@@ -2926,7 +2926,7 @@ typedef struct
 
 
 /********************  Bit definition for CRC_CR register  ********************/
-#define  CRC_CR_RESET                        ((uint8_t)0x01)        /*!< RESET bit */
+#define  CRC_CR_RESET                        ((uint8_t)0x01)        /*!< RESET_stm bit */
 
 /******************************************************************************/
 /*                                                                            */

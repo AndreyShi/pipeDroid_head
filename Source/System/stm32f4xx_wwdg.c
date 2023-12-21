@@ -39,7 +39,7 @@
                       ##### How to use this driver #####
  ===============================================================================
     [..]
-      (#) Enable WWDG clock using RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE) function
+      (#) Enable WWDG clock using RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE_stm) function
               
       (#) Configure the WWDG prescaler using WWDG_SetPrescaler() function
                              
@@ -137,8 +137,8 @@
   */
 void WWDG_DeInit(void)
 {
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, ENABLE);
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, DISABLE);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, ENABLE_stm);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, DISABLE_stm);
 }
 
 /**
@@ -195,7 +195,7 @@ void WWDG_SetWindowValue(uint8_t WindowValue)
   */
 void WWDG_EnableIT(void)
 {
-  *(__IO uint32_t *) CFR_EWI_BB = (uint32_t)ENABLE;
+  *(__IO uint32_t *) CFR_EWI_BB = (uint32_t)ENABLE_stm;
 }
 
 /**
@@ -261,19 +261,19 @@ void WWDG_Enable(uint8_t Counter)
 /**
   * @brief  Checks whether the Early Wakeup interrupt flag is set or not.
   * @param  None
-  * @retval The new state of the Early Wakeup interrupt flag (SET or RESET)
+  * @retval The new state of the Early Wakeup interrupt flag (SET_stm or RESET_stm)
   */
-FlagStatus WWDG_GetFlagStatus(void)
+FlagStatus_stm WWDG_GetFlagStatus(void)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
     
-  if ((WWDG->SR) != (uint32_t)RESET)
+  if ((WWDG->SR) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }
@@ -285,7 +285,7 @@ FlagStatus WWDG_GetFlagStatus(void)
   */
 void WWDG_ClearFlag(void)
 {
-  WWDG->SR = (uint32_t)RESET;
+  WWDG->SR = (uint32_t)RESET_stm;
 }
 
 /**

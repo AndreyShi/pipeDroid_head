@@ -175,7 +175,7 @@ void FLASH_SetLatency(uint32_t FLASH_Latency)
 /**
   * @brief  Enables or disables the Prefetch Buffer.
   * @param  NewState: new state of the Prefetch Buffer.
-  *          This parameter  can be: ENABLE or DISABLE.
+  *          This parameter  can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FLASH_PrefetchBufferCmd(FunctionalState NewState)
@@ -184,7 +184,7 @@ void FLASH_PrefetchBufferCmd(FunctionalState NewState)
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
   /* Enable or disable the Prefetch Buffer */
-  if(NewState != DISABLE)
+  if(NewState != DISABLE_stm)
   {
     FLASH->ACR |= FLASH_ACR_PRFTEN;
   }
@@ -197,7 +197,7 @@ void FLASH_PrefetchBufferCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the Instruction Cache feature.
   * @param  NewState: new state of the Instruction Cache.
-  *          This parameter  can be: ENABLE or DISABLE.
+  *          This parameter  can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FLASH_InstructionCacheCmd(FunctionalState NewState)
@@ -205,7 +205,7 @@ void FLASH_InstructionCacheCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if(NewState != DISABLE)
+  if(NewState != DISABLE_stm)
   {
     FLASH->ACR |= FLASH_ACR_ICEN;
   }
@@ -218,7 +218,7 @@ void FLASH_InstructionCacheCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the Data Cache feature.
   * @param  NewState: new state of the Data Cache.
-  *          This parameter  can be: ENABLE or DISABLE.
+  *          This parameter  can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void FLASH_DataCacheCmd(FunctionalState NewState)
@@ -226,7 +226,7 @@ void FLASH_DataCacheCmd(FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if(NewState != DISABLE)
+  if(NewState != DISABLE_stm)
   {
     FLASH->ACR |= FLASH_ACR_DCEN;
   }
@@ -299,7 +299,7 @@ void FLASH_DataCacheReset(void)
   */
 void FLASH_Unlock(void)
 {
-  if((FLASH->CR & FLASH_CR_LOCK) != RESET)
+  if((FLASH->CR & FLASH_CR_LOCK) != RESET_stm)
   {
     /* Authorize the FLASH Registers access */
     FLASH->KEYR = FLASH_KEY1;
@@ -657,7 +657,7 @@ FLASH_Status FLASH_ProgramByte(uint32_t Address, uint8_t Data)
   */
 void FLASH_OB_Unlock(void)
 {
-  if((FLASH->OPTCR & FLASH_OPTCR_OPTLOCK) != RESET)
+  if((FLASH->OPTCR & FLASH_OPTCR_OPTLOCK) != RESET_stm)
   {
     /* Authorizes the Option Byte register programming */
     FLASH->OPTKEYR = FLASH_OPT_KEY1;
@@ -683,7 +683,7 @@ void FLASH_OB_Lock(void)
   *            @arg OB_WRP: A value between OB_WRP_Sector0 and OB_WRP_Sector11                      
   *            @arg OB_WRP_Sector_All
   * @param  Newstate: new state of the Write Protection.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None  
   */
 void FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState)
@@ -698,7 +698,7 @@ void FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState)
 
   if(status == FLASH_COMPLETE)
   { 
-    if(NewState != DISABLE)
+    if(NewState != DISABLE_stm)
     {
       *(__IO uint16_t*)OPTCR_BYTE2_ADDRESS &= (~OB_WRP);
     }
@@ -843,20 +843,20 @@ uint16_t FLASH_OB_GetWRP(void)
   * @brief  Returns the FLASH Read Protection level.
   * @param  None
   * @retval FLASH ReadOut Protection Status:
-  *           - SET, when OB_RDP_Level_1 or OB_RDP_Level_2 is set
-  *           - RESET, when OB_RDP_Level_0 is set
+  *           - SET_stm, when OB_RDP_Level_1 or OB_RDP_Level_2 is set
+  *           - RESET_stm, when OB_RDP_Level_0 is set
   */
-FlagStatus FLASH_OB_GetRDP(void)
+FlagStatus_stm FLASH_OB_GetRDP(void)
 {
-  FlagStatus readstatus = RESET;
+  FlagStatus_stm readstatus = RESET_stm;
 
   if ((*(__IO uint8_t*)(OPTCR_BYTE1_ADDRESS) != (uint8_t)OB_RDP_Level_0))
   {
-    readstatus = SET;
+    readstatus = SET_stm;
   }
   else
   {
-    readstatus = RESET;
+    readstatus = RESET_stm;
   }
   return readstatus;
 }
@@ -906,7 +906,7 @@ void FLASH_ITConfig(uint32_t FLASH_IT, FunctionalState NewState)
   assert_param(IS_FLASH_IT(FLASH_IT)); 
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if(NewState != DISABLE)
+  if(NewState != DISABLE_stm)
   {
     /* Enable the interrupt sources */
     FLASH->CR |= FLASH_IT;
@@ -929,23 +929,23 @@ void FLASH_ITConfig(uint32_t FLASH_IT, FunctionalState NewState)
   *            @arg FLASH_FLAG_PGPERR: FLASH Programming Parallelism error flag
   *            @arg FLASH_FLAG_PGSERR: FLASH Programming Sequence error flag
   *            @arg FLASH_FLAG_BSY: FLASH Busy flag
-  * @retval The new state of FLASH_FLAG (SET or RESET).
+  * @retval The new state of FLASH_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus FLASH_GetFlagStatus(uint32_t FLASH_FLAG)
+FlagStatus_stm FLASH_GetFlagStatus(uint32_t FLASH_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_FLASH_GET_FLAG(FLASH_FLAG));
 
-  if((FLASH->SR & FLASH_FLAG) != (uint32_t)RESET)
+  if((FLASH->SR & FLASH_FLAG) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
-  /* Return the new state of FLASH_FLAG (SET or RESET) */
+  /* Return the new state of FLASH_FLAG (SET_stm or RESET_stm) */
   return bitstatus; 
 }
 

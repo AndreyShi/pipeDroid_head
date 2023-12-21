@@ -22,11 +22,11 @@
  ===============================================================================
     [..]
     (#) Enable the ADC interface clock using 
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADCx, ENABLE); 
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADCx, ENABLE_stm); 
        
     (#) ADC pins configuration
          (++) Enable the clock for the ADC GPIOs using the following function:
-             RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);   
+             RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE_stm);   
          (++) Configure these ADC pins in analog mode using GPIO_Init();  
   
      (#) Configure the ADC Prescaler, conversion resolution and data 
@@ -213,10 +213,10 @@
 void ADC_DeInit(void)
 {
   /* Enable all ADCs reset state */
-  RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC, ENABLE);
+  RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC, ENABLE_stm);
   
   /* Release all ADCs from reset state */
-  RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC, DISABLE);
+  RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC, DISABLE_stm);
 }
 
 /**
@@ -313,10 +313,10 @@ void ADC_StructInit(ADC_InitTypeDef* ADC_InitStruct)
   ADC_InitStruct->ADC_Resolution = ADC_Resolution_12b;
 
   /* initialize the ADC_ScanConvMode member */
-  ADC_InitStruct->ADC_ScanConvMode = DISABLE;
+  ADC_InitStruct->ADC_ScanConvMode = DISABLE_stm;
 
   /* Initialize the ADC_ContinuousConvMode member */
-  ADC_InitStruct->ADC_ContinuousConvMode = DISABLE;
+  ADC_InitStruct->ADC_ContinuousConvMode = DISABLE_stm;
 
   /* Initialize the ADC_ExternalTrigConvEdge member */
   ADC_InitStruct->ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
@@ -393,7 +393,7 @@ void ADC_CommonStructInit(ADC_CommonInitTypeDef* ADC_CommonInitStruct)
   * @brief  Enables or disables the specified ADC peripheral.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the ADCx peripheral. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -401,7 +401,7 @@ void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Set the ADON bit to wake up the ADC from power down mode */
     ADCx->CR2 |= (uint32_t)ADC_CR2_ADON;
@@ -583,14 +583,14 @@ void ADC_AnalogWatchdogSingleChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channe
 /**
   * @brief  Enables or disables the temperature sensor and Vrefint channels.
   * @param  NewState: new state of the temperature sensor and Vrefint channels.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_TempSensorVrefintCmd(FunctionalState NewState)                
 {
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the temperature sensor and Vrefint channel*/
     ADC->CCR |= (uint32_t)ADC_CCR_TSVREFE;
@@ -605,14 +605,14 @@ void ADC_TempSensorVrefintCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the VBAT (Voltage Battery) channel.
   * @param  NewState: new state of the VBAT channel.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_VBATCmd(FunctionalState NewState)                             
 {
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the VBAT channel*/
     ADC->CCR |= (uint32_t)ADC_CCR_VBATE;
@@ -840,24 +840,24 @@ void ADC_SoftwareStartConv(ADC_TypeDef* ADCx)
 /**
   * @brief  Gets the selected ADC Software start regular conversion Status.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
-  * @retval The new state of ADC software start conversion (SET or RESET).
+  * @retval The new state of ADC software start conversion (SET_stm or RESET_stm).
   */
-FlagStatus ADC_GetSoftwareStartConvStatus(ADC_TypeDef* ADCx)
+FlagStatus_stm ADC_GetSoftwareStartConvStatus(ADC_TypeDef* ADCx)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   
   /* Check the status of SWSTART bit */
-  if ((ADCx->CR2 & ADC_CR2_JSWSTART) != (uint32_t)RESET)
+  if ((ADCx->CR2 & ADC_CR2_JSWSTART) != (uint32_t)RESET_stm)
   {
     /* SWSTART bit is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* SWSTART bit is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   
   /* Return the SWSTART bit status */
@@ -869,7 +869,7 @@ FlagStatus ADC_GetSoftwareStartConvStatus(ADC_TypeDef* ADCx)
   * @brief  Enables or disables the EOC on each regular channel conversion
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the selected ADC EOC flag rising
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_EOCOnEachRegularChannelCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -878,7 +878,7 @@ void ADC_EOCOnEachRegularChannelCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC EOC rising on each regular channel conversion */
     ADCx->CR2 |= (uint32_t)ADC_CR2_EOCS;
@@ -894,7 +894,7 @@ void ADC_EOCOnEachRegularChannelCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Enables or disables the ADC continuous conversion mode 
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the selected ADC continuous conversion mode
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_ContinuousModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -903,7 +903,7 @@ void ADC_ContinuousModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC continuous conversion mode */
     ADCx->CR2 |= (uint32_t)ADC_CR2_CONT;
@@ -952,7 +952,7 @@ void ADC_DiscModeChannelCountConfig(ADC_TypeDef* ADCx, uint8_t Number)
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the selected ADC discontinuous mode on 
   *         regular group channel.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_DiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -961,7 +961,7 @@ void ADC_DiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC regular discontinuous mode */
     ADCx->CR1 |= (uint32_t)ADC_CR1_DISCEN;
@@ -1042,7 +1042,7 @@ uint32_t ADC_GetMultiModeConversionValue(void)
   * @brief  Enables or disables the specified ADC DMA request.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the selected ADC DMA transfer.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_DMACmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -1050,7 +1050,7 @@ void ADC_DMACmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC DMA request */
     ADCx->CR2 |= (uint32_t)ADC_CR2_DMA;
@@ -1066,7 +1066,7 @@ void ADC_DMACmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Enables or disables the ADC DMA request after last transfer (Single-ADC mode)  
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the selected ADC DMA request after last transfer.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_DMARequestAfterLastTransferCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -1074,7 +1074,7 @@ void ADC_DMARequestAfterLastTransferCmd(ADC_TypeDef* ADCx, FunctionalState NewSt
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC DMA request after last transfer */
     ADCx->CR2 |= (uint32_t)ADC_CR2_DDS;
@@ -1089,7 +1089,7 @@ void ADC_DMARequestAfterLastTransferCmd(ADC_TypeDef* ADCx, FunctionalState NewSt
 /**
   * @brief  Enables or disables the ADC DMA request after last transfer in multi ADC mode       
   * @param  NewState: new state of the selected ADC DMA request after last transfer.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @note   if Enabled, DMA requests are issued as long as data are converted and 
   *         DMA mode for multi ADC mode (selected using ADC_CommonInit() function 
   *         by ADC_CommonInitStruct.ADC_DMAAccessMode structure member) is 
@@ -1100,7 +1100,7 @@ void ADC_MultiModeDMARequestAfterLastTransferCmd(FunctionalState NewState)
 {
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC DMA request after last transfer */
     ADC->CCR |= (uint32_t)ADC_CCR_DDS;
@@ -1385,24 +1385,24 @@ void ADC_SoftwareStartInjectedConv(ADC_TypeDef* ADCx)
 /**
   * @brief  Gets the selected ADC Software start injected conversion Status.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
-  * @retval The new state of ADC software start injected conversion (SET or RESET).
+  * @retval The new state of ADC software start injected conversion (SET_stm or RESET_stm).
   */
-FlagStatus ADC_GetSoftwareStartInjectedConvCmdStatus(ADC_TypeDef* ADCx)
+FlagStatus_stm ADC_GetSoftwareStartInjectedConvCmdStatus(ADC_TypeDef* ADCx)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   
   /* Check the status of JSWSTART bit */
-  if ((ADCx->CR2 & ADC_CR2_JSWSTART) != (uint32_t)RESET)
+  if ((ADCx->CR2 & ADC_CR2_JSWSTART) != (uint32_t)RESET_stm)
   {
     /* JSWSTART bit is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* JSWSTART bit is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the JSWSTART bit status */
   return  bitstatus;
@@ -1413,7 +1413,7 @@ FlagStatus ADC_GetSoftwareStartInjectedConvCmdStatus(ADC_TypeDef* ADCx)
   *         conversion after regular one.
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the selected ADC auto injected conversion
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_AutoInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -1421,7 +1421,7 @@ void ADC_AutoInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC automatic injected group conversion */
     ADCx->CR1 |= (uint32_t)ADC_CR1_JAUTO;
@@ -1439,7 +1439,7 @@ void ADC_AutoInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @param  ADCx: where x can be 1, 2 or 3 to select the ADC peripheral.
   * @param  NewState: new state of the selected ADC discontinuous mode on injected
   *         group channel.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_InjectedDiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -1447,7 +1447,7 @@ void ADC_InjectedDiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC injected discontinuous mode */
     ADCx->CR1 |= (uint32_t)ADC_CR1_JDISCEN;
@@ -1574,7 +1574,7 @@ uint16_t ADC_GetInjectedConversionValue(ADC_TypeDef* ADCx, uint8_t ADC_InjectedC
   *            @arg ADC_IT_JEOC: End of injected conversion interrupt mask
   *            @arg ADC_IT_OVR: Overrun interrupt enable                       
   * @param  NewState: new state of the specified ADC interrupts.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState)  
@@ -1589,7 +1589,7 @@ void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState)
   itmask = (uint8_t)ADC_IT;
   itmask = (uint32_t)0x01 << itmask;    
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected ADC interrupts */
     ADCx->CR1 |= itmask;
@@ -1612,25 +1612,25 @@ void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState)
   *            @arg ADC_FLAG_JSTRT: Start of injected group conversion flag
   *            @arg ADC_FLAG_STRT: Start of regular group conversion flag
   *            @arg ADC_FLAG_OVR: Overrun flag                                                 
-  * @retval The new state of ADC_FLAG (SET or RESET).
+  * @retval The new state of ADC_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG)
+FlagStatus_stm ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   /* Check the parameters */
   assert_param(IS_ADC_ALL_PERIPH(ADCx));
   assert_param(IS_ADC_GET_FLAG(ADC_FLAG));
 
   /* Check the status of the specified ADC flag */
-  if ((ADCx->SR & ADC_FLAG) != (uint8_t)RESET)
+  if ((ADCx->SR & ADC_FLAG) != (uint8_t)RESET_stm)
   {
     /* ADC_FLAG is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* ADC_FLAG is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the ADC_FLAG status */
   return  bitstatus;
@@ -1668,11 +1668,11 @@ void ADC_ClearFlag(ADC_TypeDef* ADCx, uint8_t ADC_FLAG)
   *            @arg ADC_IT_AWD: Analog watchdog interrupt mask
   *            @arg ADC_IT_JEOC: End of injected conversion interrupt mask
   *            @arg ADC_IT_OVR: Overrun interrupt mask                        
-  * @retval The new state of ADC_IT (SET or RESET).
+  * @retval The new state of ADC_IT (SET_stm or RESET_stm).
   */
 ITStatus ADC_GetITStatus(ADC_TypeDef* ADCx, uint16_t ADC_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   uint32_t itmask = 0, enablestatus = 0;
 
   /* Check the parameters */
@@ -1686,15 +1686,15 @@ ITStatus ADC_GetITStatus(ADC_TypeDef* ADCx, uint16_t ADC_IT)
   enablestatus = (ADCx->CR1 & ((uint32_t)0x01 << (uint8_t)ADC_IT)) ;
 
   /* Check the status of the specified ADC interrupt */
-  if (((ADCx->SR & itmask) != (uint32_t)RESET) && enablestatus)
+  if (((ADCx->SR & itmask) != (uint32_t)RESET_stm) && enablestatus)
   {
     /* ADC_IT is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* ADC_IT is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the ADC_IT status */
   return  bitstatus;

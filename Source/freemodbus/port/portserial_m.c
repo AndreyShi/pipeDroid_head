@@ -78,9 +78,9 @@ BOOL xMBMasterPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
 	GPIO_PinAFConfig(USARTx_RX_GPIO_PORT, USARTx_RX_SOURCE, USARTx_RX_AF);
 
 	/* Enable USART clock */
-	USARTx_CLK_INIT(USARTx_CLK, ENABLE);
+	USARTx_CLK_INIT(USARTx_CLK, ENABLE_stm);
 	/* Enable the USART OverSampling by 8 */
-	USART_OverSampling8Cmd(RS485_PORT, ENABLE);
+	USART_OverSampling8Cmd(RS485_PORT, ENABLE_stm);
 	/* USARTx configuration ----------------------------------------------------*/
 	USART_InitStructure.USART_BaudRate = (uint32_t) ulBaudRate;
 
@@ -117,10 +117,10 @@ BOOL xMBMasterPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
 	NVIC_InitStructure.NVIC_IRQChannel = USARTx_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE_stm;
 	NVIC_Init(&NVIC_InitStructure);
 	/* Enable USART */
-	USART_Cmd(RS485_PORT, ENABLE);
+	USART_Cmd(RS485_PORT, ENABLE_stm);
 	RS485_PORT->SR=0;
 	RS485_PORT->SR=0;
 	RS485_PORT->SR=0;
@@ -187,17 +187,17 @@ BOOL xMBMasterPortSerialGetByte(CHAR * pucByte)
 void xMBPortSerial_IRQHandler(void) {
 	uint32_t isrflags = RS485_PORT->SR;
 
-	if ((isrflags & USART_SR_RXNE) != RESET) {
+	if ((isrflags & USART_SR_RXNE) != RESET_stm) {
 		//USART_ClearITPendingBit( USART3, USART_IT_RXNE );
 		pxMBMasterFrameCBByteReceived();
 	}
-	if ((isrflags & USART_SR_TC) != RESET) {
+	if ((isrflags & USART_SR_TC) != RESET_stm) {
 		/* Clear the TC flag in the SR register by writing 0 to it */
-		USART_ClearFlag(RS485_PORT, USART_FLAG_TC);
+		USART_ClearFlag(RS485_PORT, USART_FLAG_TC_stm);
 		//pxMBFrameCBTransmitterEmpty();
 		vMBMasterPortSerialEnable( TRUE, FALSE);
 	}
-	if ((isrflags & USART_SR_TXE) != RESET) {
+	if ((isrflags & USART_SR_TXE) != RESET_stm) {
 		USART_ClearFlag(RS485_PORT, USART_FLAG_TXE);
 		pxMBMasterFrameCBTransmitterEmpty();
 	}

@@ -282,7 +282,7 @@ void DAC_DMACmd(uint32_t DAC_Channel, FunctionalState NewState);
 
 /* Interrupts and flags management functions **********************************/
 void DAC_ITConfig(uint32_t DAC_Channel, uint32_t DAC_IT, FunctionalState NewState);
-FlagStatus DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG);
+FlagStatus_stm DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG);
 void DAC_ClearFlag(uint32_t DAC_Channel, uint32_t DAC_FLAG);
 ITStatus DAC_GetITStatus(uint32_t DAC_Channel, uint32_t DAC_IT);
 void DAC_ClearITPendingBit(uint32_t DAC_Channel, uint32_t DAC_IT);

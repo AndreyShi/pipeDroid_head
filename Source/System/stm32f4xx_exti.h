@@ -83,7 +83,7 @@ typedef struct
                                          This parameter can be a value of @ref EXTITrigger_TypeDef */
 
   FunctionalState EXTI_LineCmd;     /*!< Specifies the new state of the selected EXTI lines.
-                                         This parameter can be set either to ENABLE or DISABLE */ 
+                                         This parameter can be set either to ENABLE_stm or DISABLE_stm */ 
 }EXTI_InitTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
@@ -155,7 +155,7 @@ void EXTI_StructInit(EXTI_InitTypeDef* EXTI_InitStruct);
 void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line);
 
 /* Interrupts and flags management functions **********************************/
-FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line);
+FlagStatus_stm EXTI_GetFlagStatus(uint32_t EXTI_Line);
 void EXTI_ClearFlag(uint32_t EXTI_Line);
 ITStatus EXTI_GetITStatus(uint32_t EXTI_Line);
 void EXTI_ClearITPendingBit(uint32_t EXTI_Line);

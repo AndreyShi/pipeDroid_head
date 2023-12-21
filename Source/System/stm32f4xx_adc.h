@@ -57,10 +57,10 @@ typedef struct
   FunctionalState ADC_ScanConvMode;       /*!< Specifies whether the conversion 
                                                is performed in Scan (multichannels) 
                                                or Single (one channel) mode.
-                                               This parameter can be set to ENABLE or DISABLE */ 
+                                               This parameter can be set to ENABLE_stm or DISABLE_stm */ 
   FunctionalState ADC_ContinuousConvMode; /*!< Specifies whether the conversion 
                                                is performed in Continuous or Single mode.
-                                               This parameter can be set to ENABLE or DISABLE. */
+                                               This parameter can be set to ENABLE_stm or DISABLE_stm. */
   uint32_t ADC_ExternalTrigConvEdge;      /*!< Select the external trigger edge and
                                                enable the trigger of a regular group. 
                                                This parameter can be a value of 
@@ -600,7 +600,7 @@ void ADC_VBATCmd(FunctionalState NewState);
 /* Regular Channels Configuration functions ***********************************/
 void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Rank, uint8_t ADC_SampleTime);
 void ADC_SoftwareStartConv(ADC_TypeDef* ADCx);
-FlagStatus ADC_GetSoftwareStartConvStatus(ADC_TypeDef* ADCx);
+FlagStatus_stm ADC_GetSoftwareStartConvStatus(ADC_TypeDef* ADCx);
 void ADC_EOCOnEachRegularChannelCmd(ADC_TypeDef* ADCx, FunctionalState NewState);
 void ADC_ContinuousModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState);
 void ADC_DiscModeChannelCountConfig(ADC_TypeDef* ADCx, uint8_t Number);
@@ -620,14 +620,14 @@ void ADC_SetInjectedOffset(ADC_TypeDef* ADCx, uint8_t ADC_InjectedChannel, uint1
 void ADC_ExternalTrigInjectedConvConfig(ADC_TypeDef* ADCx, uint32_t ADC_ExternalTrigInjecConv);
 void ADC_ExternalTrigInjectedConvEdgeConfig(ADC_TypeDef* ADCx, uint32_t ADC_ExternalTrigInjecConvEdge);
 void ADC_SoftwareStartInjectedConv(ADC_TypeDef* ADCx);
-FlagStatus ADC_GetSoftwareStartInjectedConvCmdStatus(ADC_TypeDef* ADCx);
+FlagStatus_stm ADC_GetSoftwareStartInjectedConvCmdStatus(ADC_TypeDef* ADCx);
 void ADC_AutoInjectedConvCmd(ADC_TypeDef* ADCx, FunctionalState NewState);
 void ADC_InjectedDiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState);
 uint16_t ADC_GetInjectedConversionValue(ADC_TypeDef* ADCx, uint8_t ADC_InjectedChannel);
 
 /* Interrupts and flags management functions **********************************/
 void ADC_ITConfig(ADC_TypeDef* ADCx, uint16_t ADC_IT, FunctionalState NewState);
-FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG);
+FlagStatus_stm ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint8_t ADC_FLAG);
 void ADC_ClearFlag(ADC_TypeDef* ADCx, uint8_t ADC_FLAG);
 ITStatus ADC_GetITStatus(ADC_TypeDef* ADCx, uint16_t ADC_IT);
 void ADC_ClearITPendingBit(ADC_TypeDef* ADCx, uint16_t ADC_IT);

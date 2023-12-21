@@ -162,7 +162,7 @@ void       SYSCFG_MemoryRemapConfig(uint8_t SYSCFG_MemoryRemap);
 void       SYSCFG_EXTILineConfig(uint8_t EXTI_PortSourceGPIOx, uint8_t EXTI_PinSourcex);
 void       SYSCFG_ETH_MediaInterfaceConfig(uint32_t SYSCFG_ETH_MediaInterface); 
 void       SYSCFG_CompensationCellCmd(FunctionalState NewState); 
-FlagStatus SYSCFG_GetCompensationCellStatus(void);
+FlagStatus_stm SYSCFG_GetCompensationCellStatus(void);
 
 #ifdef __cplusplus
 }

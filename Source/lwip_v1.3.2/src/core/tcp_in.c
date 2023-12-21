@@ -545,7 +545,7 @@ tcp_process(struct tcp_pcb *pcb)
     }
 
     if (acceptable) {
-      LWIP_DEBUGF(TCP_INPUT_DEBUG, ("tcp_process: Connection RESET\n"));
+      LWIP_DEBUGF(TCP_INPUT_DEBUG, ("tcp_process: Connection RESET_stm\n"));
       LWIP_ASSERT("tcp_input: pcb->state != CLOSED", pcb->state != CLOSED);
       recv_flags |= TF_RESET;
       pcb->flags &= ~TF_ACK_DELAY;

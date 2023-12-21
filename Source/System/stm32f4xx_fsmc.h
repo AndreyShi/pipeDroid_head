@@ -648,7 +648,7 @@ void FSMC_PCCARDCmd(FunctionalState NewState);
 
 /* Interrupts and flags management functions **********************************/
 void FSMC_ITConfig(uint32_t FSMC_Bank, uint32_t FSMC_IT, FunctionalState NewState);
-FlagStatus FSMC_GetFlagStatus(uint32_t FSMC_Bank, uint32_t FSMC_FLAG);
+FlagStatus_stm FSMC_GetFlagStatus(uint32_t FSMC_Bank, uint32_t FSMC_FLAG);
 void FSMC_ClearFlag(uint32_t FSMC_Bank, uint32_t FSMC_FLAG);
 ITStatus FSMC_GetITStatus(uint32_t FSMC_Bank, uint32_t FSMC_IT);
 void FSMC_ClearITPendingBit(uint32_t FSMC_Bank, uint32_t FSMC_IT);

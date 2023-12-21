@@ -172,13 +172,13 @@
 #define	LSM330_STATE_PR_SIZE			16
 /* end RESUME STATE INDICES */
 
-/* STATE PROGRAMS ENABLE CONTROLS */
+/* STATE PROGRAMS ENABLE_stm CONTROLS */
 #define	LSM330_SM1_DIS_SM2_DIS			0x00
 #define	LSM330_SM1_DIS_SM2_EN			0x01
 #define	LSM330_SM1_EN_SM2_DIS			0x02
 #define	LSM330_SM1_EN_SM2_EN			0x03
 
-/* INTERRUPTS ENABLE CONTROLS */
+/* INTERRUPTS ENABLE_stm CONTROLS */
 #define	LSM330_INT1_DIS_INT2_DIS		0x00
 #define	LSM330_INT1_DIS_INT2_EN			0x01
 #define	LSM330_INT1_EN_INT2_DIS			0x02
@@ -275,19 +275,19 @@ static void I2C_Config(void) {
 	I2C_InitTypeDef I2C_InitStruct;
 	/* RCC Configuration */
 	/*I2C Peripheral clock enable */
-	RCC_APB1PeriphClockCmd(I2C_CLK, ENABLE);
+	RCC_APB1PeriphClockCmd(I2C_CLK, ENABLE_stm);
 
 	/*SDA GPIO clock enable */
-	RCC_AHB1PeriphClockCmd(I2C_SDA_GPIO_CLK, ENABLE);
+	RCC_AHB1PeriphClockCmd(I2C_SDA_GPIO_CLK, ENABLE_stm);
 
 	/*SCL GPIO clock enable */
-	RCC_AHB1PeriphClockCmd(I2C_SCL_GPIO_CLK, ENABLE);
+	RCC_AHB1PeriphClockCmd(I2C_SCL_GPIO_CLK, ENABLE_stm);
 
 	/* Reset I2Cx IP */
-	RCC_APB1PeriphResetCmd(I2C_CLK, ENABLE);
+	RCC_APB1PeriphResetCmd(I2C_CLK, ENABLE_stm);
 
 	/* Release reset signal of I2Cx IP */
-	RCC_APB1PeriphResetCmd(I2C_CLK, DISABLE);
+	RCC_APB1PeriphResetCmd(I2C_CLK, DISABLE_stm);
 
 	/* GPIO Configuration */
 	/*Configure I2C SCL pin */
@@ -309,11 +309,11 @@ static void I2C_Config(void) {
 	GPIO_PinAFConfig(I2C_SDA_GPIO_PORT, I2C_SDA_SOURCE, I2C_SDA_AF);
 
 	/* Configure I2C Filters */
-	I2C_AnalogFilterCmd(I2C, ENABLE);
+	I2C_AnalogFilterCmd(I2C, ENABLE_stm);
 	I2C_DigitalFilterConfig(I2C, 0x0F);
 
-	/* I2C ENABLE */
-	I2C_Cmd(I2C, ENABLE);
+	/* I2C ENABLE_stm */
+	I2C_Cmd(I2C, ENABLE_stm);
 
 	/* Set the I2C structure parameters */
 	I2C_InitStruct.I2C_Mode = I2C_Mode_I2C;
@@ -493,7 +493,7 @@ uint8_t writeRegister(uint8_t sensor, uint8_t address, uint8_t data) {
 	address &= 0x7F;
 
 	/* Generate the Start Condition */
-	I2C_GenerateSTART(I2C, ENABLE);
+	I2C_GenerateSTART(I2C, ENABLE_stm);
 
 	/* Test on I2C1 EV5 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
@@ -542,7 +542,7 @@ uint8_t writeRegister(uint8_t sensor, uint8_t address, uint8_t data) {
 	}
 
 	/* Send I2C1 STOP Condition */
-	I2C_GenerateSTOP(I2C, ENABLE);
+	I2C_GenerateSTOP(I2C, ENABLE_stm);
 
 	/* If operation is OK, return 0 */
 	return 0;
@@ -562,7 +562,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	// This address is to tell the LSM330 that we're reading
 	address |= 0x80;
 	/* Generate the Start Condition */
-	I2C_GenerateSTART(I2C, ENABLE);
+	I2C_GenerateSTART(I2C, ENABLE_stm);
 
 	/* Test on I2C1 EV5 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
@@ -573,7 +573,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 				I2C->SR1&=~I2C_EVENT_SLAVE_ACK_FAILURE;
 
 			}
-			I2C_GenerateSTOP(I2C, ENABLE);*/
+			I2C_GenerateSTOP(I2C, ENABLE_stm);*/
 			return 0xFF;
 		}
 	}
@@ -608,7 +608,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	I2C1->SR1 |= (uint16_t) 0x0400;
 
 	/* Generate the Start Condition */
-	I2C_GenerateSTART(I2C, ENABLE);
+	I2C_GenerateSTART(I2C, ENABLE_stm);
 
 	/* Test on I2C1 EV6 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
@@ -630,7 +630,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	}
 
 	/* Prepare an NACK for the next data received */
-	I2C_AcknowledgeConfig(I2C, DISABLE);
+	I2C_AcknowledgeConfig(I2C, DISABLE_stm);
 
 	/* Test on I2C1 EV7 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
@@ -641,7 +641,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	}
 
 	/* Prepare Stop after receiving data */
-	I2C_GenerateSTOP(I2C, ENABLE);
+	I2C_GenerateSTOP(I2C, ENABLE_stm);
 
 	/* Receive the Data */
 	Data = I2C_ReceiveData(I2C);

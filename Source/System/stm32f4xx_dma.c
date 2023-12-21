@@ -16,8 +16,8 @@
                        ##### How to use this driver #####
  ===============================================================================
     [..] 
-      (#) Enable The DMA controller clock using RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_DMA1, ENABLE)
-          function for DMA1 or using RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_DMA2, ENABLE)
+      (#) Enable The DMA controller clock using RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_DMA1, ENABLE_stm)
+          function for DMA1 or using RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_DMA2, ENABLE_stm)
           function for DMA2.
   
       (#) Enable and configure the peripheral to be connected to the DMA Stream
@@ -454,7 +454,7 @@ void DMA_StructInit(DMA_InitTypeDef* DMA_InitStruct)
   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
   *         to 7 to select the DMA Stream.
   * @param  NewState: new state of the DMAy Streamx. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   *
   * @note  This function may be used to perform Pause-Resume operation. When a
   *        transfer is ongoing, calling this function to disable the Stream will
@@ -481,7 +481,7 @@ void DMA_Cmd(DMA_Stream_TypeDef* DMAy_Streamx, FunctionalState NewState)
   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the selected DMAy Streamx by setting EN bit */
     DMAy_Streamx->CR |= (uint32_t)DMA_SxCR_EN;
@@ -755,7 +755,7 @@ void DMA_DoubleBufferModeConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t Memor
   * @param  DMAy_Streamx: where y can be 1 or 2 to select the DMA and x can be 0
   *          to 7 to select the DMA Stream.
   * @param  NewState: new state of the DMAy Streamx double buffer mode. 
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void DMA_DoubleBufferModeCmd(DMA_Stream_TypeDef* DMAy_Streamx, FunctionalState NewState)
@@ -765,7 +765,7 @@ void DMA_DoubleBufferModeCmd(DMA_Stream_TypeDef* DMAy_Streamx, FunctionalState N
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
   /* Configure the Double Buffer mode */
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     /* Enable the Double buffer mode */
     DMAy_Streamx->CR |= (uint32_t)DMA_SxCR_DBM;
@@ -897,7 +897,7 @@ uint32_t DMA_GetCurrentMemoryTarget(DMA_Stream_TypeDef* DMAy_Streamx)
       (#) DMA_FLAG_TCIFx  : to indicate that a Transfer Complete event occurred .       
     [..]
     In this Mode it is advised to use the following functions:
-      (+) FlagStatus DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG);
+      (+) FlagStatus_stm DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG);
       (+) void DMA_ClearFlag(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG);
 
     *** Interrupt Mode ***
@@ -938,11 +938,11 @@ uint32_t DMA_GetCurrentMemoryTarget(DMA_Stream_TypeDef* DMAy_Streamx)
   *          and the Stream will be effectively disabled only after the transfer
   *          of this single data is finished.  
   *      
-  * @retval Current state of the DMAy Streamx (ENABLE or DISABLE).
+  * @retval Current state of the DMAy Streamx (ENABLE_stm or DISABLE_stm).
   */
 FunctionalState DMA_GetCmdStatus(DMA_Stream_TypeDef* DMAy_Streamx)
 {
-  FunctionalState state = DISABLE;
+  FunctionalState state = DISABLE_stm;
 
   /* Check the parameters */
   assert_param(IS_DMA_ALL_PERIPH(DMAy_Streamx));
@@ -950,13 +950,13 @@ FunctionalState DMA_GetCmdStatus(DMA_Stream_TypeDef* DMAy_Streamx)
   if ((DMAy_Streamx->CR & (uint32_t)DMA_SxCR_EN) != 0)
   {
     /* The selected DMAy Streamx EN bit is set (DMA is still transferring) */
-    state = ENABLE;
+    state = ENABLE_stm;
   }
   else
   {
     /* The selected DMAy Streamx EN bit is cleared (DMA is disabled and 
         all transfers are complete) */
-    state = DISABLE;
+    state = DISABLE_stm;
   }
   return state;
 }
@@ -999,11 +999,11 @@ uint32_t DMA_GetFIFOStatus(DMA_Stream_TypeDef* DMAy_Streamx)
   *            @arg DMA_FLAG_DMEIFx: Streamx direct mode error flag
   *            @arg DMA_FLAG_FEIFx:  Streamx FIFO error flag
   *         Where x can be 0 to 7 to select the DMA Stream.
-  * @retval The new state of DMA_FLAG (SET or RESET).
+  * @retval The new state of DMA_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG)
+FlagStatus_stm DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   DMA_TypeDef* DMAy;
   uint32_t tmpreg = 0;
 
@@ -1024,7 +1024,7 @@ FlagStatus DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG
   }
 
   /* Check if the flag is in HISR or LISR */
-  if ((DMA_FLAG & HIGH_ISR_MASK) != (uint32_t)RESET)
+  if ((DMA_FLAG & HIGH_ISR_MASK) != (uint32_t)RESET_stm)
   {
     /* Get DMAy HISR register value */
     tmpreg = DMAy->HISR;
@@ -1039,15 +1039,15 @@ FlagStatus DMA_GetFlagStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG
   tmpreg &= (uint32_t)RESERVED_MASK;
 
   /* Check the status of the specified DMA flag */
-  if ((tmpreg & DMA_FLAG) != (uint32_t)RESET)
+  if ((tmpreg & DMA_FLAG) != (uint32_t)RESET_stm)
   {
     /* DMA_FLAG is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* DMA_FLAG is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
 
   /* Return the DMA_FLAG status */
@@ -1089,7 +1089,7 @@ void DMA_ClearFlag(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG)
   }
 
   /* Check if LIFCR or HIFCR register is targeted */
-  if ((DMA_FLAG & HIGH_ISR_MASK) != (uint32_t)RESET)
+  if ((DMA_FLAG & HIGH_ISR_MASK) != (uint32_t)RESET_stm)
   {
     /* Set DMAy HIFCR register clear flag bits */
     DMAy->HIFCR = (uint32_t)(DMA_FLAG & RESERVED_MASK);
@@ -1112,7 +1112,7 @@ void DMA_ClearFlag(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_FLAG)
   *            @arg DMA_IT_TE:  Transfer error interrupt mask
   *            @arg DMA_IT_FE:  FIFO error interrupt mask
   * @param  NewState: new state of the specified DMA interrupts.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void DMA_ITConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT, FunctionalState NewState)
@@ -1125,7 +1125,7 @@ void DMA_ITConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT, FunctionalS
   /* Check if the DMA_IT parameter contains a FIFO interrupt */
   if ((DMA_IT & DMA_IT_FE) != 0)
   {
-    if (NewState != DISABLE)
+    if (NewState != DISABLE_stm)
     {
       /* Enable the selected DMA FIFO interrupts */
       DMAy_Streamx->FCR |= (uint32_t)DMA_IT_FE;
@@ -1140,7 +1140,7 @@ void DMA_ITConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT, FunctionalS
   /* Check if the DMA_IT parameter contains a Transfer interrupt */
   if (DMA_IT != DMA_IT_FE)
   {
-    if (NewState != DISABLE)
+    if (NewState != DISABLE_stm)
     {
       /* Enable the selected DMA transfer interrupts */
       DMAy_Streamx->CR |= (uint32_t)(DMA_IT  & TRANSFER_IT_ENABLE_MASK);
@@ -1165,11 +1165,11 @@ void DMA_ITConfig(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT, FunctionalS
   *            @arg DMA_IT_DMEIFx: Streamx direct mode error interrupt
   *            @arg DMA_IT_FEIFx:  Streamx FIFO error interrupt
   *         Where x can be 0 to 7 to select the DMA Stream.
-  * @retval The new state of DMA_IT (SET or RESET).
+  * @retval The new state of DMA_IT (SET_stm or RESET_stm).
   */
 ITStatus DMA_GetITStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT)
 {
-  ITStatus bitstatus = RESET;
+  ITStatus bitstatus = RESET_stm;
   DMA_TypeDef* DMAy;
   uint32_t tmpreg = 0, enablestatus = 0;
 
@@ -1190,7 +1190,7 @@ ITStatus DMA_GetITStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT)
   }
 
   /* Check if the interrupt enable bit is in the CR or FCR register */
-  if ((DMA_IT & TRANSFER_IT_MASK) != (uint32_t)RESET)
+  if ((DMA_IT & TRANSFER_IT_MASK) != (uint32_t)RESET_stm)
   {
     /* Get the interrupt enable position mask in CR register */
     tmpreg = (uint32_t)((DMA_IT >> 11) & TRANSFER_IT_ENABLE_MASK);   
@@ -1205,7 +1205,7 @@ ITStatus DMA_GetITStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT)
   }
  
   /* Check if the interrupt pending flag is in LISR or HISR */
-  if ((DMA_IT & HIGH_ISR_MASK) != (uint32_t)RESET)
+  if ((DMA_IT & HIGH_ISR_MASK) != (uint32_t)RESET_stm)
   {
     /* Get DMAy HISR register value */
     tmpreg = DMAy->HISR ;
@@ -1220,15 +1220,15 @@ ITStatus DMA_GetITStatus(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT)
   tmpreg &= (uint32_t)RESERVED_MASK;
 
   /* Check the status of the specified DMA interrupt */
-  if (((tmpreg & DMA_IT) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
+  if (((tmpreg & DMA_IT) != (uint32_t)RESET_stm) && (enablestatus != (uint32_t)RESET_stm))
   {
     /* DMA_IT is set */
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
     /* DMA_IT is reset */
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
 
   /* Return the DMA_IT status */
@@ -1270,7 +1270,7 @@ void DMA_ClearITPendingBit(DMA_Stream_TypeDef* DMAy_Streamx, uint32_t DMA_IT)
   }
 
   /* Check if LIFCR or HIFCR register is targeted */
-  if ((DMA_IT & HIGH_ISR_MASK) != (uint32_t)RESET)
+  if ((DMA_IT & HIGH_ISR_MASK) != (uint32_t)RESET_stm)
   {
     /* Set DMAy HIFCR register clear interrupt bits */
     DMAy->HIFCR = (uint32_t)(DMA_IT & RESERVED_MASK);

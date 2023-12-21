@@ -1422,21 +1422,21 @@
 #endif
 
 /**
- * MSCHAP_SUPPORT==1: Support MSCHAP. CURRENTLY NOT SUPPORTED! DO NOT SET!
+ * MSCHAP_SUPPORT==1: Support MSCHAP. CURRENTLY NOT SUPPORTED! DO NOT SET_stm!
  */
 #ifndef MSCHAP_SUPPORT
 #define MSCHAP_SUPPORT                  0
 #endif
 
 /**
- * CBCP_SUPPORT==1: Support CBCP. CURRENTLY NOT SUPPORTED! DO NOT SET!
+ * CBCP_SUPPORT==1: Support CBCP. CURRENTLY NOT SUPPORTED! DO NOT SET_stm!
  */
 #ifndef CBCP_SUPPORT
 #define CBCP_SUPPORT                    0
 #endif
 
 /**
- * CCP_SUPPORT==1: Support CCP. CURRENTLY NOT SUPPORTED! DO NOT SET!
+ * CCP_SUPPORT==1: Support CCP. CURRENTLY NOT SUPPORTED! DO NOT SET_stm!
  */
 #ifndef CCP_SUPPORT
 #define CCP_SUPPORT                     0

@@ -332,20 +332,20 @@ typedef struct
   * @{
   */
 
-#define USART_FLAG_CTS                       ((uint16_t)0x0200)
-#define USART_FLAG_LBD                       ((uint16_t)0x0100)
+#define USART_FLAG_CTS_stm                       ((uint16_t)0x0200)
+#define USART_FLAG_LBD_stm                       ((uint16_t)0x0100)
 #define USART_FLAG_TXE                       ((uint16_t)0x0080)
-#define USART_FLAG_TC                        ((uint16_t)0x0040)
+#define USART_FLAG_TC_stm                        ((uint16_t)0x0040)
 #define USART_FLAG_RXNE                      ((uint16_t)0x0020)
-#define USART_FLAG_IDLE                      ((uint16_t)0x0010)
+#define USART_FLAG_IDLE_stm                      ((uint16_t)0x0010)
 #define USART_FLAG_ORE                       ((uint16_t)0x0008)
 #define USART_FLAG_NE                        ((uint16_t)0x0004)
 #define USART_FLAG_FE                        ((uint16_t)0x0002)
 #define USART_FLAG_PE                        ((uint16_t)0x0001)
 #define IS_USART_FLAG(FLAG) (((FLAG) == USART_FLAG_PE) || ((FLAG) == USART_FLAG_TXE) || \
-                             ((FLAG) == USART_FLAG_TC) || ((FLAG) == USART_FLAG_RXNE) || \
-                             ((FLAG) == USART_FLAG_IDLE) || ((FLAG) == USART_FLAG_LBD) || \
-                             ((FLAG) == USART_FLAG_CTS) || ((FLAG) == USART_FLAG_ORE) || \
+                             ((FLAG) == USART_FLAG_TC_stm) || ((FLAG) == USART_FLAG_RXNE) || \
+                             ((FLAG) == USART_FLAG_IDLE_stm) || ((FLAG) == USART_FLAG_LBD_stm) || \
+                             ((FLAG) == USART_FLAG_CTS_stm) || ((FLAG) == USART_FLAG_ORE) || \
                              ((FLAG) == USART_FLAG_NE) || ((FLAG) == USART_FLAG_FE))
                               
 #define IS_USART_CLEAR_FLAG(FLAG) ((((FLAG) & (uint16_t)0xFC9F) == 0x00) && ((FLAG) != (uint16_t)0x00))
@@ -409,7 +409,7 @@ void USART_DMACmd(USART_TypeDef* USARTx, uint16_t USART_DMAReq, FunctionalState 
 
 /* Interrupts and flags management functions **********************************/
 void USART_ITConfig(USART_TypeDef* USARTx, uint16_t USART_IT, FunctionalState NewState);
-FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG);
+FlagStatus_stm USART_GetFlagStatus(USART_TypeDef* USARTx, uint16_t USART_FLAG);
 void USART_ClearFlag(USART_TypeDef* USARTx, uint16_t USART_FLAG);
 ITStatus USART_GetITStatus(USART_TypeDef* USARTx, uint16_t USART_IT);
 void USART_ClearITPendingBit(USART_TypeDef* USARTx, uint16_t USART_IT);

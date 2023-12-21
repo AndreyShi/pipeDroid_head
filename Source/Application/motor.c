@@ -62,8 +62,8 @@ void motor_init(void) {
 	TIM_OC1PreloadConfig(MOTOR_AB_TIMER, TIM_OCPreload_Enable);
 	TIM_OC3Init(MOTOR_AB_TIMER, &TIM_OCInitStructure);
 	TIM_OC3PreloadConfig(MOTOR_AB_TIMER, TIM_OCPreload_Enable);
-	TIM_ARRPreloadConfig(MOTOR_AB_TIMER, ENABLE);
-	TIM_Cmd(MOTOR_AB_TIMER, ENABLE);
+	TIM_ARRPreloadConfig(MOTOR_AB_TIMER, ENABLE_stm);
+	TIM_Cmd(MOTOR_AB_TIMER, ENABLE_stm);
 
 	AB_speed = -500;
 	motor_setSpeed_AB(0);

@@ -142,7 +142,7 @@ void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)
   assert_param(IS_NVIC_PREEMPTION_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority));  
   assert_param(IS_NVIC_SUB_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelSubPriority));
     
-  if (NVIC_InitStruct->NVIC_IRQChannelCmd != DISABLE)
+  if (NVIC_InitStruct->NVIC_IRQChannelCmd != DISABLE_stm)
   {
     /* Compute the Corresponding IRQ Priority --------------------------------*/    
     tmppriority = (0x700 - ((SCB->AIRCR) & (uint32_t)0x700))>> 0x08;
@@ -193,7 +193,7 @@ void NVIC_SetVectorTable(uint32_t NVIC_VectTab, uint32_t Offset)
   *     @arg NVIC_LP_SEVONPEND: Low Power SEV on Pend.
   *     @arg NVIC_LP_SLEEPDEEP: Low Power DEEPSLEEP request.
   *     @arg NVIC_LP_SLEEPONEXIT: Low Power Sleep on Exit.
-  * @param  NewState: new state of LP condition. This parameter can be: ENABLE or DISABLE.
+  * @param  NewState: new state of LP condition. This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void NVIC_SystemLPConfig(uint8_t LowPowerMode, FunctionalState NewState)
@@ -202,7 +202,7 @@ void NVIC_SystemLPConfig(uint8_t LowPowerMode, FunctionalState NewState)
   assert_param(IS_NVIC_LP(LowPowerMode));
   assert_param(IS_FUNCTIONAL_STATE(NewState));  
   
-  if (NewState != DISABLE)
+  if (NewState != DISABLE_stm)
   {
     SCB->SCR |= LowPowerMode;
   }

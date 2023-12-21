@@ -126,8 +126,8 @@
   */
 void PWR_DeInit(void)
 {
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, ENABLE);
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, DISABLE);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, ENABLE_stm);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, DISABLE_stm);
 }
 
 /**
@@ -136,7 +136,7 @@ void PWR_DeInit(void)
   * @note   If the HSE divided by 2, 3, ..31 is used as the RTC clock, the 
   *         Backup Domain Access should be kept enabled.
   * @param  NewState: new state of the access to the backup domain.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void PWR_BackupAccessCmd(FunctionalState NewState)
@@ -209,7 +209,7 @@ void PWR_PVDLevelConfig(uint32_t PWR_PVDLevel)
 /**
   * @brief  Enables or disables the Power Voltage Detector(PVD).
   * @param  NewState: new state of the PVD.
-  *         This parameter can be: ENABLE or DISABLE.
+  *         This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void PWR_PVDCmd(FunctionalState NewState)
@@ -243,7 +243,7 @@ void PWR_PVDCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the WakeUp Pin functionality.
   * @param  NewState: new state of the WakeUp Pin functionality.
-  *         This parameter can be: ENABLE or DISABLE.
+  *         This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void PWR_WakeUpPinCmd(FunctionalState NewState)
@@ -304,7 +304,7 @@ void PWR_WakeUpPinCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the Backup Regulator.
   * @param  NewState: new state of the Backup Regulator.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void PWR_BackupRegulatorCmd(FunctionalState NewState)
@@ -372,7 +372,7 @@ void PWR_MainRegulatorModeConfig(uint32_t PWR_Regulator_Voltage)
 /**
   * @brief  Enables or disables the Flash Power Down in STOP mode.
   * @param  NewState: new state of the Flash power mode.
-  *          This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE_stm or DISABLE_stm.
   * @retval None
   */
 void PWR_FlashPowerDownCmd(FunctionalState NewState)
@@ -622,22 +622,22 @@ void PWR_EnterSTANDBYMode(void)
   *                  or power reset.  
   *            @arg PWR_FLAG_VOSRDY: This flag indicates that the Regulator voltage 
   *                 scaling output selection is ready. 
-  * @retval The new state of PWR_FLAG (SET or RESET).
+  * @retval The new state of PWR_FLAG (SET_stm or RESET_stm).
   */
-FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG)
+FlagStatus_stm PWR_GetFlagStatus(uint32_t PWR_FLAG)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
   
   /* Check the parameters */
   assert_param(IS_PWR_GET_FLAG(PWR_FLAG));
   
-  if ((PWR->CSR & PWR_FLAG) != (uint32_t)RESET)
+  if ((PWR->CSR & PWR_FLAG) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   /* Return the flag status */
   return bitstatus;

@@ -69,7 +69,7 @@ static void ETH_MACDMA_Config(void)
 
   /* Enable ETHERNET clock  */
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_ETH_MAC | RCC_AHB1Periph_ETH_MAC_Tx |
-                         RCC_AHB1Periph_ETH_MAC_Rx, ENABLE);
+                         RCC_AHB1Periph_ETH_MAC_Rx, ENABLE_stm);
   RCC_Configuration();
   /* Reset ETHERNET on AHB Bus */
   ETH_DeInit();
@@ -78,7 +78,7 @@ static void ETH_MACDMA_Config(void)
   ETH_SoftwareReset();
 
   /* Wait for software reset */
-  while (ETH_GetSoftwareResetStatus() == SET);
+  while (ETH_GetSoftwareResetStatus() == SET_stm);
 
   /* ETHERNET Configuration --------------------------------------------------*/
   /* Call ETH_StructInit if you don't like to configure all ETH_InitStructure parameter */
@@ -125,7 +125,7 @@ static void ETH_MACDMA_Config(void)
   ETH_Init(&ETH_InitStructure, KSZ8041_PHY_ADDRESS);
 
   /* Enable the Ethernet Rx Interrupt */
-  ETH_DMAITConfig(ETH_DMA_IT_NIS | ETH_DMA_IT_R, ENABLE);
+  ETH_DMAITConfig(ETH_DMA_IT_NIS | ETH_DMA_IT_R, ENABLE_stm);
 }
 
 /**
@@ -142,10 +142,10 @@ void ETH_GPIO_Config(void)
                          RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOI |
                          RCC_AHB1Periph_GPIOG | RCC_AHB1Periph_GPIOH |
                          RCC_AHB1Periph_GPIOE |
-                         RCC_AHB1Periph_GPIOF, ENABLE);
+                         RCC_AHB1Periph_GPIOF, ENABLE_stm);
 
   /* Enable SYSCFG clock */
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE_stm);
 
   /* Configure MCO (PA8) */
   /*GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;*/
@@ -211,11 +211,11 @@ void ETH_GPIO_Config(void)
 
     /* Configure PC1, PC2, PC3, PC4 and PC5 */
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5;
-    GPIO_Init(GPIOC, &GPIO_InitStructure);
-    GPIO_PinAFConfig(GPIOC, GPIO_PinSource2, GPIO_AF_ETH);
-    GPIO_PinAFConfig(GPIOC, GPIO_PinSource3, GPIO_AF_ETH);
-    GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_ETH);
-    GPIO_PinAFConfig(GPIOC, GPIO_PinSource5, GPIO_AF_ETH);
+    GPIO_Init(GPIOC_stm, &GPIO_InitStructure);
+    GPIO_PinAFConfig(GPIOC_stm, GPIO_PinSource2, GPIO_AF_ETH);
+    GPIO_PinAFConfig(GPIOC_stm, GPIO_PinSource3, GPIO_AF_ETH);
+    GPIO_PinAFConfig(GPIOC_stm, GPIO_PinSource4, GPIO_AF_ETH);
+    GPIO_PinAFConfig(GPIOC_stm, GPIO_PinSource5, GPIO_AF_ETH);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
     GPIO_Init(GPIOG, &GPIO_InitStructure);
@@ -246,14 +246,14 @@ void ETH_NVIC_Config(void)
   //NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY+1;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE_stm;
   NVIC_Init(&NVIC_InitStructure);
 }
 
 
 void RCC_Configuration(void)
 {
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE_stm);
 
 #ifdef MII_MODE
     SYSCFG_ETH_MediaInterfaceConfig(SYSCFG_ETH_MediaInterface_MII);
@@ -261,10 +261,10 @@ void RCC_Configuration(void)
     SYSCFG_ETH_MediaInterfaceConfig(SYSCFG_ETH_MediaInterface_RMII);
 #endif
 
-    SYSCFG_CompensationCellCmd(ENABLE);
-    RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_HASH, ENABLE);
+    SYSCFG_CompensationCellCmd(ENABLE_stm);
+    RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_HASH, ENABLE_stm);
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_ETH_MAC | RCC_AHB1Periph_ETH_MAC_Tx |
-                        RCC_AHB1Periph_ETH_MAC_Rx | RCC_AHB1Periph_CRC, ENABLE);
+                        RCC_AHB1Periph_ETH_MAC_Rx | RCC_AHB1Periph_CRC, ENABLE_stm);
 }
 
 

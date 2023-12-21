@@ -360,7 +360,7 @@ static void SetSysClock(void)
     StartUpCounter++;
   } while((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));
 
-  if ((RCC->CR & RCC_CR_HSERDY) != RESET)
+  if ((RCC->CR & RCC_CR_HSERDY) != RESET_stm)
   {
     HSEStatus = (uint32_t)0x01;
   }
@@ -455,7 +455,7 @@ void SystemInit_ExtMemCtl(void)
                      | PE15 <-> FSMC_D12  |
                      +--------------------+
 */
-   /* Enable GPIOD, GPIOE, GPIOF and GPIOG interface clock */
+   /* Enable GPIOD, GPIOE, GPIOF_stm and GPIOG interface clock */
   RCC->AHB1ENR   |= 0x00000078;
   
   /* Connect PDx pins to FSMC Alternate function */
@@ -483,16 +483,16 @@ void SystemInit_ExtMemCtl(void)
   GPIOE->PUPDR   = 0x00000000;
 
   /* Connect PFx pins to FSMC Alternate function */
-  GPIOF->AFR[0]  = 0x00cccccc;
-  GPIOF->AFR[1]  = 0xcccc0000;
+  GPIOF_stm->AFR[0]  = 0x00cccccc;
+  GPIOF_stm->AFR[1]  = 0xcccc0000;
   /* Configure PFx pins in Alternate function mode */   
-  GPIOF->MODER   = 0xaa000aaa;
+  GPIOF_stm->MODER   = 0xaa000aaa;
   /* Configure PFx pins speed to 100 MHz */ 
-  GPIOF->OSPEEDR = 0xff000fff;
+  GPIOF_stm->OSPEEDR = 0xff000fff;
   /* Configure PFx pins Output type to push-pull */  
-  GPIOF->OTYPER  = 0x00000000;
+  GPIOF_stm->OTYPER  = 0x00000000;
   /* No pull-up, pull-down for PFx pins */ 
-  GPIOF->PUPDR   = 0x00000000;
+  GPIOF_stm->PUPDR   = 0x00000000;
 
   /* Connect PGx pins to FSMC Alternate function */
   GPIOG->AFR[0]  = 0x00cccccc;

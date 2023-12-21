@@ -276,7 +276,7 @@ typedef struct
 #define RTC_AlarmMask_Minutes             ((uint32_t)0x00008000)
 #define RTC_AlarmMask_Seconds             ((uint32_t)0x00000080)
 #define RTC_AlarmMask_All                 ((uint32_t)0x80808080)
-#define IS_ALARM_MASK(MASK)  (((MASK) & 0x7F7F7F7F) == (uint32_t)RESET)
+#define IS_ALARM_MASK(MASK)  (((MASK) & 0x7F7F7F7F) == (uint32_t)RESET_stm)
 
 /**
   * @}
@@ -288,7 +288,7 @@ typedef struct
 #define RTC_Alarm_A                       ((uint32_t)0x00000100)
 #define RTC_Alarm_B                       ((uint32_t)0x00000200)
 #define IS_RTC_ALARM(ALARM)     (((ALARM) == RTC_Alarm_A) || ((ALARM) == RTC_Alarm_B))
-#define IS_RTC_CMD_ALARM(ALARM) (((ALARM) & (RTC_Alarm_A | RTC_Alarm_B)) != (uint32_t)RESET)
+#define IS_RTC_CMD_ALARM(ALARM) (((ALARM) & (RTC_Alarm_A | RTC_Alarm_B)) != (uint32_t)RESET_stm)
 
 /**
   * @}
@@ -735,7 +735,7 @@ typedef struct
                                ((FLAG) == RTC_FLAG_ALRBWF) || ((FLAG) == RTC_FLAG_ALRAWF) || \
                                ((FLAG) == RTC_FLAG_TAMP1F) || ((FLAG) == RTC_FLAG_RECALPF) || \
                                 ((FLAG) == RTC_FLAG_SHPF))
-#define IS_RTC_CLEAR_FLAG(FLAG) (((FLAG) != (uint32_t)RESET) && (((FLAG) & 0xFFFF00DF) == (uint32_t)RESET))
+#define IS_RTC_CLEAR_FLAG(FLAG) (((FLAG) != (uint32_t)RESET_stm) && (((FLAG) & 0xFFFF00DF) == (uint32_t)RESET_stm))
 /**
   * @}
   */ 
@@ -750,11 +750,11 @@ typedef struct
 #define RTC_IT_TAMP                       ((uint32_t)0x00000004) /* Used only to Enable the Tamper Interrupt */
 #define RTC_IT_TAMP1                      ((uint32_t)0x00020000)
 
-#define IS_RTC_CONFIG_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFFF0FFB) == (uint32_t)RESET))
+#define IS_RTC_CONFIG_IT(IT) (((IT) != (uint32_t)RESET_stm) && (((IT) & 0xFFFF0FFB) == (uint32_t)RESET_stm))
 #define IS_RTC_GET_IT(IT) (((IT) == RTC_IT_TS) || ((IT) == RTC_IT_WUT) || \
                            ((IT) == RTC_IT_ALRB) || ((IT) == RTC_IT_ALRA) || \
                            ((IT) == RTC_IT_TAMP1))
-#define IS_RTC_CLEAR_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFFD0FFF) == (uint32_t)RESET))
+#define IS_RTC_CLEAR_IT(IT) (((IT) != (uint32_t)RESET_stm) && (((IT) & 0xFFFD0FFF) == (uint32_t)RESET_stm))
 
 /**
   * @}
@@ -859,7 +859,7 @@ ErrorStatus RTC_SynchroShiftConfig(uint32_t RTC_ShiftAdd1S, uint32_t RTC_ShiftSu
 
 /* Interrupts and flags management functions **********************************/
 void RTC_ITConfig(uint32_t RTC_IT, FunctionalState NewState);
-FlagStatus RTC_GetFlagStatus(uint32_t RTC_FLAG);
+FlagStatus_stm RTC_GetFlagStatus(uint32_t RTC_FLAG);
 void RTC_ClearFlag(uint32_t RTC_FLAG);
 ITStatus RTC_GetITStatus(uint32_t RTC_IT);
 void RTC_ClearITPendingBit(uint32_t RTC_IT);

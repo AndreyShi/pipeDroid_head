@@ -20,7 +20,7 @@
        (#) Select the ETHERNET media interface (RMII/RII) using SYSCFG_ETH_MediaInterfaceConfig()
   
        -@- SYSCFG APB clock must be enabled to get write access to SYSCFG registers,
-           using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+           using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE_stm);
                    
  @endverbatim      
   ******************************************************************************
@@ -90,8 +90,8 @@
   */
 void SYSCFG_DeInit(void)
 {
-   RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-   RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, DISABLE);
+   RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, ENABLE_stm);
+   RCC_APB2PeriphResetCmd(RCC_APB2Periph_SYSCFG, DISABLE_stm);
 }
 
 /**
@@ -159,8 +159,8 @@ void SYSCFG_ETH_MediaInterfaceConfig(uint32_t SYSCFG_ETH_MediaInterface)
   *         voltage ranges from 2.4 to 3.6 V.  
   * @param  NewState: new state of the I/O Compensation Cell.
   *          This parameter can be one of the following values:
-  *            @arg ENABLE: I/O compensation cell enabled  
-  *            @arg DISABLE: I/O compensation cell power-down mode  
+  *            @arg ENABLE_stm: I/O compensation cell enabled  
+  *            @arg DISABLE_stm: I/O compensation cell power-down mode  
   * @retval None
   */
 void SYSCFG_CompensationCellCmd(FunctionalState NewState)
@@ -174,19 +174,19 @@ void SYSCFG_CompensationCellCmd(FunctionalState NewState)
 /**
   * @brief  Checks whether the I/O Compensation Cell ready flag is set or not.
   * @param  None
-  * @retval The new state of the I/O Compensation Cell ready flag (SET or RESET)
+  * @retval The new state of the I/O Compensation Cell ready flag (SET_stm or RESET_stm)
   */
-FlagStatus SYSCFG_GetCompensationCellStatus(void)
+FlagStatus_stm SYSCFG_GetCompensationCellStatus(void)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus_stm bitstatus = RESET_stm;
     
-  if ((SYSCFG->CMPCR & SYSCFG_CMPCR_READY ) != (uint32_t)RESET)
+  if ((SYSCFG->CMPCR & SYSCFG_CMPCR_READY ) != (uint32_t)RESET_stm)
   {
-    bitstatus = SET;
+    bitstatus = SET_stm;
   }
   else
   {
-    bitstatus = RESET;
+    bitstatus = RESET_stm;
   }
   return bitstatus;
 }

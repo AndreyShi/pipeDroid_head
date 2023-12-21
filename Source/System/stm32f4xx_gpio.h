@@ -49,10 +49,10 @@
 
 #define IS_GPIO_ALL_PERIPH(PERIPH) (((PERIPH) == GPIOA) || \
                                     ((PERIPH) == GPIOB) || \
-                                    ((PERIPH) == GPIOC) || \
+                                    ((PERIPH) == GPIOC_stm) || \
                                     ((PERIPH) == GPIOD) || \
                                     ((PERIPH) == GPIOE) || \
-                                    ((PERIPH) == GPIOF) || \
+                                    ((PERIPH) == GPIOF_stm) || \
                                     ((PERIPH) == GPIOG) || \
                                     ((PERIPH) == GPIOH) || \
                                     ((PERIPH) == GPIOI))
@@ -108,7 +108,7 @@ typedef enum
                             ((PUPD) == GPIO_PuPd_DOWN))
 
 /** 
-  * @brief  GPIO Bit SET and Bit RESET enumeration 
+  * @brief  GPIO Bit SET_stm and Bit RESET_stm enumeration 
   */ 
 typedef enum
 { 

@@ -747,7 +747,7 @@ tcp_output_segment(struct tcp_seg *seg, struct tcp_pcb *pcb)
 }
 
 /**
- * Send a TCP RESET packet (empty segment with RST flag set) either to
+ * Send a TCP RESET_stm packet (empty segment with RST flag set) either to
  * abort a connection or to show that there is no matching local connection
  * for a received segment.
  *

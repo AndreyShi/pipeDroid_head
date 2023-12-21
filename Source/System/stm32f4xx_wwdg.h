@@ -91,7 +91,7 @@ void WWDG_SetCounter(uint8_t Counter);
 void WWDG_Enable(uint8_t Counter);
 
 /* Interrupts and flags management functions **********************************/
-FlagStatus WWDG_GetFlagStatus(void);
+FlagStatus_stm WWDG_GetFlagStatus(void);
 void WWDG_ClearFlag(void);
 
 #ifdef __cplusplus
