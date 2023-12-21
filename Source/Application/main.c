@@ -41,7 +41,7 @@
 #include "protocol.h"
 #include "stm32f4x7_eth.h"
 #include "track.h"
-
+#include "../GD32F4xx_Firmware_Library_V3.1.0/systick.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define SYSTEMTICK_PERIOD_MS  1
@@ -106,13 +106,8 @@ int main(void) {
 	 To reconfigure the default setting of SystemInit() function, refer to
 	 system_stm32f4xx.c file
 	 */
-	RCC_ClocksTypeDef RCC_Clocks;
-	/* Configure Systick clock source as HCLK */
-	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);
-
-	/* SystTick configuration: an interrupt every 1ms */
-	RCC_GetClocksFreq(&RCC_Clocks);
-	SysTick_Config(RCC_Clocks.HCLK_Frequency * SYSTEMTICK_PERIOD_MS / 1000);
+    SystemCoreClockUpdate();
+    systick_config();
 	__enable_irq();
 	Delay_ms(100);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
