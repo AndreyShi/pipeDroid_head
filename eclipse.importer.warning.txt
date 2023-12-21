@@ -1,0 +1,129 @@
+!!! Warning !!!
+
+There are some incompatible arguments between 'eclipse' and 'eide', you need check and add them to eide project manually !
+
+When you have solved these incompatible problems, you need delete this note file, otherwise this file will be show again !
+
+---
+
+##### Configurations For All Targets #####
+
+//
+///// Target: 'Release' /////
+//
+
+Incompatible Args:
+    /:
+        globalArgs:
+            - <Optimization Level> = ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.size
+            - <Debug level> = ilg.gnuarmeclipse.managedbuild.cross.option.debugging.level.max
+            - <Debug format> = undefined
+            - <undefined> = GNU Tools for ARM Embedded Processors
+            - <Architecture> = ilg.gnuarmeclipse.managedbuild.cross.option.architecture.arm
+            - <ARM family> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.mcpu.cortex-m4
+            - <Instruction set> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.instructionset.thumb
+            - <Prefix> = arm-none-eabi-
+            - <C compiler> = gcc
+            - <C++ compiler> = g++
+            - <Archiver> = ar
+            - <Hex/Bin converter> = objcopy
+            - <Listing generator> = objdump
+            - <Size command> = size
+            - <Build command> = make
+            - <Remove command> = rm
+            - <Create flash image> = true
+            - <Print size> = true
+            - <Create extended listing> = true
+            - <Float ABI> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi.hard
+            - <FPU Type> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit.fpv4spd16
+            - <Endianness> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.endianness.little
+        cIncDirs: []
+        cMacros: []
+        cCompilerArgs: []
+        sIncDirs: []
+        sMacros: []
+        assemblerArgs:
+            - <Use preprocessor> = true
+        linkerArgs: []
+        linkerLibArgs: []
+
+
+//
+///// Target: 'Debug' /////
+//
+
+Incompatible Args:
+    /:
+        globalArgs:
+            - <Optimization Level> = ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.size
+            - <Debug level> = ilg.gnuarmeclipse.managedbuild.cross.option.debugging.level.max
+            - <Debug format> = undefined
+            - <undefined> = GNU Tools for ARM Embedded Processors
+            - <Architecture> = ilg.gnuarmeclipse.managedbuild.cross.option.architecture.arm
+            - <ARM family> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.mcpu.cortex-m4
+            - <Instruction set> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.instructionset.thumb
+            - <Prefix> = arm-none-eabi-
+            - <C compiler> = gcc
+            - <C++ compiler> = g++
+            - <Archiver> = ar
+            - <Hex/Bin converter> = objcopy
+            - <Listing generator> = objdump
+            - <Size command> = size
+            - <Build command> = make
+            - <Remove command> = rm
+            - <Create flash image> = true
+            - <Print size> = true
+            - <Create extended listing> = true
+            - <Float ABI> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi.hard
+            - <FPU Type> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit.fpv4spd16
+        cIncDirs: []
+        cMacros: []
+        cCompilerArgs: []
+        sIncDirs: []
+        sMacros: []
+        assemblerArgs:
+            - <Use preprocessor> = true
+        linkerArgs: []
+        linkerLibArgs: []
+
+
+//
+///// Target: 'DFU' /////
+//
+
+Incompatible Args:
+    /:
+        globalArgs:
+            - <Optimization Level> = ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.size
+            - <Debug level> = ilg.gnuarmeclipse.managedbuild.cross.option.debugging.level.max
+            - <Debug format> = undefined
+            - <undefined> = GNU Tools for ARM Embedded Processors
+            - <Architecture> = ilg.gnuarmeclipse.managedbuild.cross.option.architecture.arm
+            - <ARM family> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.mcpu.cortex-m4
+            - <Instruction set> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.instructionset.thumb
+            - <Prefix> = arm-none-eabi-
+            - <C compiler> = gcc
+            - <C++ compiler> = g++
+            - <Archiver> = ar
+            - <Hex/Bin converter> = objcopy
+            - <Listing generator> = objdump
+            - <Size command> = size
+            - <Build command> = make
+            - <Remove command> = rm
+            - <Create flash image> = true
+            - <Print size> = true
+            - <Create extended listing> = true
+            - <Float ABI> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi.hard
+            - <FPU Type> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit.fpv4spd16
+            - <Endianness> = ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.endianness.little
+            - <undefined> = 1287942917
+        cIncDirs: []
+        cMacros: []
+        cCompilerArgs: []
+        sIncDirs: []
+        sMacros: []
+        assemblerArgs:
+            - <Use preprocessor> = true
+        linkerArgs: []
+        linkerLibArgs: []
+
