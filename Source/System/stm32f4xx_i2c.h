@@ -79,7 +79,7 @@ typedef struct
   * @{
   */
 
-#define IS_I2C_ALL_PERIPH(PERIPH) (((PERIPH) == I2C1) || \
+#define IS_I2C_ALL_PERIPH(PERIPH) (((PERIPH) == I2C1_stm) || \
                                    ((PERIPH) == I2C2) || \
                                    ((PERIPH) == I2C3))
 
@@ -617,7 +617,7 @@ void I2C_ITConfig(I2C_TypeDef* I2Cx, uint16_t I2C_IT, FunctionalState NewState);
          For error management, it is advised to use the following functions:
            - I2C_ITConfig() to configure and enable the error interrupts (I2C_IT_ERR).
            - I2Cx_ER_IRQHandler() which is called when the error interrupt occurs.
-             Where x is the peripheral instance (I2C1, I2C2 ...)
+             Where x is the peripheral instance (I2C1_stm, I2C2 ...)
            - I2C_GetFlagStatus() or I2C_GetITStatus()  to be called into the 
              I2Cx_ER_IRQHandler() function in order to determine which error occurred.
            - I2C_ClearFlag() or I2C_ClearITPendingBit() and/or I2C_SoftwareResetCmd() 

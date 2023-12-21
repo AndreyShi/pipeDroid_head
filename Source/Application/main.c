@@ -111,39 +111,13 @@ int main(void) {
     systick_config();
 	__enable_irq();
 	Delay_ms(100);
-	rcu_periph_clock_enable(RCU_GPIOA);//RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOH, ENABLE_stm);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOI, ENABLE_stm);
+	rcu_periph_clock_enable(RCU_GPIOA);
+	rcu_periph_clock_enable(RCU_GPIOB);
+	rcu_periph_clock_enable(RCU_GPIOC);
+	rcu_periph_clock_enable(RCU_GPIOD);
+	rcu_periph_clock_enable(RCU_GPIOE);
 	//lsm330_setup(LSM330_GYR_FS_250DPS, LSM330_ACC_G_2G);
 	Delay_ms(100);
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOC_stm, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOC_stm, GPIO_Pin_4);
-
-
-
-	//TEST PIN
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOF_stm, &GPIO_InitStructure);
-	//TEST PIN
-	GPIO_ResetBits(GPIOF_stm, GPIO_Pin_4);
-
-
 	Delay_ms(10);
 	coef.scan_speed = 300;
 	coef.move_speed = 300;

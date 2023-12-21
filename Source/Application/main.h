@@ -114,7 +114,7 @@
 #define TX_R_X__485_Pin 		GPIO_Pin_10
 #define TX_R_X__485_GPIO_Port 	GPIOD
 
-#define RS485_PORT                       USART3
+#define RS485_PORT                       USART1
 #define USARTx_CLK                       RCC_APB1Periph_USART3
 #define USARTx_CLK_INIT                  RCC_APB1PeriphClockCmd
 #define USARTx_IRQn                      USART3_IRQn
@@ -158,7 +158,7 @@
 #define CS_ENCODER__PIN             GPIO_Pin_5
 #define CS_ENCODER__PORT			GPIOB
 
-#define I2C                          I2C1
+#define I2C                          I2C1_stm
 #define I2C_CLK                      RCC_APB1Periph_I2C1
 
 #define I2C_SDA_GPIO_CLK             RCC_AHB1Periph_GPIOB

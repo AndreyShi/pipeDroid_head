@@ -264,7 +264,7 @@ typedef struct
 /** 
   * @brief   AF 4 selection  
   */ 
-#define GPIO_AF_I2C1          ((uint8_t)0x04)  /* I2C1 Alternate Function mapping */
+#define GPIO_AF_I2C1          ((uint8_t)0x04)  /* I2C1_stm Alternate Function mapping */
 #define GPIO_AF_I2C2          ((uint8_t)0x04)  /* I2C2 Alternate Function mapping */
 #define GPIO_AF_I2C3          ((uint8_t)0x04)  /* I2C3 Alternate Function mapping */
 

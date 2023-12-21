@@ -185,8 +185,8 @@ g_pfnVectors:
   .word     TIM2_IRQHandler                   /* TIM2                         */                   
   .word     TIM3_IRQHandler                   /* TIM3                         */                   
   .word     TIM4_IRQHandler                   /* TIM4                         */                   
-  .word     I2C1_EV_IRQHandler                /* I2C1 Event                   */                          
-  .word     I2C1_ER_IRQHandler                /* I2C1 Error                   */                          
+  .word     I2C1_EV_IRQHandler                /* I2C1_stm Event                   */                          
+  .word     I2C1_ER_IRQHandler                /* I2C1_stm Error                   */                          
   .word     I2C2_EV_IRQHandler                /* I2C2 Event                   */                          
   .word     I2C2_ER_IRQHandler                /* I2C2 Error                   */                            
   .word     SPI1_IRQHandler                   /* SPI1                         */                   

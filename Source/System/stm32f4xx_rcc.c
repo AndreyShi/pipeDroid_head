@@ -1226,7 +1226,7 @@ void RCC_AHB3PeriphClockCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
   *            @arg RCC_APB1Periph_USART3: USART3 clock
   *            @arg RCC_APB1Periph_UART4:  UART4 clock
   *            @arg RCC_APB1Periph_UART5:  UART5 clock
-  *            @arg RCC_APB1Periph_I2C1:   I2C1 clock
+  *            @arg RCC_APB1Periph_I2C1:   I2C1_stm clock
   *            @arg RCC_APB1Periph_I2C2:   I2C2 clock
   *            @arg RCC_APB1Periph_I2C3:   I2C3 clock
   *            @arg RCC_APB1Periph_CAN1:   CAN1 clock
@@ -1411,7 +1411,7 @@ void RCC_AHB3PeriphResetCmd(uint32_t RCC_AHB3Periph, FunctionalState NewState)
   *            @arg RCC_APB1Periph_USART3: USART3 clock
   *            @arg RCC_APB1Periph_UART4:  UART4 clock
   *            @arg RCC_APB1Periph_UART5:  UART5 clock
-  *            @arg RCC_APB1Periph_I2C1:   I2C1 clock
+  *            @arg RCC_APB1Periph_I2C1:   I2C1_stm clock
   *            @arg RCC_APB1Periph_I2C2:   I2C2 clock
   *            @arg RCC_APB1Periph_I2C3:   I2C3 clock
   *            @arg RCC_APB1Periph_CAN1:   CAN1 clock
@@ -1608,7 +1608,7 @@ void RCC_AHB3PeriphClockLPModeCmd(uint32_t RCC_AHB3Periph, FunctionalState NewSt
   *            @arg RCC_APB1Periph_USART3: USART3 clock
   *            @arg RCC_APB1Periph_UART4:  UART4 clock
   *            @arg RCC_APB1Periph_UART5:  UART5 clock
-  *            @arg RCC_APB1Periph_I2C1:   I2C1 clock
+  *            @arg RCC_APB1Periph_I2C1:   I2C1_stm clock
   *            @arg RCC_APB1Periph_I2C2:   I2C2 clock
   *            @arg RCC_APB1Periph_I2C3:   I2C3 clock
   *            @arg RCC_APB1Periph_CAN1:   CAN1 clock

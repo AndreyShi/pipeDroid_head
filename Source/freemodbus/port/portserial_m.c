@@ -59,9 +59,9 @@ BOOL xMBMasterPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
 	GPIO_Init(TX_R_X__485_GPIO_Port, &GPIO_InitStruct);
 
-	/**USART3 GPIO Configuration
-	 PB10     ------> USART3_TX
-	 PB11     ------> USART3_RX
+	/**USART1 GPIO Configuration
+	 PA09     ------> USART1_TX
+	 PA10     ------> USART1_RX
 	 */
 
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;

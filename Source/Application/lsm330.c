@@ -324,7 +324,7 @@ static void I2C_Config(void) {
 	I2C_InitStruct.I2C_ClockSpeed = 100000;
 
 	/* Initialize the I2C peripheral w/ selected parameters */
-	I2C_Init(I2C1, &I2C_InitStruct);
+	I2C_Init(I2C1_stm, &I2C_InitStruct);
 }
 
 /*
@@ -495,7 +495,7 @@ uint8_t writeRegister(uint8_t sensor, uint8_t address, uint8_t data) {
 	/* Generate the Start Condition */
 	I2C_GenerateSTART(I2C, ENABLE_stm);
 
-	/* Test on I2C1 EV5 and clear it */
+	/* Test on I2C1_stm EV5 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_MODE_SELECT)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -511,7 +511,7 @@ uint8_t writeRegister(uint8_t sensor, uint8_t address, uint8_t data) {
 	/* Send DCMI selcted device slave Address for write */
 	I2C_Send7bitAddress(I2C, i2c_address, I2C_Direction_Transmitter);
 
-	/* Test on I2C1 EV6 and clear it */
+	/* Test on I2C1_stm EV6 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -519,10 +519,10 @@ uint8_t writeRegister(uint8_t sensor, uint8_t address, uint8_t data) {
 			return 0xFF;
 	}
 
-	/* Send I2C1 location address LSB */
+	/* Send I2C1_stm location address LSB */
 	I2C_SendData(I2C, (uint8_t) (address));
 
-	/* Test on I2C1 EV8 and clear it */
+	/* Test on I2C1_stm EV8 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -533,7 +533,7 @@ uint8_t writeRegister(uint8_t sensor, uint8_t address, uint8_t data) {
 	/* Send Data */
 	I2C_SendData(I2C, data);
 
-	/* Test on I2C1 EV8 and clear it */
+	/* Test on I2C1_stm EV8 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -541,7 +541,7 @@ uint8_t writeRegister(uint8_t sensor, uint8_t address, uint8_t data) {
 			return 0xFF;
 	}
 
-	/* Send I2C1 STOP Condition */
+	/* Send I2C1_stm STOP Condition */
 	I2C_GenerateSTOP(I2C, ENABLE_stm);
 
 	/* If operation is OK, return 0 */
@@ -564,7 +564,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	/* Generate the Start Condition */
 	I2C_GenerateSTART(I2C, ENABLE_stm);
 
-	/* Test on I2C1 EV5 and clear it */
+	/* Test on I2C1_stm EV5 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_MODE_SELECT)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -585,7 +585,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	/* Send DCMI selcted device slave Address for write */
 	I2C_Send7bitAddress(I2C, i2c_address, I2C_Direction_Transmitter);
 
-	/* Test on I2C1 EV6 and clear it */
+	/* Test on I2C1_stm EV6 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -593,10 +593,10 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 			return 0xFF;
 	}
 
-	/* Send I2C1 location address LSB */
+	/* Send I2C1_stm location address LSB */
 	I2C_SendData(I2C, (uint8_t) (address));
 
-	/* Test on I2C1 EV8 and clear it */
+	/* Test on I2C1_stm EV8 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -605,12 +605,12 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	}
 
 	/* Clear AF flag if arised */
-	I2C1->SR1 |= (uint16_t) 0x0400;
+	I2C1_stm->SR1 |= (uint16_t) 0x0400;
 
 	/* Generate the Start Condition */
 	I2C_GenerateSTART(I2C, ENABLE_stm);
 
-	/* Test on I2C1 EV6 and clear it */
+	/* Test on I2C1_stm EV6 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_MODE_SELECT)) {
 		/* If the timeout delay is exeeded, exit with error code */
@@ -621,9 +621,9 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	/* Send DCMI selcted device slave Address for write */
 	I2C_Send7bitAddress(I2C, i2c_address, I2C_Direction_Receiver);
 
-	/* Test on I2C1 EV6 and clear it */
+	/* Test on I2C1_stm EV6 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
-	while (!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED)) {
+	while (!I2C_CheckEvent(I2C1_stm, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED)) {
 		/* If the timeout delay is exeeded, exit with error code */
 		if ((timeout--) == 0)
 			return 0xFF;
@@ -632,7 +632,7 @@ uint8_t readRegister(uint8_t sensor, uint8_t address) {
 	/* Prepare an NACK for the next data received */
 	I2C_AcknowledgeConfig(I2C, DISABLE_stm);
 
-	/* Test on I2C1 EV7 and clear it */
+	/* Test on I2C1_stm EV7 and clear it */
 	timeout = I2C_TIMEOUT_MAX; /* Initialize timeout value */
 	while (!I2C_CheckEvent(I2C, I2C_EVENT_MASTER_BYTE_RECEIVED)) {
 		/* If the timeout delay is exeeded, exit with error code */

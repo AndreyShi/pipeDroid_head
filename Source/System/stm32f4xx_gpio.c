@@ -516,7 +516,7 @@ void GPIO_ToggleBits(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
   *            @arg GPIO_AF_TIM9: Connect TIM9 pins to AF3
   *            @arg GPIO_AF_TIM10: Connect TIM10 pins to AF3
   *            @arg GPIO_AF_TIM11: Connect TIM11 pins to AF3
-  *            @arg GPIO_AF_I2C1: Connect I2C1 pins to AF4
+  *            @arg GPIO_AF_I2C1: Connect I2C1_stm pins to AF4
   *            @arg GPIO_AF_I2C2: Connect I2C2 pins to AF4
   *            @arg GPIO_AF_I2C3: Connect I2C3 pins to AF4
   *            @arg GPIO_AF_SPI1: Connect SPI1 pins to AF5

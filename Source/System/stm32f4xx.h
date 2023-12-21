@@ -189,8 +189,8 @@ typedef enum IRQn_stm
   TIM2_IRQn                   = 28,     /*!< TIM2 global Interrupt                                             */
   TIM3_IRQn                   = 29,     /*!< TIM3 global Interrupt                                             */
   TIM4_IRQn                   = 30,     /*!< TIM4 global Interrupt                                             */
-  I2C1_EV_IRQn_stm                = 31,     /*!< I2C1 Event Interrupt                                              */
-  I2C1_ER_IRQn_stm                = 32,     /*!< I2C1 Error Interrupt                                              */
+  I2C1_EV_IRQn_stm                = 31,     /*!< I2C1_stm Event Interrupt                                              */
+  I2C1_ER_IRQn_stm                = 32,     /*!< I2C1_stm Error Interrupt                                              */
   I2C2_EV_IRQn_stm                = 33,     /*!< I2C2 Event Interrupt                                              */
   I2C2_ER_IRQn_stm                = 34,     /*!< I2C2 Error Interrupt                                              */  
   SPI1_IRQn_stm                   = 35,     /*!< SPI1 global Interrupt                                             */
@@ -1215,7 +1215,7 @@ typedef struct
 #define USART3              ((USART_TypeDef *) USART3_BASE)
 #define UART4               ((USART_TypeDef *) UART4_BASE)
 #define UART5               ((USART_TypeDef *) UART5_BASE)
-#define I2C1                ((I2C_TypeDef *) I2C1_BASE)
+#define I2C1_stm                ((I2C_TypeDef *) I2C1_BASE)
 #define I2C2                ((I2C_TypeDef *) I2C2_BASE)
 #define I2C3                ((I2C_TypeDef *) I2C3_BASE)
 #define CAN1                ((CAN_TypeDef *) CAN1_BASE)

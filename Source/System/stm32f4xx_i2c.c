@@ -18,7 +18,7 @@
  ===============================================================================
     [..]
       (#) Enable peripheral clock using RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2Cx, ENABLE_stm)
-          function for I2C1, I2C2 or I2C3.
+          function for I2C1_stm, I2C2 or I2C3.
   
       (#) Enable SDA, SCL  and SMBA (when used) GPIO clocks using 
           RCC_AHBPeriphClockCmd() function. 
@@ -139,11 +139,11 @@ void I2C_DeInit(I2C_TypeDef* I2Cx)
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 
-  if (I2Cx == I2C1)
+  if (I2Cx == I2C1_stm)
   {
-    /* Enable I2C1 reset state */
+    /* Enable I2C1_stm reset state */
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, ENABLE_stm);
-    /* Release I2C1 from reset state */
+    /* Release I2C1_stm from reset state */
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_I2C1, DISABLE_stm);    
   }
   else if (I2Cx == I2C2)
@@ -990,7 +990,7 @@ void I2C_DMALastTransferCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
      -@@- For error management, it is advised to use the following functions:
         (+@@) I2C_ITConfig() to configure and enable the error interrupts (I2C_IT_ERR).
         (+@@) I2Cx_ER_IRQHandler() which is called when the error interrupt occurs.
-              Where x is the peripheral instance (I2C1, I2C2 ...)
+              Where x is the peripheral instance (I2C1_stm, I2C2 ...)
         (+@@) I2C_GetFlagStatus() or I2C_GetITStatus()  to be called into the 
               I2Cx_ER_IRQHandler() function in order to determine which error occurred.
         (+@@) I2C_ClearFlag() or I2C_ClearITPendingBit() and/or I2C_SoftwareResetCmd() 
