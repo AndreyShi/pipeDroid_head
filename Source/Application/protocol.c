@@ -53,9 +53,9 @@ void protocol_init(void) {
 			115200,			// Baud
 			MB_PAR_NONE);  // Par
 	Delay_ms(1000);
-	eMBMasterInit(MB_RTU, 0,				//Not Used
-			115200,			// Baud
-			MB_PAR_NONE);  // Par
+	//eMBMasterInit(MB_RTU, 0,				//Not Used
+	//		115200,			// Baud
+	//		MB_PAR_NONE);  // Par
 	eMBErrorCode eStatus;   // modbus status
 	//     Enable the Modbus Protocol Stack.
 	eStatus = eMBMasterEnable();
@@ -153,7 +153,7 @@ protocol_state_t protocol_process(void) {
 			regs[dev_adr-FIRST_MODBUS_ADR].step=usMRegHoldBuf[dev_adr-1][22];
 			regs[dev_adr-FIRST_MODBUS_ADR].res=usMRegHoldBuf[dev_adr-1][23];
 			rx_flag[dev_adr-FIRST_MODBUS_ADR]=1;
-			dev_adr++;
+			//dev_adr++;
 			if (dev_adr > LAST_MODBUS_ADR) {
 				p_state = pm_ready;
 			} else {
@@ -170,7 +170,7 @@ protocol_state_t protocol_process(void) {
 				} else {
 					encoder[dev_adr-FIRST_MODBUS_ADR] = 0;
 					trackState[dev_adr-FIRST_MODBUS_ADR] = 0;
-					dev_adr++;
+					//dev_adr++;
 					if (dev_adr > LAST_MODBUS_ADR) {
 						p_state = pm_ready;
 					} else {

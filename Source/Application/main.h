@@ -42,7 +42,7 @@
 
 #if HEAD_PART==1
 #define FIRST_MODBUS_ADR	10
-#define LAST_MODBUS_ADR		10
+#define LAST_MODBUS_ADR		9
 #else
 #define FIRST_MODBUS_ADR	10
 #define LAST_MODBUS_ADR		12

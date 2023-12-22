@@ -107,7 +107,7 @@ BOOL xMBMasterPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
 			USART_HardwareFlowControl_None;
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	USART_Init(RS485_PORT, &USART_InitStructure);
-
+    uart0_init_gd();
 
 	/* NVIC configuration */
 	/* Configure the Priority Group to 2 bits */
