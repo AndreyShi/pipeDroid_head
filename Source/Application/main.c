@@ -141,7 +141,9 @@ int main(void) {
 	float direction;
 	Delay_ms(1000);
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
-	ETH_BSP_Config();
+	//ETH_BSP_Config();
+
+	enet_system_setup();
 	/* Initilaize the LwIP stack */
 	LwIP_Init();
 	LwIp_initFlag = true;

@@ -75,4 +75,5 @@ OF SUCH DAMAGE.
 #include "gd32f4xx_exmc.h"
 #endif
 extern void uart0_init_gd(void);
+extern void enet_system_setup(void);
 #endif /* GD32F4XX_LIBOPT_H */
