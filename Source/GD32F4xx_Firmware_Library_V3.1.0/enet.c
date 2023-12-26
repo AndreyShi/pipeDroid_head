@@ -100,6 +100,10 @@ void enet_gpio_config(void)
 
 #elif defined RMII_MODE
 
+    gpio_bit_set(rst_n_GPIO_Port,rst_n_Pin);
+    gpio_mode_set(rst_n_GPIO_Port, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,rst_n_Pin);
+    gpio_output_options_set(rst_n_GPIO_Port, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ,rst_n_Pin);
+
     /* PA1: ETH_RMII_REF_CLK */
     gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO_PIN_1);
     gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_MAX, GPIO_PIN_1);
