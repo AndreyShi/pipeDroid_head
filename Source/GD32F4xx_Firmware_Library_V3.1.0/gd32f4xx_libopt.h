@@ -76,4 +76,5 @@ OF SUCH DAMAGE.
 #endif
 extern void uart0_init_gd(void);
 extern void enet_system_setup(void);
+extern void Delay_ms(uint32_t nCount);
 #endif /* GD32F4XX_LIBOPT_H */

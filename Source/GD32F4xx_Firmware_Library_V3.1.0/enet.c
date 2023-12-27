@@ -5,6 +5,27 @@ static __IO uint32_t enet_init_status = 0;
 void enet_gpio_config(void);
 void enet_mac_dma_config(void);
 void enet_mac_dma_config(void);
+void eth_init(void);
+
+void eth_init(void){
+
+
+	//SPI Serial Data Output in SPI Client Mode. 	Strap option: Serial bus configuration
+	//PD = SPI client mode. 	PU = MDC/MDIO mode.
+    gpio_mode_set(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_0);
+    gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_MAX, GPIO_PIN_0);
+    gpio_bit_set(GPIOA,GPIO_PIN_0);
+
+
+    //RESET
+    gpio_mode_set(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_12);
+    gpio_output_options_set(GPIOA, GPIO_OTYPE_PP, GPIO_OSPEED_MAX, GPIO_PIN_12);
+    gpio_bit_reset(GPIOA,GPIO_PIN_12);
+
+    Delay_ms(500);
+    gpio_bit_set(GPIOA,GPIO_PIN_12);
+    Delay_ms(1000);
+}
 
 /*!
     \brief      setup ethernet system(GPIOs, clocks, MAC, DMA, systick)
@@ -100,9 +121,7 @@ void enet_gpio_config(void)
 
 #elif defined RMII_MODE
 
-    gpio_bit_set(rst_n_GPIO_Port,rst_n_Pin);
-    gpio_mode_set(rst_n_GPIO_Port, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,rst_n_Pin);
-    gpio_output_options_set(rst_n_GPIO_Port, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ,rst_n_Pin);
+    eth_init();
 
     /* PA1: ETH_RMII_REF_CLK */
     gpio_mode_set(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO_PIN_1);
