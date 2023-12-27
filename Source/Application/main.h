@@ -90,7 +90,7 @@
 #define GW_ADDR2   1
 #define GW_ADDR3   1  
 
-#define MII_MODE
+//#define MII_MODE
 
 /* Exported macro ------------------------------------------------------------*/
 
