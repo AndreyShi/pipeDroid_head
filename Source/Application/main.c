@@ -90,6 +90,37 @@ void udp_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p,
 		struct ip_addr *addr, u16_t port);
 void udp_sendBuf(char* udpTxBuf);
 
+#define COM_PORT                        USART0
+/* Private function prototypes -----------------------------------------------*/
+#ifdef __GNUC__
+/* With GCC, small printf (option LD Linker->Libraries->Small printf
+ set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+  #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+
+/**
+ * @brief  Retargets the C library printf function to the USART.
+ * @param  None
+ * @retval None
+ */
+PUTCHAR_PROTOTYPE {
+    usart_data_transmit(COM_PORT, (uint8_t)ch);
+    while(RESET == usart_flag_get(COM_PORT, USART_FLAG_TBE));
+    return ch;
+}
+
+/* retarget the C library printf function to the USART */
+int fputc(int ch, FILE *f)
+{
+    usart_data_transmit(COM_PORT, (uint8_t)ch);
+    while(RESET == usart_flag_get(COM_PORT, USART_FLAG_TBE));
+    return ch;
+}
+
+
+
 /**
  * @brief  Main program
  * @param  None
@@ -132,7 +163,8 @@ int main(void) {
 	coef.kAcs[2] = 1;
 
 	protocol_init();
-
+    //vMBMasterPortSerialEnable( 0, 1);   
+	
 	float speedL;
 	float speedR;
 	float speed;
