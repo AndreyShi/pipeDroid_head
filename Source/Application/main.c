@@ -304,6 +304,7 @@ int main(void) {
 		if (wait_cmd_time > 2000) {
 			wait_cmd_time = 0;
 			track_stop();
+			//udp_printf("track_stop");
 		}
 		//периодическая посылка на ПК
 		if (getTime_ms() > readTime) {
@@ -327,7 +328,7 @@ int main(void) {
 			}
 			data.coef = coef;
 			udp_sendBuf((uint8_t*) &udp_Pack);
-			readTime = getTime_ms() + 20;
+			readTime = getTime_ms() + 100;
 		}
 	}
 }
