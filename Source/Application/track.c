@@ -15,7 +15,7 @@
 #define ACS_RISE_REG_ADR		0x05
 #define I_LIMIT_REG_ADR			0x03
 #define CONTROL_REG_ADR			0x02
-
+#define CNT_DRIVERS             1U
 
 #define	MOVE_FWD	0x02
 #define	MOVE_REV	0x01
@@ -36,7 +36,7 @@ void track_update_speed(uint16_t speed, float* kSpeed) {
 	track_data.reg_adr = MOVE_SPEED_REG_ADR;
 	track_data.size = 1;
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < CNT_DRIVERS; j++) {
 		track_data.modbus_adr = FIRST_MODBUS_ADR + j;
 		cSpeed=(float) speed * kSpeed[j] + 0.5;
 		siPtr[0] = cSpeed;
@@ -63,7 +63,7 @@ void track_update_scan_speed(uint16_t speed,float* kSpeed) {
 	track_data.reg_adr = SCAN_SPEED_REG_ADR;
 	track_data.size = 1;
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < CNT_DRIVERS; j++) {
 		track_data.modbus_adr = FIRST_MODBUS_ADR + j;
 		cSpeed=(float) speed * kSpeed[j] + 0.5;
 		siPtr[0] = cSpeed;
@@ -90,7 +90,7 @@ void track_update_step(uint16_t step, float* kSpeed) {
 	track_data.reg_adr = SCAN_STEP_REG_ADR;
 	track_data.size = 1;
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < CNT_DRIVERS; j++) {
 		track_data.modbus_adr = FIRST_MODBUS_ADR + j;
 		siPtr[0] = (float) step * kSpeed[j] + 0.5;
 		for (int i = 0; i < 3; i++) {
@@ -116,7 +116,7 @@ void track_update_acs(uint16_t acs, float* kAcs) {
 	track_data.reg_adr = ACS_RISE_REG_ADR;
 	track_data.size = 1;
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < CNT_DRIVERS; j++) {
 		track_data.modbus_adr = FIRST_MODBUS_ADR + j;
 		siPtr[0] = (float) acs * kAcs[j] + 0.5;
 		for (int i = 0; i < 3; i++) {
@@ -143,7 +143,7 @@ void track_update_Ilimit(uint16_t* Ilimit) {
 	track_data.reg_adr = I_LIMIT_REG_ADR;
 	track_data.size = 1;
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < CNT_DRIVERS; j++) {
 		track_data.modbus_adr = FIRST_MODBUS_ADR + j;
 		siPtr[0] = Ilimit[j];
 		for (int i = 0; i < 3; i++) {
