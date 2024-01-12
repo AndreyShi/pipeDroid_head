@@ -401,6 +401,7 @@ void udp_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p,
 		struct ip_addr *addr, u16_t port) {
 	udp_motor_pack_type* motor_pack;
 	uint8_t rxData[1200];
+	memset(rxData,0,1200);
 	wait_cmd_time = 0;
 	rxByteCount = p->tot_len;
 	MEMCPY((char* )rxData, p->payload, rxByteCount);
