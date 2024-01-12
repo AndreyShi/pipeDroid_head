@@ -16,6 +16,7 @@
 #define I_LIMIT_REG_ADR			0x03
 #define CONTROL_REG_ADR			0x02
 #define CNT_DRIVERS             1U
+#define broadcast_messages      0U
 
 #define	MOVE_FWD	0x02
 #define	MOVE_REV	0x01
@@ -167,7 +168,7 @@ void track_scan_fwd(void) {
 	uint32_t delay;
 	siPtr[0] = STEP_FWD;
 
-	track_data.modbus_adr = 0;
+	track_data.modbus_adr = broadcast_messages;
 	track_data.reg_adr = CONTROL_REG_ADR;
 	track_data.size = 1;
 
@@ -193,7 +194,7 @@ void track_scan_rev(void) {
 	uint32_t delay;
 	siPtr[0] = STEP_REV;
 
-	track_data.modbus_adr = 0;
+	track_data.modbus_adr = broadcast_messages;
 	track_data.reg_adr = CONTROL_REG_ADR;
 	track_data.size = 1;
 
@@ -216,7 +217,7 @@ void track_stop(void) {
 	uint16_t* siPtr = (uint16_t*) track_data.data;
 	uint32_t delay;
 	siPtr[0] = 0;
-	track_data.modbus_adr = 0;
+	track_data.modbus_adr = broadcast_messages;
 	track_data.reg_adr = CONTROL_REG_ADR;
 	track_data.size = 1;
 
@@ -240,7 +241,7 @@ void track_fwd(void) {
 	uint32_t delay;
 	siPtr[0] = MOVE_FWD;
 
-	track_data.modbus_adr = 0;
+	track_data.modbus_adr = broadcast_messages;
 	track_data.reg_adr = CONTROL_REG_ADR;
 	track_data.size = 1;
 	for (int i = 0; i < 3; i++) {
@@ -263,7 +264,7 @@ void track_rev(void) {
 	uint32_t delay;
 	siPtr[0] = MOVE_REV;
 
-	track_data.modbus_adr = 0;
+	track_data.modbus_adr = broadcast_messages;
 	track_data.reg_adr = CONTROL_REG_ADR;
 	track_data.size = 1;
 	for (int i = 0; i < 3; i++) {
