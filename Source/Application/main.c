@@ -180,7 +180,7 @@ int main(void) {
 	mux_set_sync(1);
 	spi_mux_send(0xAA);
 	mux_set_sync(0);
-	Delay(1000);
+	Delay_ms(1000);
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();
 

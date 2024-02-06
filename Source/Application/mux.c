@@ -1,4 +1,5 @@
 #include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
+#include "mux.h"
 
 /*configurate spi for mux control*/
 void spi_mux_config(void)
