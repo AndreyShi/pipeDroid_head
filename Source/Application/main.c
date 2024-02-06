@@ -43,6 +43,7 @@
 #include "track.h"
 #include "../GD32F4xx_Firmware_Library_V3.1.0/systick.h"
 #include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
+#include "mux.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define SYSTEMTICK_PERIOD_MS  1
@@ -171,7 +172,15 @@ int main(void) {
 	float rotation;
 	float fastRotation;
 	float direction;
-	Delay_ms(1000);
+
+    spi_mux_config();
+	mux_reset(0);
+	mux_set_sync(0);
+	Delay_ms(10);
+	mux_set_sync(1);
+	spi_mux_send(0xAA);
+	mux_set_sync(0);
+	Delay(1000);
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();
 
