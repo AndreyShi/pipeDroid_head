@@ -9,7 +9,7 @@ void spi_mux_config(void)
     rcu_periph_clock_enable(RCU_GPIOB);
 
     /* configure SPI2 GPIO */
-    gpio_af_set(GPIOC, GPIO_AF_5, GPIO_PIN_10 | GPIO_PIN_12 );
+    gpio_af_set(GPIOC, GPIO_AF_6, GPIO_PIN_10 | GPIO_PIN_12 );
     gpio_mode_set(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO_PIN_10 | GPIO_PIN_12 );
     gpio_output_options_set(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10 | GPIO_PIN_12 );
     /* set MUX SYNC as GPIO*/
