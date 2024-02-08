@@ -1,7 +1,7 @@
 #include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
 #include "mux.h"
 
-/*configurate spi for mux control*/
+/*configurate spi and gpio for mux control*/
 void spi_mux_config(void)
 {
     rcu_periph_clock_enable(RCU_SPI2);
@@ -25,15 +25,20 @@ void spi_mux_config(void)
     spi_init_struct.trans_mode           = SPI_TRANSMODE_BDTRANSMIT;
     spi_init_struct.device_mode          = SPI_MASTER;
     spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;
-    spi_init_struct.clock_polarity_phase = SPI_CK_PL_LOW_PH_1EDGE;
+    spi_init_struct.clock_polarity_phase = SPI_CK_PL_LOW_PH_2EDGE;
     spi_init_struct.nss                  = SPI_NSS_SOFT;
     spi_init_struct.prescale             = SPI_PSC_32;
     spi_init_struct.endian               = SPI_ENDIAN_MSB;
 
     spi_init(SPI2, &spi_init_struct);
     spi_enable(SPI2);
+    mux_reset(0);
+	mux_set_sync(0);
 }
-
+/*
+change level on SYNC pin ADG714
+char on - 1 - set low level (data reg is ready), 0 - set high level
+*/
 void mux_set_sync(char on)
 {
     if(on)
@@ -41,7 +46,10 @@ void mux_set_sync(char on)
     else
         { gpio_bit_set(GPIOC,GPIO_PIN_11);}
 }
-
+/*
+change level on RESET pin ADG714
+char on - 1 - set low level (reset data reg to 0), 0 - set high level
+*/
 void mux_reset(char on)
 {
     if(on)

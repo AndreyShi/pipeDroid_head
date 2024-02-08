@@ -44,6 +44,7 @@
 #include "../GD32F4xx_Firmware_Library_V3.1.0/systick.h"
 #include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
 #include "mux.h"
+#include "adc.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define SYSTEMTICK_PERIOD_MS  1
@@ -174,8 +175,6 @@ int main(void) {
 	float direction;
 
     spi_mux_config();
-	mux_reset(0);
-	mux_set_sync(0);
 	Delay_ms(10);
 	mux_set_sync(1);
 	spi_mux_send(0xAA);
