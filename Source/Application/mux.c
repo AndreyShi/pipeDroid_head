@@ -8,6 +8,8 @@ void spi_mux_config(void)
     rcu_periph_clock_enable(RCU_GPIOC);
     rcu_periph_clock_enable(RCU_GPIOB);
 
+    mux_set_sync(0);
+    mux_reset(1);
     /* configure SPI2 GPIO */
     gpio_af_set(GPIOC, GPIO_AF_6, GPIO_PIN_10 | GPIO_PIN_12 );
     gpio_mode_set(GPIOC, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO_PIN_10 | GPIO_PIN_12 );
@@ -25,15 +27,15 @@ void spi_mux_config(void)
     spi_init_struct.trans_mode           = SPI_TRANSMODE_BDTRANSMIT;
     spi_init_struct.device_mode          = SPI_MASTER;
     spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;
-    spi_init_struct.clock_polarity_phase = SPI_CK_PL_LOW_PH_2EDGE;
+    spi_init_struct.clock_polarity_phase = SPI_CK_PL_HIGH_PH_2EDGE;
     spi_init_struct.nss                  = SPI_NSS_SOFT;
-    spi_init_struct.prescale             = SPI_PSC_32;
+    spi_init_struct.prescale             = SPI_PSC_16;
     spi_init_struct.endian               = SPI_ENDIAN_MSB;
 
     spi_init(SPI2, &spi_init_struct);
     spi_enable(SPI2);
     mux_reset(0);
-	mux_set_sync(0);
+	
 }
 /*
 change level on SYNC pin ADG714
@@ -42,9 +44,20 @@ char on - 1 - set low level (data reg is ready), 0 - set high level
 void mux_set_sync(char on)
 {
     if(on)
-        { gpio_bit_reset(GPIOC,GPIO_PIN_11);}
+        { 
+            gpio_bit_reset(GPIOC,GPIO_PIN_11);
+            __asm("nop");
+            __asm("nop");
+            __asm("nop");
+        }
     else
-        { gpio_bit_set(GPIOC,GPIO_PIN_11);}
+        { 
+            wait_spi();
+            __asm("nop");
+            __asm("nop");
+            __asm("nop");
+            gpio_bit_set(GPIOC,GPIO_PIN_11);
+        }
 }
 /*
 change level on RESET pin ADG714
@@ -61,5 +74,12 @@ void mux_reset(char on)
 void spi_mux_send(unsigned char byte)
 {   
     spi_i2s_data_transmit(SPI2, byte);
-    while(!spi_i2s_flag_get(SPI2, SPI_FLAG_TBE)){;}
+    //while(!spi_i2s_flag_get(SPI2, SPI_FLAG_TBE));    // only empty buffer
+    while(spi_i2s_flag_get(SPI2, SPI_FLAG_TRANS)); // full transfer
+}
+
+char wait_spi(void)
+{
+    while(spi_i2s_flag_get(SPI2, SPI_FLAG_TRANS)); // full transfer
+    return 1;
 }
