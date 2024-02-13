@@ -176,14 +176,18 @@ int main(void) {
 
     spi_mux_config();
 	Delay_ms(10);
-  //while(1){
+	mux_reset(0);
+while(1){
 	mux_set_sync(1);
-	spi_mux_send(0x01);
+	spi_mux_send(0x55);
 	mux_set_sync(0);
 	mux_set_sync(1);
-	spi_mux_send(0x02);
+	spi_mux_send(0x55);
 	mux_set_sync(0);
-  //}
+	
+
+	Delay_ms(100);
+}
 	//Delay_ms(1);
 	//mux_set_sync(1);
 	//spi_mux_send(0x02);

@@ -16,10 +16,10 @@ void spi_mux_config(void)
     gpio_output_options_set(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10 | GPIO_PIN_12 );
     /* set MUX SYNC as GPIO*/
     gpio_mode_set(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_11);
-    gpio_output_options_set(GPIOC, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_11);
+    gpio_output_options_set(GPIOC, GPIO_OTYPE_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_11);
     /* set MUX RESET as GPIO*/
     gpio_mode_set(GPIOB, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO_PIN_10);
-    gpio_output_options_set(GPIOB, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+    gpio_output_options_set(GPIOB, GPIO_OTYPE_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
 
     spi_parameter_struct spi_init_struct;
 
@@ -29,13 +29,11 @@ void spi_mux_config(void)
     spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;
     spi_init_struct.clock_polarity_phase = SPI_CK_PL_HIGH_PH_2EDGE;
     spi_init_struct.nss                  = SPI_NSS_SOFT;
-    spi_init_struct.prescale             = SPI_PSC_16;
+    spi_init_struct.prescale             = SPI_PSC_32;
     spi_init_struct.endian               = SPI_ENDIAN_MSB;
 
     spi_init(SPI2, &spi_init_struct);
-    spi_enable(SPI2);
-    mux_reset(0);
-	
+    spi_enable(SPI2);	
 }
 /*
 change level on SYNC pin ADG714
