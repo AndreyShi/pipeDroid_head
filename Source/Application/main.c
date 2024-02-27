@@ -175,24 +175,9 @@ int main(void) {
 	float direction;
 
     spi_mux_config();
-	Delay_ms(10);
-	mux_reset(0);
-while(1){
-	mux_set_sync(1);
-	spi_mux_send(0x1);
-	mux_set_sync(0);
-	mux_set_sync(1);
-	spi_mux_send(0x55);
-	mux_set_sync(0);
-	
-
-	Delay_ms(1000);
-}
-	//Delay_ms(1);
-	//mux_set_sync(1);
-	//spi_mux_send(0x02);
-	//mux_set_sync(0);
-
+	Delay_ms(2);
+    set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 
+    adc_init();
 	//while(1){;}
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();

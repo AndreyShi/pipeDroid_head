@@ -34,10 +34,11 @@ void spi_mux_config(void)
 
     spi_init(SPI2, &spi_init_struct);
     spi_enable(SPI2);	
+    mux_reset(0);
 }
 /*
 change level on SYNC pin ADG714
-char on - 1 - set low level (data reg is ready), 0 - set high level
+char on - 1 - set low level (shift register is enabled), 0 - set high level (input shift register is disabled)
 */
 void mux_set_sync(char on)
 {
@@ -80,4 +81,24 @@ char wait_spi(void)
 {
     while(spi_i2s_flag_get(SPI2, SPI_FLAG_TRANS)); // full transfer
     return 1;
+}
+/*
+set six muxes data
+const char* data - input data example data: "x01x02x03x04x05x06"
+x01 - data for u10 
+x02 - data for u11
+x03 - data for u12
+x04 - data for u2
+x05 - data for u3
+x06 - data for u4
+*/
+void set_muxes(const char* data)
+{
+    int i = 6;
+    while(i--)
+    {
+        mux_set_sync(1);
+        spi_mux_send(*data++);
+        mux_set_sync(0);
+    }
 }
