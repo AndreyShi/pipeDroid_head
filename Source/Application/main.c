@@ -179,14 +179,14 @@ int main(void) {
 	mux_reset(0);
 while(1){
 	mux_set_sync(1);
-	spi_mux_send(0x55);
+	spi_mux_send(0x1);
 	mux_set_sync(0);
 	mux_set_sync(1);
 	spi_mux_send(0x55);
 	mux_set_sync(0);
 	
 
-	Delay_ms(100);
+	Delay_ms(1000);
 }
 	//Delay_ms(1);
 	//mux_set_sync(1);

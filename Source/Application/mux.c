@@ -29,7 +29,7 @@ void spi_mux_config(void)
     spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;
     spi_init_struct.clock_polarity_phase = SPI_CK_PL_HIGH_PH_2EDGE;
     spi_init_struct.nss                  = SPI_NSS_SOFT;
-    spi_init_struct.prescale             = SPI_PSC_32;
+    spi_init_struct.prescale             = SPI_PSC_256;
     spi_init_struct.endian               = SPI_ENDIAN_MSB;
 
     spi_init(SPI2, &spi_init_struct);
@@ -72,8 +72,8 @@ void mux_reset(char on)
 void spi_mux_send(unsigned char byte)
 {   
     spi_i2s_data_transmit(SPI2, byte);
-    //while(!spi_i2s_flag_get(SPI2, SPI_FLAG_TBE));    // only empty buffer
-    while(spi_i2s_flag_get(SPI2, SPI_FLAG_TRANS)); // full transfer
+    while(!spi_i2s_flag_get(SPI2, SPI_FLAG_TBE));    // only empty buffer
+    //while(spi_i2s_flag_get(SPI2, SPI_FLAG_TRANS)); // full transfer
 }
 
 char wait_spi(void)
