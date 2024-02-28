@@ -2,7 +2,11 @@
 #include "adc.h"
 uint16_t data_adc;
 void adc_init(){
-
+    
+    /* enable GPIOA clock */
+    rcu_periph_clock_enable(RCU_GPIOA);
+    /* enable GPIOB clock */
+    rcu_periph_clock_enable(RCU_GPIOB);
     rcu_periph_clock_enable(RCU_ADC0);
     /* config ADC clock */
     adc_clock_config(ADC_ADCCK_PCLK2_DIV8);
