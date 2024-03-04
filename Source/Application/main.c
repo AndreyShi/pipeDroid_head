@@ -121,7 +121,7 @@ int fputc(int ch, FILE *f)
     return ch;
 }
 
-
+float adc_volts[4];
 
 /**
  * @brief  Main program
@@ -173,11 +173,16 @@ int main(void) {
 	float rotation;
 	float fastRotation;
 	float direction;
+	
 
     spi_mux_config();
 	Delay_ms(2);
     set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 
     adc_init();
+	adc_volts[0] = adc_channel_sample_f(AOUT1);
+	adc_volts[1] = adc_channel_sample_f(AOUT2);
+	adc_volts[2] = adc_channel_sample_f(AOUT3);
+	adc_volts[3] = adc_channel_sample_f(AOUT4);
 	//while(1){;}
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();

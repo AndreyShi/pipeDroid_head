@@ -1,6 +1,9 @@
 #include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
 #include "adc.h"
+#define V_REF_EXT_21_PIN 2.505F
+#define ADC_RESOLUTION12BIT 4096
 uint16_t data_adc;
+float volt_adc;
 void adc_init(){
     
     /* enable GPIOA clock */
@@ -34,6 +37,9 @@ void adc_init(){
     adc_external_trigger_source_config(ADC0, ADC_ROUTINE_CHANNEL, ADC_EXTTRIG_ROUTINE_T0_CH0);
     adc_external_trigger_config(ADC0, ADC_ROUTINE_CHANNEL, EXTERNAL_TRIGGER_DISABLE);
 
+    /* ADC temperature and Vref enable */
+    //adc_channel_16_to_18(ADC_TEMP_VREF_CHANNEL_SWITCH,ENABLE);
+
     /* enable ADC interface */
     adc_enable(ADC0);
     /* wait for ADC stability */
@@ -41,7 +47,7 @@ void adc_init(){
     /* ADC calibration and reset calibration */
     adc_calibration_enable(ADC0);
 
-    data_adc = adc_channel_sample(ADC_CHANNEL_8);
+    //volt_adc = adc_channel_sample(ADC_CHANNEL_8) * V_REF_EXT_21_PIN / ADC_RESOLUTION12BIT;
 }
 
 /*!
@@ -66,4 +72,18 @@ uint16_t adc_channel_sample(uint8_t channel)
     adc_flag_clear(ADC0, ADC_FLAG_EOC);
     /* return regular channel sample value */
     return (adc_routine_data_read(ADC0));
+}
+
+/*!
+    \brief      ADC channel sample
+    \param[in]  
+    ADC_CHANNEL_8 (PB0 AOUT1),
+    ADC_CHANNEL_9 (PB1 AOUT2),
+    ADC_CHANNEL_5 (PA5 AOUT3),
+    ADC_CHANNEL_6 (PA6 AOUT4)
+    \retval     float adc_volts
+*/
+float adc_channel_sample_f(uint8_t channel)
+{
+    return adc_channel_sample(channel) * V_REF_EXT_21_PIN / ADC_RESOLUTION12BIT;
 }
