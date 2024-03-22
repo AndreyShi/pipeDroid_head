@@ -54,7 +54,7 @@
 //#define IP_ADDR2   219
 #define IP_ADDR0   169
 #define IP_ADDR1   254
-#define IP_ADDR2   38
+#define IP_ADDR2   43
 
 /* MAC ADDRESS: MAC_ADDR0:MAC_ADDR1:MAC_ADDR2:MAC_ADDR3:MAC_ADDR4:MAC_ADDR5 */
 #define MAC_ADDR0   0x00
@@ -67,7 +67,7 @@
 //#define IP_ADDR2   100
 #if HEAD_PART==1
 //#define IP_ADDR3   100
-#define IP_ADDR3   199
+#define IP_ADDR3   150
 #define MAC_ADDR5   0x10
 #else
 #define IP_ADDR3   101
@@ -79,11 +79,11 @@
 //#define DEST_IP_ADDR2   219
 //#define DEST_IP_ADDR3   106
 
-//home ip
+//home ip ethrnet adapter Dhcp ip addres
 #define DEST_IP_ADDR0   169
 #define DEST_IP_ADDR1   254
-#define DEST_IP_ADDR2   38
-#define DEST_IP_ADDR3   200
+#define DEST_IP_ADDR2   43
+#define DEST_IP_ADDR3   151
 
 #define UDP_LOCAL_PORT    	10000   /* define the UDP local connection port */
 #define UDP_SERVER_PORT    	10001   /* define the UDP local connection port */

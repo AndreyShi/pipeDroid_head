@@ -122,7 +122,6 @@ int fputc(int ch, FILE *f)
 }
 
 float adc_volts[4];
-
 /**
  * @brief  Main program
  * @param  None
@@ -177,12 +176,19 @@ int main(void) {
 
     spi_mux_config();
 	Delay_ms(2);
-    set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 
+    set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1
+	set_muxes("\x00\x00\x00\x00\x0C\x00");// only on AIN6 for AOUT2
+	set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3
+	set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4
     adc_init();
+	while(0){
 	adc_volts[0] = adc_channel_sample_f(AOUT1);
 	adc_volts[1] = adc_channel_sample_f(AOUT2);
 	adc_volts[2] = adc_channel_sample_f(AOUT3);
 	adc_volts[3] = adc_channel_sample_f(AOUT4);
+
+	//Delay_ms(1);
+	}
 	//while(1){;}
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();
