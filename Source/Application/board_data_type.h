@@ -49,8 +49,8 @@ typedef struct {
     float gX;
     float gY;
     float gZ;
-    uint8_t trackState[4];		//не используется
-    uint32_t scanState;			//не используется
+    uint8_t trackState[3];		//состояние гусениц
+    uint8_t BoardState;		//Не используется
     tack_regs_t reg[3];
     coef_track_dt coef;
 } track_data_type;
