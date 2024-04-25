@@ -39,7 +39,7 @@ static uint32_t repeat_count;
 static uint16_t dev_adr = FIRST_MODBUS_ADR;
 extern void xMBPortSerial_IRQHandler(void);
 static int32_t encoder[3];
-static uint32_t trackState[3]={0,0,0};
+static uint32_t trackState_u32[3]={0,0,0};
 
 static uint16_t regAdr;
 static uint16_t regSize;
@@ -47,6 +47,8 @@ static uint16_t regSize;
 static int rx_flag[3]={0,0,0};
 
 tack_regs_t regs[3];
+
+static int Vmin=0;
 
 void protocol_init(void) {
 	eMBMasterInit(MB_RTU, 0,				//Not Used
@@ -92,13 +94,13 @@ uint32_t protocol_getSensState(uint32_t num){
 tack_regs_t protocol_regs(uint32_t num){
 	return regs[num];
 }
-
+/*
+return int :
+2 - rs485 with track is bad
+3 - rs485 with track is ok
+*/
 int protocol_getRxData(int track){
-	if (rx_flag[track]==1){
-		rx_flag[track]=0;
-		return 1;
-	}
-	return 0;
+	return rx_flag[track] ? 3 : 2;
 }
 
 bool protocol_write(void) {
@@ -135,13 +137,17 @@ bool protocol_read(void) {
 	return true;
 }
 
+int getVmin(void){
+	return Vmin;
+}
+
 protocol_state_t protocol_process(void) {
 	USHORT* data_ptr;
 	eMBMasterPoll();
 	switch (p_state) {
 	case pm_read:
 		dev_adr = FIRST_MODBUS_ADR;
-		eMBMasterReqReadHoldingRegister(dev_adr, 20, 4, 100);
+		eMBMasterReqReadHoldingRegister(dev_adr, 20, 7, 100);
 		delay_time = getTime_ms() + REPEAT_TIME;
 		repeat_count = 0;
 		p_state = pm_read_cmlt;
@@ -151,30 +157,33 @@ protocol_state_t protocol_process(void) {
 			regs[dev_adr-FIRST_MODBUS_ADR].cur=usMRegHoldBuf[dev_adr-1][20];
 			regs[dev_adr-FIRST_MODBUS_ADR].curLimit=usMRegHoldBuf[dev_adr-1][21];
 			regs[dev_adr-FIRST_MODBUS_ADR].step=usMRegHoldBuf[dev_adr-1][22];
-			regs[dev_adr-FIRST_MODBUS_ADR].res=usMRegHoldBuf[dev_adr-1][23];
+			Vmin = usMRegHoldBuf[dev_adr-1][23];
+			regs[dev_adr-FIRST_MODBUS_ADR].HallTicks=usMRegHoldBuf[dev_adr-1][24] + 65536 * usMRegHoldBuf[dev_adr-1][25];		
+			regs[dev_adr-FIRST_MODBUS_ADR].pwmLimitFlag = usMRegHoldBuf[dev_adr-1][26];
 			rx_flag[dev_adr-FIRST_MODBUS_ADR]=1;
 			//dev_adr++;
 			if (dev_adr > LAST_MODBUS_ADR) {
 				p_state = pm_ready;
 			} else {
-				eMBMasterReqReadHoldingRegister(dev_adr, 20, 4, 100);
+				eMBMasterReqReadHoldingRegister(dev_adr, 20, 7, 100);
 				delay_time = getTime_ms() + REPEAT_TIME;
 				repeat_count = 0;
 			}
 		} else if (eMBMasterWaitRequestFinish() != MB_MRE_MASTER_BUSY) {
 			if (getTime_ms() >= delay_time) {
 				if (repeat_count < MAX_REPEAT_COUNT) {
-					eMBMasterReqReadHoldingRegister(dev_adr, 20, 4, 100);
+					eMBMasterReqReadHoldingRegister(dev_adr, 20, 7, 100);
 					repeat_count++;
 					delay_time = getTime_ms() + REPEAT_TIME;
 				} else {
 					encoder[dev_adr-FIRST_MODBUS_ADR] = 0;
-					trackState[dev_adr-FIRST_MODBUS_ADR] = 0;
+					trackState_u32[dev_adr-FIRST_MODBUS_ADR] = 0;
+					rx_flag[dev_adr-FIRST_MODBUS_ADR]=0;
 					//dev_adr++;
 					if (dev_adr > LAST_MODBUS_ADR) {
 						p_state = pm_ready;
 					} else {
-						eMBMasterReqReadHoldingRegister(dev_adr, 20, 4, 100);
+						eMBMasterReqReadHoldingRegister(dev_adr, 20, 7, 100);
 						delay_time = getTime_ms() + REPEAT_TIME;
 						repeat_count = 0;
 					}
@@ -208,9 +217,9 @@ protocol_state_t protocol_process(void) {
 			p_state = pm_ready;
 		}else if (eMBMasterWaitRequestFinish() != MB_MRE_MASTER_BUSY) {
 			if (getTime_ms() >= delay_time) {
-				trackState[0] = 0;
-				trackState[1] = 0;
-				trackState[2] = 0;
+				trackState_u32[0] = 0;
+				trackState_u32[1] = 0;
+				trackState_u32[2] = 0;
 				p_state = pm_stopped;
 			}
 		}

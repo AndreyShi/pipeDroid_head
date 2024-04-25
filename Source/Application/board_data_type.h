@@ -18,10 +18,11 @@ typedef struct {
 } udp_motor_pack_type;
 
 typedef struct{
+    int32_t HallTicks;//Счётчик тиков Холла
 	uint16_t cur;
 	uint16_t curLimit;
 	uint16_t step;
-	uint16_t res;
+	uint16_t pwmLimitFlag;//Флаг срабатывания pwm>=pwmMax
 }tack_regs_t;
 
 typedef struct {
@@ -44,11 +45,11 @@ typedef struct{
 
 typedef struct {
     uint32_t time;
-    float Vin;
+    float Vin_min;
     float gX;
     float gY;
     float gZ;
-    uint8_t sensorState[4];		//не используется
+    uint8_t trackState[4];		//не используется
     uint32_t scanState;			//не используется
     tack_regs_t reg[3];
     coef_track_dt coef;

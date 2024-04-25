@@ -332,13 +332,11 @@ int main(void) {
 			data.gX = scaledAccelX_;
 			data.gY = scaledAccelY_;
 			data.gZ = scaledAccelZ_;
+			data.Vin_min = getVmin();
+			
 			for (int i = 0; i < 3; i++) {
-				if (protocol_getRxData(i) == 1) {
-					data.reg[i] = protocol_regs(i);
-				}else{
-					//здесь можно поставить флаг отсутствия связи с гусеницей
-				}
-
+				data.trackState[i] = protocol_getRxData(i);//здесь можно поставить флаг отсутствия связи с гусеницей
+				data.reg[i] = protocol_regs(i);
 			}
 			udp_Pack.pac_type = 0;
 			for (int i = 0; i < sizeof(data); i++) {

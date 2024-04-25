@@ -37,6 +37,7 @@ void protocol_IRQHandler(void);
 //uint32_t protocol_getSensState(uint32_t num);
 tack_regs_t protocol_regs(uint32_t num);
 int protocol_getRxData(int track);
+int getVmin(void);
 
 
 #endif /* SOURCE_APPLICATION_PROTOCOL_H_ */
