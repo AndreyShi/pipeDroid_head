@@ -78,7 +78,7 @@ static volatile UCHAR  ucMasterRTURcvBuf[MB_SER_PDU_SIZE_MAX];
 static volatile USHORT usMasterSendPDULength;
 
 static volatile UCHAR *pucMasterSndBufferCur;
-static volatile USHORT usMasterSndBufferCount;
+volatile USHORT usMasterSndBufferCount;
 
 static volatile USHORT usMasterRcvBufferPos;
 static volatile BOOL   xFrameIsBroadcast = FALSE;

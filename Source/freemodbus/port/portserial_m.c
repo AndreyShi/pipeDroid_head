@@ -190,15 +190,20 @@ void xMBPortSerial_IRQHandler(void) {
 	if ((isrflags & USART_SR_RXNE) != RESET_stm) {
 		//USART_ClearITPendingBit( USART3, USART_IT_RXNE );
 		pxMBMasterFrameCBByteReceived();
+		return;
 	}
 	if ((isrflags & USART_SR_TC) != RESET_stm) {
 		/* Clear the TC flag in the SR register by writing 0 to it */
 		USART_ClearFlag(RS485_PORT, USART_FLAG_TC_stm);
 		//pxMBFrameCBTransmitterEmpty();
 		vMBMasterPortSerialEnable( TRUE, FALSE);
+		return;
 	}
 	if ((isrflags & USART_SR_TXE) != RESET_stm) {
-		USART_ClearFlag(RS485_PORT, USART_FLAG_TXE);
+		//USART_ClearFlag(RS485_PORT, USART_FLAG_TXE);
+		extern volatile USHORT usMasterSndBufferCount;
+		if( usMasterSndBufferCount == 0 )
+		    {CLEAR_BIT(RS485_PORT->CR1, USART_CR1_TXEIE);}
 		pxMBMasterFrameCBTransmitterEmpty();
 	}
 }
