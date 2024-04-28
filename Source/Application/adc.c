@@ -12,7 +12,7 @@ void adc_init(){
     rcu_periph_clock_enable(RCU_GPIOB);
     rcu_periph_clock_enable(RCU_ADC0);
     /* config ADC clock */
-    adc_clock_config(ADC_ADCCK_PCLK2_DIV8);
+    adc_clock_config(ADC_ADCCK_PCLK2_DIV4); //HCLK 200 Mhz/2 (APB2presc) = PCLK2 100Mhz/4 = 25 Mhz
 
     /* config the GPIO as analog mode */
     gpio_mode_set(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_0);// ADC01 PB0 AOUT1
