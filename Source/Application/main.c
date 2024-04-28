@@ -62,7 +62,7 @@ track_data_type data;
 uint32_t rxByteCount = 0;
 uint32_t udpPacketNum = 0;
 pack_type udp_Pack;
-struct udp_pcb *upcb;
+struct udp_pcb *upcb = 0;
 volatile uint32_t wait_cmd_time = 0;
 volatile uint32_t modbus_write = 0;
 
@@ -120,8 +120,9 @@ int fputc(int ch, FILE *f)
     while(RESET == usart_flag_get(COM_PORT, USART_FLAG_TBE));
     return ch;
 }
-
+static void ETH_Setup(void);
 float adc_volts[4];
+char reset_ETN;
 /**
  * @brief  Main program
  * @param  None
@@ -129,7 +130,6 @@ float adc_volts[4];
  */
 int main(void) {
 	uint32_t index = 0;
-	struct ip_addr DestIPaddr;
 	err_t err;
 	GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -192,32 +192,7 @@ int main(void) {
 	//while(1){;}
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();
-
-	enet_system_setup();
-	/* Initilaize the LwIP stack */
-	LwIP_Init();
-	LwIp_initFlag = true;
-	/* Create a new UDP control block  */
-	upcb = udp_new();
-
-	if (upcb != NULL) {
-		/*assign destination IP address */
-		IP4_ADDR(&DestIPaddr, DEST_IP_ADDR0, DEST_IP_ADDR1, DEST_IP_ADDR2,
-				DEST_IP_ADDR3);
-		err = udp_bind(upcb, IP_ADDR_ANY, UDP_LOCAL_PORT);
-		if (err == ERR_OK) {
-			udp_recv(upcb, udp_receive_callback, NULL);
-		}
-		/* configure destination IP address and port */
-		err = udp_connect(upcb, &DestIPaddr, UDP_SERVER_PORT);
-
-		if (err == ERR_OK) {
-			/* Set a receive callback for the upcb */
-			udp_recv(upcb, udp_receive_callback, NULL);
-		} else {
-		}
-	} else {
-	}
+    ETH_Setup();
 
 	Delay_ms(10);
 	lsm330_setup(LSM330_GYR_FS_250DPS, LSM330_ACC_G_2G);
@@ -243,7 +218,8 @@ int main(void) {
 	uint8_t* dataPtr=(uint8_t*) &data;
 
 	while (1) {
-
+        if(reset_ETN)
+		    { ETH_Setup();}
 
 		protocol_process();
 
@@ -344,12 +320,46 @@ int main(void) {
 			}
 			data.coef = coef;
 			udp_sendBuf((uint8_t*) &udp_Pack);
-			readTime = getTime_ms() + 100;
+			readTime = getTime_ms() + 20;
 		}
 	}
 }
 
+static void ETH_Setup(void)
+{
+	err_t err;
+	struct ip_addr DestIPaddr;
 
+	enet_system_setup();
+	/* Initilaize the LwIP stack */
+	LwIP_Init();
+	LwIp_initFlag = true;
+	if(upcb != NULL)
+	    { udp_remove(upcb);}
+	/* Create a new UDP control block  */
+	upcb = udp_new();
+
+	if (upcb != NULL) {
+		/*assign destination IP address */
+		IP4_ADDR(&DestIPaddr, DEST_IP_ADDR0, DEST_IP_ADDR1, DEST_IP_ADDR2,
+				DEST_IP_ADDR3);
+		err = udp_bind(upcb, IP_ADDR_ANY, UDP_LOCAL_PORT);
+		if (err == ERR_OK) {
+			udp_recv(upcb, udp_receive_callback, NULL);
+		}
+		/* configure destination IP address and port */
+		err = udp_connect(upcb, &DestIPaddr, UDP_SERVER_PORT);
+
+		if (err == ERR_OK) {
+			/* Set a receive callback for the upcb */
+			udp_recv(upcb, udp_receive_callback, NULL);
+		} else {			
+		}
+	} else {		
+	}
+
+	reset_ETN = 0;	
+}
 
 int udp_printf(const char* format, ...) {
 	int ret;
@@ -399,7 +409,7 @@ void udp_sendBuf(char* udpTxBuf) {
 	if (udp_send(upcb, p) == ERR_OK) {
 
 	} else {
-
+		reset_ETN = 1;
 	}
 	pbuf_free(p);
 }
