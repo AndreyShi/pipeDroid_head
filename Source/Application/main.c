@@ -180,14 +180,15 @@ int main(void) {
     //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
 	//set_muxes("\x00\x00\x00\x00\x0C\x00");// only on AIN6 for AOUT2 bad
 	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
-	set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
+	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 bad
+	  set_muxes("\xC0\x00\x0C\x00\x0C\x03");
     adc_init();
 
     while(1)
 	{
 		if(inc_adc_v == 2000)
 		{break;}
-		float tmp = adc_channel_sample_f(AOUT4);
+		float tmp = adc_channel_sample_f(AOUT1);
 		if(tmp!= 0.F && tmp != 2.50438857F)
 		{adc_volts[inc_adc_v++] = tmp;}
 	}
