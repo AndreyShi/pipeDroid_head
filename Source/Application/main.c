@@ -121,7 +121,8 @@ int fputc(int ch, FILE *f)
     return ch;
 }
 static void ETH_Setup(void);
-float adc_volts[4];
+float adc_volts[2000];
+int inc_adc_v;
 char reset_ETN;
 /**
  * @brief  Main program
@@ -176,19 +177,21 @@ int main(void) {
 
     spi_mux_config();
 	Delay_ms(2);
-    set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1
-	set_muxes("\x00\x00\x00\x00\x0C\x00");// only on AIN6 for AOUT2
-	set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3
-	set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4
+    //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
+	//set_muxes("\x00\x00\x00\x00\x0C\x00");// only on AIN6 for AOUT2 bad
+	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
+	set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
     adc_init();
-	while(0){
-	adc_volts[0] = adc_channel_sample_f(AOUT1);
-	adc_volts[1] = adc_channel_sample_f(AOUT2);
-	adc_volts[2] = adc_channel_sample_f(AOUT3);
-	adc_volts[3] = adc_channel_sample_f(AOUT4);
 
-	//Delay_ms(1);
+    while(1)
+	{
+		if(inc_adc_v == 2000)
+		{break;}
+		float tmp = adc_channel_sample_f(AOUT4);
+		if(tmp!= 0.F && tmp != 2.50438857F)
+		{adc_volts[inc_adc_v++] = tmp;}
 	}
+
 	//while(1){;}
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();
