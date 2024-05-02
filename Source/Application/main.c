@@ -178,10 +178,10 @@ int main(void) {
     spi_mux_config();
 	Delay_ms(2);
     //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
-	//set_muxes("\x00\x00\x00\x00\x0C\x00");// only on AIN6 for AOUT2 bad
+	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 will test
 	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
 	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 bad
-	  set_muxes("\xC0\x00\x0C\x00\x0C\x03");
+	  set_muxes("\xC0\x00\x0C\x00\x30\x03");
     adc_init();
 
     while(1)
