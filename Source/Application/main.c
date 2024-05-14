@@ -178,18 +178,27 @@ int main(void) {
     spi_mux_config();
 	Delay_ms(2);
     //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
-	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 will test
+	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 ok
 	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
-	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 bad
+	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
 	  set_muxes("\xC0\x00\x0C\x00\x30\x03");
+	//подготовить функции для включения комбинаций датчиков:
+	//1  9 13 21
+    //2 10 14 22
+	//3 11 15 23
+	//4 12 16 24
+	//5 17
+	//6 18
+	//7 19
+	//8 20
     adc_init();
 
     while(1)
 	{
 		if(inc_adc_v == 2000)
 		{break;}
-		float tmp = adc_channel_sample_f(AOUT1);
-		if(tmp!= 0.F && tmp != 2.50438857F)
+		float tmp = adc_channel_sample_f(AOUT3);
+		//if(tmp!= 0.F && tmp != 2.50438857F)
 		{adc_volts[inc_adc_v++] = tmp;}
 	}
 
@@ -401,6 +410,7 @@ int udp_printf(const char* format, ...) {
 void udp_sendBuf(char* udpTxBuf) {
 	struct pbuf *p;
 	char* sPtr;
+	volatile err_t t;
 
 	/* allocate pbuf from pool*/
 	p = pbuf_alloc(PBUF_TRANSPORT, 1024, PBUF_POOL);
@@ -410,9 +420,12 @@ void udp_sendBuf(char* udpTxBuf) {
 		sPtr[index] = udpTxBuf[index];
 	}
 	/* send udp data */
-	if (udp_send(upcb, p) == ERR_OK) {
+	t = udp_send(upcb, p);
+	if ( t == ERR_OK) {
 
-	} else {
+	} else if(t == ERR_BUF)
+	    {reset_ETN = 1;}
+     else {
 		reset_ETN = 1;
 	}
 	pbuf_free(p);
