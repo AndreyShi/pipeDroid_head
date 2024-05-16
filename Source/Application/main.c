@@ -124,6 +124,7 @@ static void ETH_Setup(void);
 float adc_volts[2000];
 int inc_adc_v;
 char reset_ETN;
+uint16_t adc_buff[24][360];
 /**
  * @brief  Main program
  * @param  None
@@ -179,18 +180,20 @@ int main(void) {
 	Delay_ms(2);
     //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
 	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 ok
-	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
+	set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
 	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
-	  set_muxes("\xC0\x00\x0C\x00\x30\x03");
+	//  set_muxes("\xC0\x00\x0C\x00\x30\x03");
 	//подготовить функции для включения комбинаций датчиков:
-	//1  9 13 21
-    //2 10 14 22
-	//3 11 15 23
-	//4 12 16 24
-	//5 17
-	//6 18
-	//7 19
-	//8 20
+	//set_muxes("\x30\x00\xC0\x0C\x00\x30");//1(AOUT1)  9(AOUT2) 13(AOUT4) 21(AOUT3)   //1 итерация
+	//включть DMA AOUT1 AOUT2 AOUT3 AOUT4
+	//ждем пока заполнится 
+    //set_muxes("\xC0\x00\x30\x03\x00\xC0");//2(AOUT1) 10(AOUT2) 14(AOUT4) 22(AOUT3)   //2 итерация
+	//set_muxes("\x0C\x00\x03\xC0\x00\x0C");//3(AOUT1) 11(AOUT2) 15(AOUT4) 23(AOUT3)   //3
+	//set_muxes("\x03\x00\x0C\x30\x00\x03");//4(AOUT1) 12(AOUT2) 16(AOUT4) 24(AOUT3)   //4
+	//set_muxes("\x00\xC0\x00\x00\xC0\x00");//5(AOUT2) 17(AOUT4)                       //5
+	//set_muxes("\x00\x30\x00\x00\x30\x00");//6(AOUT2) 18(AOUT4)                       //6
+	//set_muxes("\x00\x0C\x00\x00\x0C\x00");//7(AOUT1) 19(AOUT3)                       //7
+	//set_muxes("\x00\x03\x00\x00\x03\x00");//8(AOUT1) 20(AOUT3)                       //8
     adc_init();
 
     while(1)

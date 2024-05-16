@@ -87,3 +87,34 @@ float adc_channel_sample_f(uint8_t channel)
 {
     return adc_channel_sample(channel) * V_REF_EXT_21_PIN / ADC_RESOLUTION12BIT;
 }
+/*
+uint32_t adc - ADC0, ADC1
+uint8_t dma_ch - DMA_CH0, DMA_CH1
+uint16_t* buff
+*/
+void dma_config(uint32_t adc,uint8_t dma_ch,uint16_t* buff)
+{
+    /* ADC_DMA_channel configuration */
+    dma_single_data_parameter_struct dma_single_data_parameter;
+
+    /* ADC DMA_channel configuration */
+    dma_deinit(DMA1, DMA_CH0);
+
+    /* initialize DMA single data mode */
+    dma_single_data_parameter.periph_addr = (uint32_t)(&ADC_RDATA(ADC0));
+    dma_single_data_parameter.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+    dma_single_data_parameter.memory0_addr = (uint32_t)(adc_value);
+    dma_single_data_parameter.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+    dma_single_data_parameter.periph_memory_width = DMA_PERIPH_WIDTH_16BIT;
+    dma_single_data_parameter.direction = DMA_PERIPH_TO_MEMORY;
+    dma_single_data_parameter.number = 360;
+    dma_single_data_parameter.priority = DMA_PRIORITY_HIGH;
+    dma_single_data_mode_init(DMA1, DMA_CH0, &dma_single_data_parameter);
+    dma_channel_subperipheral_select(DMA1, DMA_CH0, DMA_SUBPERI0);
+
+    /* enable DMA circulation mode */
+    dma_circulation_disable(DMA1, DMA_CH0);
+
+    /* enable DMA channel */
+    dma_channel_enable(DMA1, DMA_CH0);
+}
