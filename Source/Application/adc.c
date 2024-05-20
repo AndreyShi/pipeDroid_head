@@ -25,7 +25,7 @@ void adc_init(){
     /* ADC mode config */
     adc_sync_mode_config(ADC_SYNC_MODE_INDEPENDENT);
     /* ADC contineous function disable */
-    adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, DISABLE);
+    adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, ENABLE);
     /* ADC continous function enable */
     adc_special_function_config(ADC0, ADC_SCAN_MODE, DISABLE);
     /* ADC data alignment config */
@@ -38,7 +38,9 @@ void adc_init(){
     adc_external_trigger_config(ADC0, ADC_ROUTINE_CHANNEL, EXTERNAL_TRIGGER_DISABLE);
 
     /* ADC temperature and Vref enable */
-    //adc_channel_16_to_18(ADC_TEMP_VREF_CHANNEL_SWITCH,ENABLE);
+        /* ADC DMA function enable */
+    adc_dma_request_after_last_enable(ADC0);
+    adc_dma_mode_enable(ADC0);
 
     /* enable ADC interface */
     adc_enable(ADC0);
@@ -90,31 +92,38 @@ float adc_channel_sample_f(uint8_t channel)
 /*
 uint32_t adc - ADC0, ADC1
 uint8_t dma_ch - DMA_CH0, DMA_CH1
+uint8_t ADCchannel - ADC_CHANNEL_8 (PB0 AOUT1),ADC_CHANNEL_9 (PB1 AOUT2),ADC_CHANNEL_5 (PA5 AOUT3),ADC_CHANNEL_6 (PA6 AOUT4)
 uint16_t* buff
 */
-void dma_config(uint32_t adc,uint8_t dma_ch,uint16_t* buff)
+void dma_config(uint32_t adc,uint8_t dma_ch,uint16_t* buff,uint8_t ADCchannel)
 {
+        /* enable DMA clock */
+    rcu_periph_clock_enable(RCU_DMA1);
     /* ADC_DMA_channel configuration */
     dma_single_data_parameter_struct dma_single_data_parameter;
 
     /* ADC DMA_channel configuration */
-    dma_deinit(DMA1, DMA_CH0);
+    dma_deinit(DMA1, dma_ch);
 
     /* initialize DMA single data mode */
     dma_single_data_parameter.periph_addr = (uint32_t)(&ADC_RDATA(ADC0));
     dma_single_data_parameter.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
-    dma_single_data_parameter.memory0_addr = (uint32_t)(adc_value);
+    dma_single_data_parameter.memory0_addr = (uint32_t)(buff);
     dma_single_data_parameter.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
     dma_single_data_parameter.periph_memory_width = DMA_PERIPH_WIDTH_16BIT;
     dma_single_data_parameter.direction = DMA_PERIPH_TO_MEMORY;
     dma_single_data_parameter.number = 360;
     dma_single_data_parameter.priority = DMA_PRIORITY_HIGH;
-    dma_single_data_mode_init(DMA1, DMA_CH0, &dma_single_data_parameter);
-    dma_channel_subperipheral_select(DMA1, DMA_CH0, DMA_SUBPERI0);
+    dma_single_data_mode_init(DMA1, dma_ch, &dma_single_data_parameter);
+    dma_channel_subperipheral_select(DMA1, dma_ch, DMA_SUBPERI0);
 
-    /* enable DMA circulation mode */
-    dma_circulation_disable(DMA1, DMA_CH0);
+    /* disable DMA circulation mode */
+    dma_circulation_disable(DMA1, dma_ch);
 
     /* enable DMA channel */
-    dma_channel_enable(DMA1, DMA_CH0);
+    dma_channel_enable(DMA1, dma_ch);
+
+    adc_routine_channel_config(ADC0, 0U, ADCchannel, ADC_SAMPLETIME_3);
+    /* ADC software trigger enable */
+    adc_software_trigger_enable(ADC0, ADC_ROUTINE_CHANNEL);
 }

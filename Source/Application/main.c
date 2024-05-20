@@ -178,9 +178,12 @@ int main(void) {
 
     spi_mux_config();
 	Delay_ms(2);
+	adc_init();
     //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
 	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 ok
 	set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
+	dma_config(ADC0,DMA_CH0,adc_buff[23],AOUT3);
+	while(1){;}
 	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
 	//  set_muxes("\xC0\x00\x0C\x00\x30\x03");
 	//подготовить функции для включения комбинаций датчиков:
@@ -194,7 +197,7 @@ int main(void) {
 	//set_muxes("\x00\x30\x00\x00\x30\x00");//6(AOUT2) 18(AOUT4)                       //6
 	//set_muxes("\x00\x0C\x00\x00\x0C\x00");//7(AOUT1) 19(AOUT3)                       //7
 	//set_muxes("\x00\x03\x00\x00\x03\x00");//8(AOUT1) 20(AOUT3)                       //8
-    adc_init();
+    
 
     while(1)
 	{

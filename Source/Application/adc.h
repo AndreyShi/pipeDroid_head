@@ -9,5 +9,5 @@
 void adc_init(void);
 uint16_t adc_channel_sample(uint8_t channel);
 float adc_channel_sample_f(uint8_t channel);
-void dma_config(void);
+void dma_config(uint32_t adc,uint8_t dma_ch,uint16_t* buff,uint8_t ADCchannel);
 #endif
