@@ -106,7 +106,7 @@ void dma_config(uint32_t adc,uint8_t dma_ch,uint16_t* buff,uint8_t ADCchannel)
     dma_deinit(DMA1, dma_ch);
 
     /* initialize DMA single data mode */
-    dma_single_data_parameter.periph_addr = (uint32_t)(&ADC_RDATA(ADC0));
+    dma_single_data_parameter.periph_addr = (uint32_t)(&ADC_RDATA(adc));
     dma_single_data_parameter.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
     dma_single_data_parameter.memory0_addr = (uint32_t)(buff);
     dma_single_data_parameter.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
@@ -123,7 +123,7 @@ void dma_config(uint32_t adc,uint8_t dma_ch,uint16_t* buff,uint8_t ADCchannel)
     /* enable DMA channel */
     dma_channel_enable(DMA1, dma_ch);
 
-    adc_routine_channel_config(ADC0, 0U, ADCchannel, ADC_SAMPLETIME_3);
+    adc_routine_channel_config(adc, 0U, ADCchannel, ADC_SAMPLETIME_3);
     /* ADC software trigger enable */
-    adc_software_trigger_enable(ADC0, ADC_ROUTINE_CHANNEL);
+    adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
 }
