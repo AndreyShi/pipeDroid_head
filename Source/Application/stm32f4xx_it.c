@@ -144,7 +144,14 @@ void USARTx_IRQHandler(void) {
 	protocol_IRQHandler();
 }
 
-
+void DMA2_Stream0_IRQHandler(void)
+{
+	//очистить флаг, переключить на другой канал 
+	__asm("nop");
+    if(dma_interrupt_flag_get(DMA1, DMA_CH0, DMA_INT_FLAG_FTF)) {
+        dma_interrupt_flag_clear(DMA1, DMA_CH0, DMA_INT_FLAG_FTF);
+    }
+}
 
 
 

@@ -182,8 +182,8 @@ int main(void) {
     //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
 	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 ok
 	set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
-	dma_config(ADC0,DMA_CH0,adc_buff[23],AOUT3);
-	while(1){;}
+	dma_config(ADC0,DMA1,DMA_CH0,adc_buff[23],AOUT3);
+	//while(1){;}
 	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
 	//  set_muxes("\xC0\x00\x0C\x00\x30\x03");
 	//подготовить функции для включения комбинаций датчиков:
@@ -198,12 +198,17 @@ int main(void) {
 	//set_muxes("\x00\x0C\x00\x00\x0C\x00");//7(AOUT1) 19(AOUT3)                       //7
 	//set_muxes("\x00\x03\x00\x00\x03\x00");//8(AOUT1) 20(AOUT3)                       //8
     
-
-    while(1)
+    //adc_channel_sample_f(AOUT3);
+	while(1)
+	{
+		if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET)
+		{break;}
+	}
+    while(0)
 	{
 		if(inc_adc_v == 2000)
 		{break;}
-		float tmp = adc_channel_sample_f(AOUT3);
+		float tmp = adc_wait_result_f();
 		//if(tmp!= 0.F && tmp != 2.50438857F)
 		{adc_volts[inc_adc_v++] = tmp;}
 	}
