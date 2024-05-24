@@ -159,6 +159,22 @@ void dma_config(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint
     adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
 }
 
+void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint16_t* buff,uint8_t dma_it)
+{
+    dma_flag_clear(dma, dma_ch, DMA_FLAG_FTF);
+    dma_flag_clear(dma, dma_ch, DMA_FLAG_HTF);
+    dma_channel_disable(dma, dma_ch);
+
+    adc_dma_mode_disable(adc); 
+    adc_dma_mode_enable(adc);           
+    adc_flag_clear(adc, ADC_FLAG_EOC);
+    adc_flag_clear(adc, ADC_FLAG_STRC);
+    adc_flag_clear(adc, ADC_FLAG_ROVF);
+
+    dma_transfer_number_config(dma,dma_ch, 360);
+    dma_channel_enable(dma, dma_ch);
+}
+
 int iter;
 
 void adc_main_algorithm(void)
@@ -167,9 +183,8 @@ void adc_main_algorithm(void)
 	    if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET)
 		    {  
                 __asm("nop");
-                dma_flag_clear(DMA1, DMA_CH0, DMA_FLAG_FTF);
-                //выход в алгоритм
-                //нужно чтото сделать чтобы запустить цикл преобразования заново
+                dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[23],0);
+                return;
             }
             else
                 { return;}
