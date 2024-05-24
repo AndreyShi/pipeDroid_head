@@ -9,6 +9,7 @@ uint16_t data_adc;
 float volt_adc;
 
 uint16_t adc_buff[24][360];
+int iab;
 
 void adc_init(){
     
@@ -143,10 +144,10 @@ void dma_config(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint
 
     if(dma_it == 1)
     {
-    /* Enable the DMA Interrupt */
-    dma_interrupt_enable(dma, dma_ch, DMA_CHXCTL_FTFIE);    
-    //nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
-    nvic_irq_enable(DMA1_Channel0_IRQn, 0, 0);  // запускаются прерывания в которых нужно очищать флаг (в STM файле это DMA2_Stream0_IRQHandler)
+        /* Enable the DMA Interrupt */
+        dma_interrupt_enable(dma, dma_ch, DMA_CHXCTL_FTFIE);    
+        //nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
+        nvic_irq_enable(DMA1_Channel0_IRQn, 0, 0);  // запускаются прерывания в которых нужно очищать флаг (в STM файле это DMA2_Stream0_IRQHandler)
     }
     /* disable DMA circulation mode */
     dma_circulation_disable(dma, dma_ch);
@@ -159,42 +160,62 @@ void dma_config(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint
     adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
 }
 
-void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint16_t* buff,uint8_t dma_it)
+void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint16_t* buff)
 {
     dma_flag_clear(dma, dma_ch, DMA_FLAG_FTF);
     dma_flag_clear(dma, dma_ch, DMA_FLAG_HTF);
     dma_channel_disable(dma, dma_ch);
 
+    adc_special_function_config(adc, ADC_CONTINUOUS_MODE, DISABLE);
     adc_dma_mode_disable(adc); 
     adc_dma_mode_enable(adc);           
     adc_flag_clear(adc, ADC_FLAG_EOC);
     adc_flag_clear(adc, ADC_FLAG_STRC);
     adc_flag_clear(adc, ADC_FLAG_ROVF);
-
-    dma_transfer_number_config(dma,dma_ch, 360);
+    adc_special_function_config(adc, ADC_CONTINUOUS_MODE, ENABLE);
+        //adc 12.5 MHZ * ADC_SAMPLETIME_112 = 0.00000896 Sec = 111607 Hz for signal 300 Hz
+    adc_routine_channel_config(adc, 0U, ADCchannel, ADC_SAMPLETIME_112); 
+    
+    dma_periph_address_config(dma, dma_ch, (uint32_t)(&ADC_RDATA(adc)));
+    dma_memory_address_config(dma, dma_ch, dma == DMA_CH1 ? 1 : 0, (uint32_t)buff);
+    dma_transfer_number_config(dma, dma_ch, 360);
     dma_channel_enable(dma, dma_ch);
-}
 
-int iter;
+    /* ADC software trigger enable */
+    adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
+}
 
 void adc_main_algorithm(void)
 {
-    if(iter != 0){
-	    if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET)
-		    {  
+	if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET)
+	{  
+        iab++;
+        if(iab >= 5)
+            {
+                iab = 0;
                 __asm("nop");
-                dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[23],0);
-                return;
             }
-            else
-                { return;}
-    }
-    
-    set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
-	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 ok
+        
+        if(iab == 0)
+        {
+            set_muxes("\x00\x00\x00\x00\x00\x30");// only on AIN0 for AOUT1
+	        dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 1){
+            set_muxes("\x00\x00\x00\x00\x00\xC0");// only on AIN1 for AOUT1
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 2){
+            set_muxes("\x00\x00\x00\x00\x00\x0C");// only on AIN2 for AOUT1
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 3){
+            set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 4){
+            set_muxes("\x00\x00\x00\x00\xC0\x00");// only on AIN4 for AOUT2
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
+        }
+    }  
 	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
-	dma_config(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[23],0);
-    iter++;
+
 	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
 	//  set_muxes("\xC0\x00\x0C\x00\x30\x03");
 	//подготовить функции для включения комбинаций датчиков:
