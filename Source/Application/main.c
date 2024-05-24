@@ -121,10 +121,9 @@ int fputc(int ch, FILE *f)
     return ch;
 }
 static void ETH_Setup(void);
-float adc_volts[2000];
-int inc_adc_v;
+
 char reset_ETN;
-uint16_t adc_buff[24][360];
+
 /**
  * @brief  Main program
  * @param  None
@@ -179,41 +178,6 @@ int main(void) {
     spi_mux_config();
 	Delay_ms(2);
 	adc_init();
-    //set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
-	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 ok
-	set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
-	dma_config(ADC0,DMA1,DMA_CH0,adc_buff[23],AOUT3);
-	//while(1){;}
-	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
-	//  set_muxes("\xC0\x00\x0C\x00\x30\x03");
-	//подготовить функции для включения комбинаций датчиков:
-	//set_muxes("\x30\x00\xC0\x0C\x00\x30");//1(AOUT1)  9(AOUT2) 13(AOUT4) 21(AOUT3)   //1 итерация
-	//включть DMA AOUT1 AOUT2 AOUT3 AOUT4
-	//ждем пока заполнится 
-    //set_muxes("\xC0\x00\x30\x03\x00\xC0");//2(AOUT1) 10(AOUT2) 14(AOUT4) 22(AOUT3)   //2 итерация
-	//set_muxes("\x0C\x00\x03\xC0\x00\x0C");//3(AOUT1) 11(AOUT2) 15(AOUT4) 23(AOUT3)   //3
-	//set_muxes("\x03\x00\x0C\x30\x00\x03");//4(AOUT1) 12(AOUT2) 16(AOUT4) 24(AOUT3)   //4
-	//set_muxes("\x00\xC0\x00\x00\xC0\x00");//5(AOUT2) 17(AOUT4)                       //5
-	//set_muxes("\x00\x30\x00\x00\x30\x00");//6(AOUT2) 18(AOUT4)                       //6
-	//set_muxes("\x00\x0C\x00\x00\x0C\x00");//7(AOUT1) 19(AOUT3)                       //7
-	//set_muxes("\x00\x03\x00\x00\x03\x00");//8(AOUT1) 20(AOUT3)                       //8
-    
-    //adc_channel_sample_f(AOUT3);
-	while(1)
-	{
-		if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET)
-		{break;}
-	}
-    while(0)
-	{
-		if(inc_adc_v == 2000)
-		{break;}
-		float tmp = adc_wait_result_f();
-		//if(tmp!= 0.F && tmp != 2.50438857F)
-		{adc_volts[inc_adc_v++] = tmp;}
-	}
-
-	//while(1){;}
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();
     ETH_Setup();
@@ -242,6 +206,9 @@ int main(void) {
 	uint8_t* dataPtr=(uint8_t*) &data;
 
 	while (1) {
+
+		adc_main_algorithm();
+
         if(reset_ETN)
 		    { ETH_Setup();}
 

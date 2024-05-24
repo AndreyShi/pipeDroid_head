@@ -1,11 +1,15 @@
 #include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
 #include "adc.h"
+#include "mux.h"
 //#include "stm32f4xx.h" при подключении stm файла не работает adc
 
 #define V_REF_EXT_21_PIN 2.505F
 #define ADC_RESOLUTION12BIT 4096
 uint16_t data_adc;
 float volt_adc;
+
+uint16_t adc_buff[24][360];
+
 void adc_init(){
     
     /* enable GPIOA clock */
@@ -14,7 +18,10 @@ void adc_init(){
     rcu_periph_clock_enable(RCU_GPIOB);
     rcu_periph_clock_enable(RCU_ADC0);
     /* config ADC clock */
-    adc_clock_config(ADC_ADCCK_PCLK2_DIV4); //HCLK 200 Mhz/2 (APB2presc) = PCLK2 100Mhz/4 = 25 Mhz
+    // автоматически устанавливается AHB или APB2
+    //HCLK 200 Mhz/2 (APB2presc) = PCLK2 100Mhz/4 = 25 Mhz
+    //HCLK 200 Mhz/2 (APB2presc) = PCLK2 100Mhz/8 = 12,5 Mhz
+    adc_clock_config(ADC_ADCCK_PCLK2_DIV8); 
 
     /* config the GPIO as analog mode */
     gpio_mode_set(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_0);// ADC01 PB0 AOUT1
@@ -102,12 +109,14 @@ float adc_channel_sample_f(uint8_t channel)
     return adc_channel_sample(channel) * V_REF_EXT_21_PIN / ADC_RESOLUTION12BIT;
 }
 /*
-uint32_t adc - ADC0, ADC1
-uint8_t dma_ch - DMA_CH0, DMA_CH1
-uint8_t ADCchannel - ADC_CHANNEL_8 (PB0 AOUT1),ADC_CHANNEL_9 (PB1 AOUT2),ADC_CHANNEL_5 (PA5 AOUT3),ADC_CHANNEL_6 (PA6 AOUT4)
-uint16_t* buff
+uint32_t adc       - переферия ADC0, ADC1
+uint8_t ADCchannel - канал ADC_CHANNEL_8 (PB0 AOUT1),ADC_CHANNEL_9 (PB1 AOUT2),ADC_CHANNEL_5 (PA5 AOUT3),ADC_CHANNEL_6 (PA6 AOUT4)
+uint32_t dma       - переферия DMA0, DMA1
+uint8_t dma_ch     - канал DMA_CH0, DMA_CH1
+uint16_t* buff     - буфер для приема
+uint8_t dma_it     - (1)активировать прерывание по окончанию пересылки в буфер или нет(0)
 */
-void dma_config(uint32_t adc,uint32_t dma,uint8_t dma_ch,uint16_t* buff,uint8_t ADCchannel)
+void dma_config(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint16_t* buff,uint8_t dma_it)
 {
         /* enable DMA clock */
     if(dma == DMA0)
@@ -132,23 +141,69 @@ void dma_config(uint32_t adc,uint32_t dma,uint8_t dma_ch,uint16_t* buff,uint8_t 
     dma_single_data_mode_init(dma, dma_ch, &dma_single_data_parameter);
     dma_channel_subperipheral_select(dma, dma_ch, DMA_SUBPERI0);
 
+    if(dma_it == 1)
+    {
     /* Enable the DMA Interrupt */
     dma_interrupt_enable(dma, dma_ch, DMA_CHXCTL_FTFIE);    
     //nvic_priority_group_set(NVIC_PRIGROUP_PRE2_SUB2);
     nvic_irq_enable(DMA1_Channel0_IRQn, 0, 0);  // запускаются прерывания в которых нужно очищать флаг (в STM файле это DMA2_Stream0_IRQHandler)
-
+    }
     /* disable DMA circulation mode */
     dma_circulation_disable(dma, dma_ch);
     //dma_circulation_enable(dma, dma_ch);
     /* enable DMA channel */
     dma_channel_enable(dma, dma_ch);
-
-    adc_routine_channel_config(adc, 0U, ADCchannel, ADC_SAMPLETIME_3);
+    //adc 12.5 MHZ * ADC_SAMPLETIME_112 = 0.00000896 Sec = 111607 Hz for signal 300 Hz
+    adc_routine_channel_config(adc, 0U, ADCchannel, ADC_SAMPLETIME_112); 
     /* ADC software trigger enable */
     adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
 }
 
+int iter;
+
+void adc_main_algorithm(void)
+{
+    if(iter != 0){
+	    if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET)
+		    {  
+                __asm("nop");
+                dma_flag_clear(DMA1, DMA_CH0, DMA_FLAG_FTF);
+                //выход в алгоритм
+                //нужно чтото сделать чтобы запустить цикл преобразования заново
+            }
+            else
+                { return;}
+    }
+    
+    set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1 ok
+	//set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2 ok
+	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
+	dma_config(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[23],0);
+    iter++;
+	//set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4 ok
+	//  set_muxes("\xC0\x00\x0C\x00\x30\x03");
+	//подготовить функции для включения комбинаций датчиков:
+
+    //set_muxes("\x30\x00\xC0\x0C\x00\x30");//1(AOUT1)  9(AOUT2) 13(AOUT4) 21(AOUT3)   //1 итерация
+    //set_muxes("\xC0\x00\x30\x03\x00\xC0");//2(AOUT1) 10(AOUT2) 14(AOUT4) 22(AOUT3)   //2 итерация
+	//set_muxes("\x0C\x00\x03\xC0\x00\x0C");//3(AOUT1) 11(AOUT2) 15(AOUT4) 23(AOUT3)   //3
+	//set_muxes("\x03\x00\x0C\x30\x00\x03");//4(AOUT1) 12(AOUT2) 16(AOUT4) 24(AOUT3)   //4
+	//set_muxes("\x00\xC0\x00\x00\xC0\x00");//5(AOUT2) 17(AOUT4)                       //5
+	//set_muxes("\x00\x30\x00\x00\x30\x00");//6(AOUT2) 18(AOUT4)                       //6
+	//set_muxes("\x00\x0C\x00\x00\x0C\x00");//7(AOUT1) 19(AOUT3)                       //7
+	//set_muxes("\x00\x03\x00\x00\x03\x00");//8(AOUT1) 20(AOUT3)                       //8
+}
+//GD версия обработчика
 void DMA1_Channel0_IRQHandler(void)
 {
     __asm("nop");
+}
+//STM версия обработчика
+void DMA2_Stream0_IRQHandler(void)
+{
+	//очистить флаг, переключить на другой канал 
+	__asm("nop");
+    if(dma_interrupt_flag_get(DMA1, DMA_CH0, DMA_INT_FLAG_FTF)) {
+        dma_interrupt_flag_clear(DMA1, DMA_CH0, DMA_INT_FLAG_FTF);
+    }
 }

@@ -29,7 +29,9 @@ void spi_mux_config(void)
     spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;
     spi_init_struct.clock_polarity_phase = SPI_CK_PL_HIGH_PH_2EDGE;
     spi_init_struct.nss                  = SPI_NSS_SOFT;
-    spi_init_struct.prescale             = SPI_PSC_256;
+    // SYSCLK 200Mhz / APB1 4 = 50 Mhz / 256 = SPI speed 0.195312 Mhz  6 байт для установки mux 0,000244 sec
+    // SYSCLK 200Mhz / APB1 4 = 50 Mhz / 32  = SPI speed 1.562500 Mhz  6 байт для установки mux 0,000031 sec
+    spi_init_struct.prescale             = SPI_PSC_32;   
     spi_init_struct.endian               = SPI_ENDIAN_MSB;
 
     spi_init(SPI2, &spi_init_struct);
