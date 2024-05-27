@@ -212,6 +212,63 @@ void adc_main_algorithm(void)
         }else if(iab == 4){
             set_muxes("\x00\x00\x00\x00\xC0\x00");// only on AIN4 for AOUT2
             dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 5){
+            set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 6){
+            set_muxes("\x00\x00\x00\x00\x0C\x00");// only on AIN6 for AOUT1
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 7){
+            set_muxes("\x00\x00\x00\x00\x03\x00");// only on AIN7 for AOUT1
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 8){
+            set_muxes("\x00\x00\x00\x0C\x00\x00");// only on AIN8 for AOUT2
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 9){
+            set_muxes("\x00\x00\x00\x03\x00\x00");// only on AIN9 for AOUT2
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 10){
+            set_muxes("\x00\x00\x00\xC0\x00\x00");// only on AIN10 for AOUT2
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 11){
+            set_muxes("\x00\x00\x00\x30\x00\x00");// only on AIN11 for AOUT2
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 12){
+            set_muxes("\x30\x00\x00\x00\x00\x00");// only on AIN12 for AOUT4
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 13){
+            set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 14){
+            set_muxes("\x0C\x00\x00\x00\x00\x00");// only on AIN14 for AOUT4
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 15){
+            set_muxes("\x03\x00\x00\x00\x00\x00");// only on AIN15 for AOUT4
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 16){
+            set_muxes("\x00\xC0\x00\x00\x00\x00");// only on AIN16 for AOUT4
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 17){
+            set_muxes("\x00\x30\x00\x00\x00\x00");// only on AIN17 for AOUT4
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 18){
+            set_muxes("\x00\x0C\x00\x00\x00\x00");// only on AIN18 for AOUT3
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 19){
+            set_muxes("\x00\x03\x00\x00\x00\x00");// only on AIN19 for AOUT3
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 20){
+            set_muxes("\x00\x00\xC0\x00\x00\x00");// only on AIN20 for AOUT3
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 21){
+            set_muxes("\x00\x00\x30\x00\x00\x00");// only on AIN21 for AOUT3
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 22){
+            set_muxes("\x00\x00\x03\x00\x00\x00");// only on AIN22 for AOUT3
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
+        }else if(iab == 23){
+            set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
         }
     }  
 	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
