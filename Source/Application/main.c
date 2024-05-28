@@ -179,7 +179,7 @@ int main(void) {
 	Delay_ms(2);
 	adc_init();
 	set_muxes("\x00\x00\x00\x00\x00\x30");// only on AIN0 for AOUT1 ok
-	dma_config(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab],0);
+	dma_config(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab],1);
 	/* configure ethernet (GPIOs, clocks, MAC, DMA) */
 	//ETH_BSP_Config();
     ETH_Setup();

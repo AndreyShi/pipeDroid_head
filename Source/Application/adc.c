@@ -10,8 +10,17 @@ float volt_adc;
 
 uint16_t adc_buff[24][360];
 int iab;
+char flag_dma_finish;
 
 void adc_init(){
+    
+    for(int i = 0; i < 24;i++)
+    {
+        for(int j = 0; j < 360;j++)
+        {
+             adc_buff[i][j] = 0xffff;
+        }
+    }
     
     /* enable GPIOA clock */
     rcu_periph_clock_enable(RCU_GPIOA);
@@ -49,7 +58,7 @@ void adc_init(){
 
     /* ADC temperature and Vref enable */
         /* ADC DMA function enable */
-    //adc_dma_request_after_last_enable(ADC0);
+    adc_dma_request_after_last_enable(ADC0);
     adc_dma_mode_enable(ADC0);
 
     /* enable ADC interface */
@@ -169,9 +178,7 @@ void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,ui
     adc_special_function_config(adc, ADC_CONTINUOUS_MODE, DISABLE);
     adc_dma_mode_disable(adc); 
     adc_dma_mode_enable(adc);           
-    adc_flag_clear(adc, ADC_FLAG_EOC);
-    adc_flag_clear(adc, ADC_FLAG_STRC);
-    adc_flag_clear(adc, ADC_FLAG_ROVF);
+    adc_flag_clear(adc, ADC_FLAG_EOC | ADC_FLAG_STRC | ADC_FLAG_ROVF);
     adc_special_function_config(adc, ADC_CONTINUOUS_MODE, ENABLE);
         //adc 12.5 MHZ * ADC_SAMPLETIME_112 = 0.00000896 Sec = 111607 Hz for signal 300 Hz
     adc_routine_channel_config(adc, 0U, ADCchannel, ADC_SAMPLETIME_112); 
@@ -180,17 +187,18 @@ void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,ui
     dma_memory_address_config(dma, dma_ch, dma == DMA_CH1 ? 1 : 0, (uint32_t)buff);
     dma_transfer_number_config(dma, dma_ch, 360);
     dma_channel_enable(dma, dma_ch);
-
+    adc_flag_clear(adc, ADC_FLAG_EOC | ADC_FLAG_STRC | ADC_FLAG_ROVF);
     /* ADC software trigger enable */
     adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
 }
 
 void adc_main_algorithm(void)
 {
-	if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET)
+	if(dma_flag_get(DMA1, DMA_CH0, DMA_FLAG_FTF) == SET || flag_dma_finish == SET)
 	{  
+        flag_dma_finish = RESET;
         iab++;
-        if(iab >= 5)
+        if(iab >= 24)
             {
                 iab = 0;
                 __asm("nop");
@@ -199,15 +207,19 @@ void adc_main_algorithm(void)
         if(iab == 0)
         {
             set_muxes("\x00\x00\x00\x00\x00\x30");// only on AIN0 for AOUT1
+            //реализовать задержку//Delay_ms(10);
 	        dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
         }else if(iab == 1){
             set_muxes("\x00\x00\x00\x00\x00\xC0");// only on AIN1 for AOUT1
+            //реализовать задержку//Delay_ms(10);
             dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
         }else if(iab == 2){
             set_muxes("\x00\x00\x00\x00\x00\x0C");// only on AIN2 for AOUT1
+            //реализовать задержку//Delay_ms(10);
             dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
         }else if(iab == 3){
             set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1
+            //реализовать задержку//Delay_ms(10);
             dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
         }else if(iab == 4){
             set_muxes("\x00\x00\x00\x00\xC0\x00");// only on AIN4 for AOUT2
@@ -294,9 +306,10 @@ void DMA1_Channel0_IRQHandler(void)
 //STM версия обработчика
 void DMA2_Stream0_IRQHandler(void)
 {
-	//очистить флаг, переключить на другой канал 
-	__asm("nop");
     if(dma_interrupt_flag_get(DMA1, DMA_CH0, DMA_INT_FLAG_FTF)) {
         dma_interrupt_flag_clear(DMA1, DMA_CH0, DMA_INT_FLAG_FTF);
+        //отключаем ADC  преобразования
+        adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, DISABLE);
+        flag_dma_finish = SET;
     }
 }
