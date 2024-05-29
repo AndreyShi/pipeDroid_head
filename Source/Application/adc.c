@@ -169,7 +169,7 @@ void dma_config(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint
     adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
 }
 
-void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint16_t* buff)
+void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,uint16_t* buff,uint32_t sam_t)
 {
     dma_flag_clear(dma, dma_ch, DMA_FLAG_FTF);
     dma_flag_clear(dma, dma_ch, DMA_FLAG_HTF);
@@ -181,7 +181,8 @@ void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,ui
     adc_flag_clear(adc, ADC_FLAG_EOC | ADC_FLAG_STRC | ADC_FLAG_ROVF);
     adc_special_function_config(adc, ADC_CONTINUOUS_MODE, ENABLE);
         //adc 12.5 MHZ * ADC_SAMPLETIME_112 = 0.00000896 Sec = 111607 Hz for signal 300 Hz
-    adc_routine_channel_config(adc, 0U, ADCchannel, ADC_SAMPLETIME_112); 
+        //adc 12.5 MHZ * ADC_SAMPLETIME_56  = 0.00000448 Sec = 223214 Hz for signal 600 Hz
+    adc_routine_channel_config(adc, 0U, ADCchannel, sam_t); 
     
     dma_periph_address_config(dma, dma_ch, (uint32_t)(&ADC_RDATA(adc)));
     dma_memory_address_config(dma, dma_ch, dma == DMA_CH1 ? 1 : 0, (uint32_t)buff);
@@ -191,6 +192,12 @@ void dma_reconfig(uint32_t adc,uint8_t ADCchannel,uint32_t dma,uint8_t dma_ch,ui
     /* ADC software trigger enable */
     adc_software_trigger_enable(adc, ADC_ROUTINE_CHANNEL);
 }
+//за счет этой последовательности чередуются переключатели тем самым дается пауза между переключениями одного канала 
+//3 * 3,2 = 9,6 мс для 300 Hz преобразования
+//3 * 1,6 = 4,8 мс для 600 Hz преобразования
+int adc_sec[24] = {0,4,12,18, 1,5,13,19, 2,8,14,20, 3,9,15,21, 6,10,16,22, 7,11,17,23};
+int freq300_600 = 0;// 0 - 300 Hz  1 - 600 Hz
+uint32_t sam_t = ADC_SAMPLETIME_112;
 
 void adc_main_algorithm(void)
 {
@@ -202,85 +209,91 @@ void adc_main_algorithm(void)
             {
                 iab = 0;
                 __asm("nop");
+                if(freq300_600 == 0)
+                {
+                    sam_t = ADC_SAMPLETIME_112;//sam_t = ADC_SAMPLETIME_56;
+                    freq300_600 = 1;
+                }else{
+                    sam_t = ADC_SAMPLETIME_112;
+                    freq300_600 = 0;
+                }
             }
+
+        int iabs = adc_sec[iab];
         
-        if(iab == 0)
+        if(iabs == 0)
         {
             set_muxes("\x00\x00\x00\x00\x00\x30");// only on AIN0 for AOUT1
-            //реализовать задержку//Delay_ms(10);
-	        dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 1){
+	        dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 1){
             set_muxes("\x00\x00\x00\x00\x00\xC0");// only on AIN1 for AOUT1
-            //реализовать задержку//Delay_ms(10);
-            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 2){
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 2){
             set_muxes("\x00\x00\x00\x00\x00\x0C");// only on AIN2 for AOUT1
-            //реализовать задержку//Delay_ms(10);
-            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 3){
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 3){
             set_muxes("\x00\x00\x00\x00\x00\x03");// only on AIN3 for AOUT1
-            //реализовать задержку//Delay_ms(10);
-            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 4){
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 4){
             set_muxes("\x00\x00\x00\x00\xC0\x00");// only on AIN4 for AOUT2
-            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 5){
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 5){
             set_muxes("\x00\x00\x00\x00\x30\x00");// only on AIN5 for AOUT2
-            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 6){
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 6){
             set_muxes("\x00\x00\x00\x00\x0C\x00");// only on AIN6 for AOUT1
-            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 7){
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 7){
             set_muxes("\x00\x00\x00\x00\x03\x00");// only on AIN7 for AOUT1
-            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 8){
+            dma_reconfig(ADC0,AOUT1,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 8){
             set_muxes("\x00\x00\x00\x0C\x00\x00");// only on AIN8 for AOUT2
-            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 9){
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 9){
             set_muxes("\x00\x00\x00\x03\x00\x00");// only on AIN9 for AOUT2
-            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 10){
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 10){
             set_muxes("\x00\x00\x00\xC0\x00\x00");// only on AIN10 for AOUT2
-            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 11){
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 11){
             set_muxes("\x00\x00\x00\x30\x00\x00");// only on AIN11 for AOUT2
-            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 12){
+            dma_reconfig(ADC0,AOUT2,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 12){
             set_muxes("\x30\x00\x00\x00\x00\x00");// only on AIN12 for AOUT4
-            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 13){
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 13){
             set_muxes("\xC0\x00\x00\x00\x00\x00");// only on AIN13 for AOUT4
-            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 14){
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 14){
             set_muxes("\x0C\x00\x00\x00\x00\x00");// only on AIN14 for AOUT4
-            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 15){
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 15){
             set_muxes("\x03\x00\x00\x00\x00\x00");// only on AIN15 for AOUT4
-            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 16){
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 16){
             set_muxes("\x00\xC0\x00\x00\x00\x00");// only on AIN16 for AOUT4
-            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 17){
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 17){
             set_muxes("\x00\x30\x00\x00\x00\x00");// only on AIN17 for AOUT4
-            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 18){
+            dma_reconfig(ADC0,AOUT4,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 18){
             set_muxes("\x00\x0C\x00\x00\x00\x00");// only on AIN18 for AOUT3
-            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 19){
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 19){
             set_muxes("\x00\x03\x00\x00\x00\x00");// only on AIN19 for AOUT3
-            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 20){
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 20){
             set_muxes("\x00\x00\xC0\x00\x00\x00");// only on AIN20 for AOUT3
-            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 21){
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 21){
             set_muxes("\x00\x00\x30\x00\x00\x00");// only on AIN21 for AOUT3
-            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 22){
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 22){
             set_muxes("\x00\x00\x03\x00\x00\x00");// only on AIN22 for AOUT3
-            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
-        }else if(iab == 23){
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
+        }else if(iabs == 23){
             set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3
-            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iab]);
+            dma_reconfig(ADC0,AOUT3,DMA1,DMA_CH0,adc_buff[iabs],sam_t);
         }
     }  
 	//set_muxes("\x00\x00\x0C\x00\x00\x00");// only on AIN23 for AOUT3 ok
