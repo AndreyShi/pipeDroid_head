@@ -1,6 +1,13 @@
 #include "../GD32F4xx_Firmware_Library_V3.1.0/gd32f4xx_libopt.h"
 #include "adc.h"
 #include "mux.h"
+
+#ifdef __BSD_VISIBLE
+#undef __BSD_VISIBLE
+#define __BSD_VISIBLE 1
+#endif
+
+#include "math.h"
 //#include "stm32f4xx.h" при подключении stm файла не работает adc
 
 #define V_REF_EXT_21_PIN 2.505F
@@ -11,6 +18,13 @@ float volt_adc;
 uint16_t adc_buff[24][360];
 int iab;
 char flag_dma_finish;
+float sin_t[91];
+float ampl[24][2]; // [AIN0-23][0 - 300Hz 1 - 600Hz]
+
+ static void init_sin(void);
+ static float sin_fast(int a);
+ static float cos_fast(int a);
+ static float CalcHarm(uint16_t* signal, int size); 
 
 void adc_init(){
     
@@ -21,6 +35,7 @@ void adc_init(){
              adc_buff[i][j] = 0xffff;
         }
     }
+    init_sin();
     
     /* enable GPIOA clock */
     rcu_periph_clock_enable(RCU_GPIOA);
@@ -207,11 +222,14 @@ void adc_main_algorithm(void)
         iab++;
         if(iab >= 24)
             {
+                set_muxes("\x00\x00\x00\x00\x00\x00");//set all reset
                 iab = 0;
                 __asm("nop");
+                for(int i = 0 ; i < 24;i++)
+                    { ampl[i][freq300_600] = CalcHarm(adc_buff[i], 360);}
                 if(freq300_600 == 0)
                 {
-                    sam_t = ADC_SAMPLETIME_112;//sam_t = ADC_SAMPLETIME_56;
+                    sam_t = ADC_SAMPLETIME_56;
                     freq300_600 = 1;
                 }else{
                     sam_t = ADC_SAMPLETIME_112;
@@ -325,4 +343,55 @@ void DMA2_Stream0_IRQHandler(void)
         adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, DISABLE);
         flag_dma_finish = SET;
     }
+}
+
+void init_sin(void) {
+	for (int i = 0; i <= 90; i++)
+		sin_t[i] = sin(2 * M_PI * i / 360);
+}
+
+float sin_fast(int a) {
+	int sign = 1;
+	while (a > 359) {
+		a = a - 360;
+	}
+	if (a > 179) {
+		a = a - 180;
+		sign = -1;
+	}
+	if (a > 89) {
+		return sign * sin_t[180 - a];
+	} else {
+		return sign * sin_t[a];
+	}
+
+}
+
+float cos_fast(int a) {
+	return sin_fast(90 + a);
+}
+
+/**
+ * @brief  Рассчет амплитуды сигнала на одной частоте (F=частота дескритизации/360)
+ * @param  signal: сигнал с АЦП 1 точка- это 1 градус (1/360 периода)
+ * @param  size:	размер буфера
+ * @retval Амплитуда гармоники
+ */
+float CalcHarm(uint16_t* signal, int size) {
+	float sum1 = 0;
+	float sum2 = 0;
+	float a, b, c;
+	float calc_amp;
+	for (int i = 0; i < size; i++) {
+		sum1 = sum1 + signal[i] * cos_fast(i);
+		sum2 = sum2 + signal[i] * sin_fast(i);
+	}
+	a = 2 * sum1 / size;
+	b = 2 * sum2 / size;
+	c = a * a + b * b;
+	if (c > 0)
+		calc_amp = sqrt(c);
+	else
+		calc_amp = 0;
+	return calc_amp;
 }
