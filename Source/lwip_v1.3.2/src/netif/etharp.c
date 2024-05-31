@@ -993,7 +993,8 @@ etharp_query(struct netif *netif, struct ip_addr *ipaddr, struct pbuf *q)
             /* queue was already existent, append the new entry to the end */
             struct etharp_q_entry *r;
             r = arp_table[i].q;
-            while (r->next != NULL) {
+            //обнаружил в отладке переполнение стэка, добавил && r != r->next
+            while (r->next != NULL && r != r->next) {
               r = r->next;
             }
             r->next = new_entry;
