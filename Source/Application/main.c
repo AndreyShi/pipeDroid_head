@@ -302,6 +302,7 @@ int main(void) {
 			data.gY = scaledAccelY_;
 			data.gZ = scaledAccelZ_;
 			data.Vin_min = getVmin();
+			data.BoardState = -1;
 			
 			for (int i = 0; i < 3; i++) {
 				data.trackState[i] = protocol_getRxData(i);//здесь можно поставить флаг отсутствия связи с гусеницей
