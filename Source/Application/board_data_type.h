@@ -53,6 +53,7 @@ typedef struct {
     uint8_t BoardState;		//Не используется
     tack_regs_t reg[3];
     coef_track_dt coef;
+    float ampl[24][2]; // [AIN0-23][0 - 300Hz 1 - 600Hz]
 } track_data_type;
 
 #endif /* BOARD_DATA_TYPE_H_ */

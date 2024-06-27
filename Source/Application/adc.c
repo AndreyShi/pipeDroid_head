@@ -8,6 +8,7 @@
 #endif
 
 #include "math.h"
+#include "board_data_type.h"
 //#include "stm32f4xx.h" при подключении stm файла не работает adc
 
 #define V_REF_EXT_21_PIN 2.505F
@@ -19,7 +20,7 @@ uint16_t adc_buff[24][360];
 int iab;
 char flag_dma_finish;
 float sin_t[91];
-float ampl[24][2]; // [AIN0-23][0 - 300Hz 1 - 600Hz]
+extern track_data_type data;
 
  static void init_sin(void);
  static float sin_fast(int a);
@@ -226,7 +227,7 @@ void adc_main_algorithm(void)
                 iab = 0;
                 __asm("nop");
                 for(int i = 0 ; i < 24;i++)
-                    { ampl[i][freq300_600] = CalcHarm(adc_buff[i], 360);}
+                    { data.ampl[i][freq300_600] = CalcHarm(adc_buff[i], 360);}
                 if(freq300_600 == 0)
                 {
                     sam_t = ADC_SAMPLETIME_56;
