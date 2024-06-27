@@ -308,7 +308,7 @@ int main(void) {
 				data.trackState[i] = protocol_getRxData(i);//здесь можно поставить флаг отсутствия связи с гусеницей
 				data.reg[i] = protocol_regs(i);
 			}
-			udp_Pack.pac_type = 0;
+			udp_Pack.pac_type = 1; // 1 - Ershik, 2 - ControlSwitch
 			for (int i = 0; i < sizeof(data); i++) {
 				udp_Pack.data[i] = dataPtr[i];
 			}
