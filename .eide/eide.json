@@ -3,7 +3,6 @@
   "type": "ARM",
   "dependenceList": [],
   "srcDirs": [
-    ".eide/deps",
     "Source"
   ],
   "virtualFolder": {
@@ -68,11 +67,9 @@
           "Source/lwip_v1.3.2/src/include/ipv4",
           "Source/lwip_v1.3.2/port",
           "Source/lwip_v1.3.2/src/netif/ppp",
-          "Source/System",
-          ".eide/deps"
+          "Source/System"
         ],
         "libList": [],
-        "sourceDirList": [],
         "defineList": [
           "ARM_MATH_CM4",
           "__FPU_PRESENT",
@@ -188,5 +185,5 @@
       }
     }
   },
-  "version": "3.3"
+  "version": "3.4"
 }
